@@ -861,9 +861,9 @@ export default function AntiviralLanding() {
           opacity: 0,
           animation: "fadeSlideIn 0.7s ease forwards 0.9s",
         }}>
-          <a href="#personal" className="cta-btn cta-primary">
+          <a href="https://testflight.apple.com/join/sQH5sdCw" target="_blank" rel="noopener noreferrer" className="cta-btn cta-primary">
             Get Antiviral
-            <span style={{ fontSize: "18px" }}>↓</span>
+            <span style={{ fontSize: "18px" }}>↗</span>
           </a>
         </div>
       </section>
@@ -1274,7 +1274,7 @@ export default function AntiviralLanding() {
 
         <FadeIn delay={0.2}>
           <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="#personal" className="cta-btn cta-primary">
+            <a href="https://testflight.apple.com/join/sQH5sdCw" target="_blank" rel="noopener noreferrer" className="cta-btn cta-primary">
               Get Antiviral — Free
             </a>
             <a href="#family" className="cta-btn cta-secondary">
