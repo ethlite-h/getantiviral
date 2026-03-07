@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 
 const PERSONAL_FEATURES = [
   "Import your YouTube subscriptions, podcasts, and blogs",
@@ -15,6 +15,274 @@ const FAMILY_FEATURES = [
   "Parent dashboard shows what topics your kids are exploring",
   "No screen time charts — a window into what they're curious about",
 ];
+
+const FEED_COLORS = [
+  { r: 107, g: 158, b: 111 }, // muted green (primary)
+  { r: 111, g: 138, b: 168 }, // muted blue
+  { r: 158, g: 123, b: 107 }, // muted rust
+  { r: 138, g: 111, b: 158 }, // muted purple
+  { r: 158, g: 152, b: 107 }, // muted gold
+  { r: 107, g: 158, b: 148 }, // muted teal
+  { r: 158, g: 107, b: 134 }, // muted rose
+  { r: 128, g: 148, b: 118 }, // sage
+];
+
+function FeedVisualization() {
+  const canvasRef = useRef(null);
+  const dataRef = useRef(null);
+  const animRef = useRef(null);
+
+  const init = useCallback((w, h) => {
+    const lineCount = 8;
+    const segments = 14;
+    const centerY = h * 0.5;
+    const homeYs = [];
+    for (let i = 0; i < lineCount; i++) {
+      homeYs.push(h * 0.12 + i * (h * 0.76 / (lineCount - 1)));
+    }
+
+    const lines = [];
+    for (let i = 0; i < lineCount; i++) {
+      const color = FEED_COLORS[i % FEED_COLORS.length];
+      const yValues = new Array(segments).fill(homeYs[i]);
+
+      // 1-2 connections: each jumps to another line's Y for 2 segments
+      const numConn = 1 + Math.floor(Math.random() * 2);
+      const used = new Set();
+      for (let c = 0; c < numConn; c++) {
+        let seg;
+        do { seg = 2 + Math.floor(Math.random() * (segments - 5)); } while (used.has(seg));
+        used.add(seg);
+        used.add(seg + 1);
+        let target = i;
+        while (target === i) target = Math.floor(Math.random() * lineCount);
+        yValues[seg] = homeYs[target];
+        if (seg + 1 < segments - 1) yValues[seg + 1] = homeYs[target];
+      }
+
+      const points = yValues.map((y, j) => ({
+        x: (w / (segments - 1)) * j,
+        spreadY: y,
+        convergedY: centerY,
+      }));
+
+      // Pulses that travel along the line
+      const pulses = [];
+      const numPulses = 2 + Math.floor(Math.random() * 3);
+      for (let p = 0; p < numPulses; p++) {
+        pulses.push({
+          speed: 0.04 + Math.random() * 0.06,
+          offset: Math.random(),
+          radius: 4 + Math.random() * 4,
+        });
+      }
+
+      lines.push({ points, color, opacity: 0.18 + Math.random() * 0.14, pulses });
+    }
+    return lines;
+  }, []);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 2;
+
+    const resize = () => {
+      const rect = canvas.parentElement.getBoundingClientRect();
+      canvas.width = rect.width * dpr;
+      canvas.height = rect.height * dpr;
+      canvas.style.width = rect.width + "px";
+      canvas.style.height = rect.height + "px";
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      dataRef.current = init(rect.width, rect.height);
+    };
+    resize();
+    window.addEventListener("resize", resize);
+
+    const draw = (time) => {
+      const w = canvas.width / dpr;
+      const h = canvas.height / dpr;
+      ctx.clearRect(0, 0, w, h);
+
+      const lines = dataRef.current;
+      if (!lines) { animRef.current = requestAnimationFrame(draw); return; }
+
+      // Convergence pulse: mostly spread, brief merge to single line
+      const phase = ((time * 0.001) / 12) % 1;
+      const raw = Math.sin(phase * Math.PI * 2);
+      const converge = Math.pow(Math.max(0, raw), 4); // brief sharp pulse
+      // smoothstep for clean ease
+      const t = converge * converge * (3 - 2 * converge);
+
+      for (const line of lines) {
+        const { r, g, b } = line.color;
+        const pts = line.points.map((p) => ({
+          x: p.x,
+          y: p.spreadY + (p.convergedY - p.spreadY) * t,
+        }));
+
+        // Draw the line
+        ctx.beginPath();
+        ctx.moveTo(pts[0].x, pts[0].y);
+        for (let i = 0; i < pts.length - 1; i++) {
+          const cpx = (pts[i].x + pts[i + 1].x) / 2;
+          const cpy = (pts[i].y + pts[i + 1].y) / 2;
+          ctx.quadraticCurveTo(pts[i].x, pts[i].y, cpx, cpy);
+        }
+        ctx.lineTo(pts[pts.length - 1].x, pts[pts.length - 1].y);
+
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${line.opacity})`;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Sample path into points for pulse positioning
+        const sampled = [{ x: pts[0].x, y: pts[0].y }];
+        let sx = pts[0].x, sy = pts[0].y;
+        const stepsPerSeg = 8;
+        for (let i = 0; i < pts.length - 1; i++) {
+          const cx = pts[i].x, cy = pts[i].y;
+          const ex = (pts[i].x + pts[i + 1].x) / 2;
+          const ey = (pts[i].y + pts[i + 1].y) / 2;
+          for (let s = 1; s <= stepsPerSeg; s++) {
+            const st = s / stepsPerSeg;
+            const mt = 1 - st;
+            sampled.push({
+              x: mt * mt * sx + 2 * mt * st * cx + st * st * ex,
+              y: mt * mt * sy + 2 * mt * st * cy + st * st * ey,
+            });
+          }
+          sx = ex; sy = ey;
+        }
+        sampled.push({ x: pts[pts.length - 1].x, y: pts[pts.length - 1].y });
+
+        // Draw pulses traveling along the path
+        for (const pulse of line.pulses) {
+          const progress = ((time * 0.001 * pulse.speed + pulse.offset) % 1);
+          const fi = progress * (sampled.length - 1);
+          const idx = Math.floor(fi);
+          const frac = fi - idx;
+          const next = Math.min(idx + 1, sampled.length - 1);
+          const px = sampled[idx].x + (sampled[next].x - sampled[idx].x) * frac;
+          const py = sampled[idx].y + (sampled[next].y - sampled[idx].y) * frac;
+
+          const grad = ctx.createRadialGradient(px, py, 0, px, py, pulse.radius);
+          grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, 0.7)`);
+          grad.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, 0.25)`);
+          grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+          ctx.fillStyle = grad;
+          ctx.fillRect(px - pulse.radius, py - pulse.radius, pulse.radius * 2, pulse.radius * 2);
+        }
+      }
+
+      animRef.current = requestAnimationFrame(draw);
+    };
+    animRef.current = requestAnimationFrame(draw);
+
+    return () => {
+      cancelAnimationFrame(animRef.current);
+      window.removeEventListener("resize", resize);
+    };
+  }, [init]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+      }}
+    />
+  );
+}
+
+function AnimatedLogo({ size = 28 }) {
+  const canvasRef = useRef(null);
+  const animRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    const dpr = window.devicePixelRatio || 2;
+    canvas.width = size * dpr;
+    canvas.height = size * dpr;
+    canvas.style.width = size + "px";
+    canvas.style.height = size + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    const streaks = [
+      { color: [100, 230, 160], dotX: 0.15, yStart: 0.42, yMid: 0.55, yEnd: 0.48 },
+      { color: [230, 110, 140], dotX: 0.50, yStart: 0.55, yMid: 0.45, yEnd: 0.52 },
+      { color: [160, 140, 240], dotX: 0.85, yStart: 0.50, yMid: 0.52, yEnd: 0.45 },
+    ];
+
+    const draw = (time) => {
+      ctx.clearRect(0, 0, size, size);
+      const t = time * 0.001;
+
+      for (const s of streaks) {
+        const [r, g, b] = s.color;
+        const wave = Math.sin(t * 0.8 + s.dotX * 6) * 0.04;
+        const y0 = (s.yStart + wave) * size;
+        const y1 = (s.yMid - wave * 0.7) * size;
+        const y2 = (s.yEnd + wave * 0.5) * size;
+
+        // Draw streak line
+        ctx.beginPath();
+        ctx.moveTo(-2, y0);
+        ctx.quadraticCurveTo(size * 0.35, y1, size * 0.5, (y0 + y2) / 2 + wave * size * 2);
+        ctx.quadraticCurveTo(size * 0.65, y2, size + 2, y2);
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.35)`;
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+
+        // Second thinner parallel line for richness
+        ctx.beginPath();
+        ctx.moveTo(-2, y0 + 2);
+        ctx.quadraticCurveTo(size * 0.35, y1 + 1.5, size * 0.5, (y0 + y2) / 2 + wave * size * 2 + 2);
+        ctx.quadraticCurveTo(size * 0.65, y2 + 1.5, size + 2, y2 + 2);
+        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.15)`;
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Glowing dot
+        const pulse = 0.6 + 0.4 * Math.sin(t * 1.5 + s.dotX * 10);
+        const dx = s.dotX * size;
+        const dy = s.dotX < 0.3 ? y0 : s.dotX > 0.7 ? y2 : (y0 + y2) / 2 + wave * size * 2;
+        const dotR = 2.5 + pulse * 1.5;
+
+        const grad = ctx.createRadialGradient(dx, dy, 0, dx, dy, dotR * 2);
+        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.9 * pulse})`);
+        grad.addColorStop(0.4, `rgba(${r}, ${g}, ${b}, ${0.4 * pulse})`);
+        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(dx - dotR * 2, dy - dotR * 2, dotR * 4, dotR * 4);
+      }
+
+      animRef.current = requestAnimationFrame(draw);
+    };
+    animRef.current = requestAnimationFrame(draw);
+
+    return () => cancelAnimationFrame(animRef.current);
+  }, [size]);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      style={{
+        width: size + "px",
+        height: size + "px",
+        borderRadius: "6px",
+        flexShrink: 0,
+      }}
+    />
+  );
+}
 
 function useInView(threshold = 0.15) {
   const ref = useRef(null);
@@ -80,7 +348,7 @@ function FeatureItem({ text, index }) {
         width: "6px",
         height: "6px",
         borderRadius: "50%",
-        background: "#4AE68A",
+        background: "#6B9E6F",
         marginTop: "9px",
         flexShrink: 0,
       }} />
@@ -89,11 +357,302 @@ function FeatureItem({ text, index }) {
         fontSize: "17px",
         lineHeight: 1.65,
         color: "rgba(255,255,255,0.75)",
-        fontFamily: "'Source Serif 4', Georgia, serif",
+        fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
       }}>
         {text}
       </p>
     </div>
+  );
+}
+
+const CONV_PLACEHOLDERS = [
+  { text: "Ask me anything about Antiviral", weight: 0.283 },
+  { text: "How is the feed built?", weight: 0.283 },
+  { text: "Is this really free?", weight: 0.284 },
+  { text: "Who made this app?", weight: 0.06 },
+  { text: "How does the AI work?", weight: 0.06 },
+  { text: "Tell me a secret", weight: 0.03 },
+];
+
+function pickStartIndex() {
+  const r = Math.random();
+  let sum = 0;
+  for (let i = 0; i < CONV_PLACEHOLDERS.length; i++) {
+    sum += CONV_PLACEHOLDERS[i].weight;
+    if (r < sum) return i;
+  }
+  return 0;
+}
+
+function ConversationBar() {
+  const [phase, setPhase] = useState("collapsed"); // collapsed | typing | loading | response
+  const [query, setQuery] = useState("");
+  const [answer, setAnswer] = useState("");
+  const [placeholderIdx, setPlaceholderIdx] = useState(() => pickStartIndex());
+  const [lastSubmitTime, setLastSubmitTime] = useState(0);
+  const [questionCount, setQuestionCount] = useState(0);
+  const inputRef = useRef(null);
+  const barRef = useRef(null);
+
+  const maxQuestions = 10;
+  const cooldownMs = 3000;
+  const placeholder = CONV_PLACEHOLDERS[placeholderIdx].text;
+
+  // Rotate placeholder every 5 seconds when not loading/responding
+  useEffect(() => {
+    if (phase === "loading" || phase === "response") return;
+    const timer = setInterval(() => {
+      setPlaceholderIdx((i) => (i + 1) % CONV_PLACEHOLDERS.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [phase]);
+
+  // Click outside to collapse
+  useEffect(() => {
+    if (phase === "collapsed") return;
+    const handleClick = (e) => {
+      if (barRef.current && !barRef.current.contains(e.target)) {
+        setPhase("collapsed");
+        setQuery("");
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [phase]);
+
+  // Escape to collapse
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (e.key === "Escape" && phase !== "collapsed") {
+        setPhase("collapsed");
+        setQuery("");
+      }
+    };
+    document.addEventListener("keydown", handleKey);
+    return () => document.removeEventListener("keydown", handleKey);
+  }, [phase]);
+
+  // Auto-focus when entering typing phase
+  useEffect(() => {
+    if (phase === "typing" && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [phase]);
+
+  const handlePillClick = () => {
+    if (questionCount >= maxQuestions) return;
+    setPhase("typing");
+    setAnswer("");
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (phase === "loading") return;
+    const trimmed = query.trim() || placeholder;
+    if (!trimmed) return;
+
+    if (questionCount >= maxQuestions) {
+      setAnswer("That's a lot of questions — download the app for the full experience.");
+      setPhase("response");
+      return;
+    }
+
+    const now = Date.now();
+    if (now - lastSubmitTime < cooldownMs) return;
+
+    setLastSubmitTime(now);
+    setPhase("loading");
+
+    try {
+      const res = await fetch("/api/ask", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ question: trimmed }),
+      });
+      const data = await res.json();
+      if (data.answer) {
+        setAnswer(data.answer);
+        setQuestionCount((c) => c + 1);
+      } else {
+        setAnswer("I'm having trouble thinking right now.");
+      }
+    } catch {
+      setAnswer("I'm having trouble thinking right now.");
+    }
+    setPhase("response");
+  };
+
+  const handleDismiss = () => {
+    setPhase("collapsed");
+    setQuery("");
+    setAnswer("");
+  };
+
+  const barBase = {
+    position: "fixed",
+    bottom: "12px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    zIndex: 99,
+    fontFamily: "'DM Mono', monospace",
+  };
+
+  if (phase === "collapsed") {
+    return (
+      <div ref={barRef} className="conv-bar-anchor" style={barBase}>
+        <button
+          onClick={handlePillClick}
+          style={{
+            background: "rgba(10,10,10,0.7)",
+            backdropFilter: "blur(16px)",
+            WebkitBackdropFilter: "blur(16px)",
+            border: "1px solid rgba(107,158,111,0.2)",
+            borderRadius: "100px",
+            padding: "12px 24px",
+            color: "rgba(255,255,255,0.4)",
+            fontSize: "13px",
+            fontFamily: "'DM Mono', monospace",
+            cursor: "pointer",
+            maxWidth: "360px",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            transition: "all 0.25s ease",
+          }}
+        >
+          {placeholder}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {/* Translucent backdrop when response is visible */}
+      {phase === "response" && answer && (
+        <div
+          onClick={handleDismiss}
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: "-100px",
+            zIndex: 98,
+            background: "rgba(0,0,0,0.5)",
+            animation: "convBarFadeIn 0.25s ease",
+          }}
+        />
+      )}
+      <div ref={barRef} className="conv-bar-anchor" style={{
+        ...barBase,
+        width: "min(520px, calc(100vw - 32px))",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "stretch",
+        gap: "8px",
+      }}>
+      {/* Response panel */}
+      {phase === "response" && answer && (
+        <div style={{
+          background: "rgba(10,10,10,0.85)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid rgba(107,158,111,0.15)",
+          borderRadius: "16px",
+          padding: "20px",
+          maxHeight: "40vh",
+          overflowY: "auto",
+          animation: "convBarSlideUp 0.3s ease",
+          position: "relative",
+        }}>
+          <button
+            onClick={handleDismiss}
+            style={{
+              position: "absolute",
+              top: "12px",
+              right: "12px",
+              background: "none",
+              border: "none",
+              color: "rgba(255,255,255,0.3)",
+              fontSize: "16px",
+              cursor: "pointer",
+              padding: "4px 8px",
+              lineHeight: 1,
+              fontFamily: "'DM Mono', monospace",
+            }}
+          >
+            &times;
+          </button>
+          <p style={{
+            margin: 0,
+            fontSize: "15px",
+            lineHeight: 1.7,
+            color: "rgba(255,255,255,0.8)",
+            fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
+            paddingRight: "24px",
+          }}>
+            {answer}
+          </p>
+        </div>
+      )}
+
+      {/* Input */}
+      <form onSubmit={handleSubmit} style={{
+        display: "flex",
+        alignItems: "center",
+        background: "rgba(10,10,10,0.7)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        border: "1px solid rgba(107,158,111,0.2)",
+        borderRadius: "100px",
+        padding: "4px 4px 4px 20px",
+        ...(phase === "loading" ? { animation: "convBarPulse 1.5s ease infinite" } : {}),
+      }}>
+        <input
+          ref={inputRef}
+          type="text"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={placeholder}
+          maxLength={500}
+          disabled={phase === "loading"}
+          style={{
+            flex: 1,
+            background: "none",
+            border: "none",
+            outline: "none",
+            color: "rgba(255,255,255,0.85)",
+            fontSize: "16px",
+            fontFamily: "'DM Mono', monospace",
+            caretColor: "#6B9E6F",
+          }}
+        />
+        <button
+          type="submit"
+          disabled={phase === "loading"}
+          style={{
+            background: "#6B9E6F",
+            border: "none",
+            borderRadius: "100px",
+            width: "36px",
+            height: "36px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
+            transition: "background 0.2s ease",
+            color: "#0A0A0A",
+            fontSize: "16px",
+            flexShrink: 0,
+            opacity: phase === "loading" ? 0.5 : 1,
+          }}
+        >
+          &uarr;
+        </button>
+      </form>
+    </div>
+    </>
   );
 }
 
@@ -111,11 +670,11 @@ export default function AntiviralLanding() {
       background: "#0A0A0A",
       color: "#fff",
       minHeight: "100vh",
-      fontFamily: "'Source Serif 4', Georgia, serif",
+      fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
       overflowX: "hidden",
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=DM+Mono:wght@400;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -136,7 +695,7 @@ export default function AntiviralLanding() {
         }
 
         ::selection {
-          background: #4AE68A;
+          background: #6B9E6F;
           color: #0A0A0A;
         }
 
@@ -163,13 +722,13 @@ export default function AntiviralLanding() {
         }
 
         .cta-primary {
-          background: #4AE68A;
+          background: #6B9E6F;
           color: #0A0A0A;
         }
         .cta-primary:hover {
-          background: #5FF59D;
+          background: #7DB882;
           transform: translateY(-2px);
-          box-shadow: 0 8px 32px rgba(74, 230, 138, 0.25);
+          box-shadow: 0 8px 32px rgba(94, 140, 97, 0.3);
         }
 
         .cta-secondary {
@@ -192,12 +751,33 @@ export default function AntiviralLanding() {
         .quote-mark {
           font-size: 120px;
           line-height: 0.6;
-          color: rgba(74, 230, 138, 0.15);
+          color: rgba(107, 158, 111, 0.2);
           font-family: Georgia, serif;
           position: absolute;
           top: -10px;
           left: -8px;
           user-select: none;
+        }
+
+        @media (max-width: 768px) {
+          .conv-bar-anchor {
+            bottom: 64px !important;
+          }
+        }
+
+        @keyframes convBarPulse {
+          0%, 100% { opacity: 0.4; }
+          50% { opacity: 1; }
+        }
+
+        @keyframes convBarSlideUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes convBarFadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
         }
       `}</style>
 
@@ -225,7 +805,7 @@ export default function AntiviralLanding() {
           alignItems: "center",
           gap: "8px",
         }}>
-          <span style={{ color: "#4AE68A" }}>⊘</span> antiviral
+          antiviral
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
           <a href="#personal" className="cta-btn cta-secondary" style={{ padding: "10px 24px", fontSize: "13px" }}>Personal</a>
@@ -244,32 +824,22 @@ export default function AntiviralLanding() {
         margin: "0 auto",
         position: "relative",
       }}>
-        {/* Subtle background glow */}
-        <div style={{
-          position: "absolute",
-          top: "20%",
-          left: "50%",
-          width: "600px",
-          height: "600px",
-          borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(74,230,138,0.04) 0%, transparent 70%)",
-          transform: "translateX(-50%)",
-          pointerEvents: "none",
-        }} />
+        <FeedVisualization />
 
         <div style={{ marginBottom: "40px" }}>
           <Pill>Free — no catch</Pill>
         </div>
 
         <h1 style={{
+          fontFamily: "'Instrument Serif', Georgia, serif",
           fontSize: "clamp(42px, 7vw, 76px)",
-          fontWeight: 700,
+          fontWeight: 400,
           lineHeight: 1.05,
           letterSpacing: "-0.025em",
           marginBottom: "36px",
         }}>
           <span className="hero-line" style={{ animationDelay: "0.1s" }}>Your feed,</span>
-          <span className="hero-line" style={{ animationDelay: "0.3s", color: "#4AE68A" }}>finally yours.</span>
+          <span className="hero-line" style={{ animationDelay: "0.3s", color: "#6B9E6F" }}>finally yours.</span>
         </h1>
 
         <p style={{
@@ -308,9 +878,10 @@ export default function AntiviralLanding() {
           <div style={{ position: "relative", paddingLeft: "36px" }}>
             <span className="quote-mark">"</span>
             <p style={{
+              fontFamily: "'Instrument Serif', Georgia, serif",
               fontSize: "clamp(24px, 3.5vw, 34px)",
               lineHeight: 1.55,
-              fontWeight: 300,
+              fontWeight: 400,
               fontStyle: "italic",
               color: "rgba(255,255,255,0.85)",
             }}>
@@ -344,8 +915,9 @@ export default function AntiviralLanding() {
             <Pill>Personal Edition</Pill>
           </div>
           <h2 style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontSize: "clamp(32px, 5vw, 52px)",
-            fontWeight: 700,
+            fontWeight: 400,
             lineHeight: 1.1,
             letterSpacing: "-0.02em",
             marginBottom: "20px",
@@ -401,7 +973,7 @@ export default function AntiviralLanding() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <div>
-                <span style={{ color: "#4AE68A" }}>you →</span>
+                <span style={{ color: "#6B9E6F" }}>you →</span>
                 <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>go deeper on pottery</span>
               </div>
               <div>
@@ -409,7 +981,7 @@ export default function AntiviralLanding() {
                 <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Found a 3-part series on Japanese wheel throwing from a channel you're already subscribed to. Also promoting pottery from surface to moderate depth — I'll start including longer-form and more technical content.</span>
               </div>
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
-                <span style={{ color: "#4AE68A" }}>you →</span>
+                <span style={{ color: "#6B9E6F" }}>you →</span>
                 <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>I'm done with politics</span>
               </div>
               <div>
@@ -425,13 +997,14 @@ export default function AntiviralLanding() {
             marginTop: "56px",
             padding: "32px 40px",
             borderRadius: "16px",
-            background: "linear-gradient(135deg, rgba(74,230,138,0.08), rgba(74,230,138,0.02))",
-            border: "1px solid rgba(74,230,138,0.15)",
+            background: "linear-gradient(135deg, rgba(94,140,97,0.1), rgba(94,140,97,0.03))",
+            border: "1px solid rgba(94,140,97,0.2)",
             textAlign: "center",
           }}>
             <p style={{
+              fontFamily: "'Instrument Serif', Georgia, serif",
               fontSize: "28px",
-              fontWeight: 600,
+              fontWeight: 400,
               marginBottom: "8px",
               letterSpacing: "-0.01em",
             }}>
@@ -458,14 +1031,15 @@ export default function AntiviralLanding() {
       }}>
         <FadeIn>
           <h2 style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontSize: "clamp(28px, 4.5vw, 44px)",
-            fontWeight: 700,
+            fontWeight: 400,
             lineHeight: 1.15,
             letterSpacing: "-0.02em",
             marginBottom: "28px",
           }}>
             It never calls home.<br />
-            <span style={{ color: "#4AE68A" }}>So it never betrays you.</span>
+            <span style={{ color: "#6B9E6F" }}>So it never betrays you.</span>
           </h2>
         </FadeIn>
 
@@ -501,7 +1075,7 @@ export default function AntiviralLanding() {
                 alignItems: "center",
                 gap: "8px",
               }}>
-                <span style={{ color: "#4AE68A", fontSize: "20px" }}>{item.icon}</span>
+                <span style={{ color: "#6B9E6F", fontSize: "20px" }}>{item.icon}</span>
                 <span style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: "13px",
@@ -529,8 +1103,9 @@ export default function AntiviralLanding() {
             <Pill>Family Edition</Pill>
           </div>
           <h2 style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontSize: "clamp(32px, 5vw, 52px)",
-            fontWeight: 700,
+            fontWeight: 400,
             lineHeight: 1.1,
             letterSpacing: "-0.02em",
             marginBottom: "20px",
@@ -599,9 +1174,9 @@ export default function AntiviralLanding() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               {[
-                { topic: "Astronomy", trend: "↑ growing", weeks: "3 weeks", depth: "moderate", color: "#4AE68A" },
+                { topic: "Astronomy", trend: "↑ growing", weeks: "3 weeks", depth: "moderate", color: "#6B9E6F" },
                 { topic: "Minecraft", trend: "→ steady", weeks: "6 months", depth: "deep", color: "rgba(255,255,255,0.4)" },
-                { topic: "Drawing", trend: "↑ new", weeks: "1 week", depth: "surface", color: "#4AE68A" },
+                { topic: "Drawing", trend: "↑ new", weeks: "1 week", depth: "surface", color: "#6B9E6F" },
                 { topic: "Slime videos", trend: "↓ fading", weeks: "2 months", depth: "surface", color: "rgba(255,255,255,0.2)" },
               ].map((item, i) => (
                 <div key={i} style={{
@@ -619,7 +1194,7 @@ export default function AntiviralLanding() {
                       background: item.color,
                     }} />
                     <span style={{
-                      fontFamily: "'Source Serif 4', Georgia, serif",
+                      fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
                       fontSize: "17px",
                       color: "rgba(255,255,255,0.8)",
                     }}>
@@ -650,7 +1225,7 @@ export default function AntiviralLanding() {
             </div>
 
             <p style={{
-              fontFamily: "'Source Serif 4', Georgia, serif",
+              fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
               fontSize: "15px",
               fontStyle: "italic",
               color: "rgba(255,255,255,0.3)",
@@ -683,8 +1258,9 @@ export default function AntiviralLanding() {
             The thesis
           </p>
           <h2 style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
             fontSize: "clamp(26px, 4vw, 40px)",
-            fontWeight: 300,
+            fontWeight: 400,
             lineHeight: 1.4,
             letterSpacing: "-0.01em",
             color: "rgba(255,255,255,0.85)",
@@ -712,27 +1288,30 @@ export default function AntiviralLanding() {
       <footer style={{
         padding: "40px",
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        flexWrap: "wrap",
-        gap: "16px",
+        textAlign: "center",
       }}>
-        <div style={{
-          fontFamily: "'DM Mono', monospace",
-          fontSize: "13px",
-          color: "rgba(255,255,255,0.3)",
-        }}>
-          <span style={{ color: "#4AE68A" }}>⊘</span> antiviral — getantiviral.app
-        </div>
         <div style={{
           fontFamily: "'DM Mono', monospace",
           fontSize: "12px",
           color: "rgba(255,255,255,0.2)",
         }}>
-          Your attention is not a product.
+          from{" "}
+          <a
+            href="https://studioikigai.ai"
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{
+              color: "rgba(255,255,255,0.3)",
+              textDecoration: "none",
+              borderBottom: "1px solid rgba(255,255,255,0.1)",
+            }}
+          >
+            Studio Ikigai
+          </a>
         </div>
       </footer>
+
+      <ConversationBar />
     </div>
   );
 }
