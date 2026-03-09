@@ -978,7 +978,7 @@ export default function AntiviralLanding() {
               </div>
               <div>
                 <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Found a 3-part series on Japanese wheel throwing from a channel you're already subscribed to. Also promoting pottery from surface to moderate depth — I'll start including longer-form and more technical content.</span>
+                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Diving deeper into pottery for you.</span>
               </div>
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
                 <span style={{ color: "#6B9E6F" }}>you →</span>
@@ -986,7 +986,15 @@ export default function AntiviralLanding() {
               </div>
               <div>
                 <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Done. Politics is dismissed. Your feed won't include political content anymore.</span>
+                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Got it — I'll stop showing politics content.</span>
+              </div>
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
+                <span style={{ color: "#6B9E6F" }}>you →</span>
+                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>is my data private?</span>
+              </div>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
+                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Everything runs on your device. Your interests, watch history, and conversations never leave your phone. There's no analytics, no tracking, no data collection.</span>
               </div>
             </div>
           </div>
@@ -1174,10 +1182,10 @@ export default function AntiviralLanding() {
 
             <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
               {[
-                { topic: "Astronomy", trend: "↑ growing", weeks: "3 weeks", depth: "moderate", color: "#6B9E6F" },
-                { topic: "Minecraft", trend: "→ steady", weeks: "6 months", depth: "deep", color: "rgba(255,255,255,0.4)" },
-                { topic: "Drawing", trend: "↑ new", weeks: "1 week", depth: "surface", color: "#6B9E6F" },
-                { topic: "Slime videos", trend: "↓ fading", weeks: "2 months", depth: "surface", color: "rgba(255,255,255,0.2)" },
+                { topic: "Astronomy", trend: "↑ growing", weeks: "3 weeks", status: "active", color: "#6B9E6F" },
+                { topic: "Minecraft", trend: "→ steady", weeks: "6 months", status: "active", color: "rgba(255,255,255,0.4)" },
+                { topic: "Drawing", trend: "↑ new", weeks: "1 week", status: "growing", color: "#6B9E6F" },
+                { topic: "Slime videos", trend: "↓ fading", weeks: "2 months", status: "fading", color: "rgba(255,255,255,0.2)" },
               ].map((item, i) => (
                 <div key={i} style={{
                   display: "flex",
@@ -1216,7 +1224,7 @@ export default function AntiviralLanding() {
                       background: "rgba(255,255,255,0.05)",
                       fontSize: "11px",
                     }}>
-                      {item.depth}
+                      {item.status}
                     </span>
                     <span style={{ color: item.color }}>{item.trend}</span>
                   </div>
