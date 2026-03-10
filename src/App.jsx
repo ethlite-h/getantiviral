@@ -1292,6 +1292,8 @@ export default function AntiviralLanding() {
         </FadeIn>
       </section>
 
+      <ConversationBar />
+
       {/* FOOTER */}
       <footer style={{
         borderTop: "1px solid rgba(255,255,255,0.06)",
@@ -1307,10 +1309,10 @@ export default function AntiviralLanding() {
         <div style={{
           fontFamily: "'DM Mono', monospace",
           fontSize: "12px",
-          color: "rgba(255,255,255,0.2)",
+          color: "rgba(255,255,255,0.4)",
         }}>
           <a href="https://studioikigai.ai" target="_blank" rel="noopener noreferrer" style={{
-            color: "rgba(255,255,255,0.2)",
+            color: "rgba(255,255,255,0.4)",
             textDecoration: "none",
           }}>
             from Studio Ikigai
@@ -1320,14 +1322,11 @@ export default function AntiviralLanding() {
         <div style={{
           fontFamily: "'DM Mono', monospace",
           fontSize: "11px",
-          color: "rgba(255,255,255,0.2)",
-          opacity: 0.5,
+          color: "rgba(255,255,255,0.35)",
         }}>
           Your feed. Your data. Your device.
         </div>
       </footer>
-
-      <ConversationBar />
     </div>
   );
 }
