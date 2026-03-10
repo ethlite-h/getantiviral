@@ -1294,28 +1294,36 @@ export default function AntiviralLanding() {
 
       {/* FOOTER */}
       <footer style={{
-        padding: "40px",
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        textAlign: "center",
+        padding: "36px 40px",
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        maxWidth: "1000px",
+        margin: "0 auto",
+        flexWrap: "wrap",
+        gap: "12px",
       }}>
         <div style={{
           fontFamily: "'DM Mono', monospace",
           fontSize: "12px",
           color: "rgba(255,255,255,0.2)",
         }}>
-          from{" "}
-          <a
-            href="https://studioikigai.ai"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{
-              color: "rgba(255,255,255,0.3)",
-              textDecoration: "none",
-              borderBottom: "1px solid rgba(255,255,255,0.1)",
-            }}
-          >
-            Studio Ikigai
+          <a href="https://studioikigai.ai" target="_blank" rel="noopener noreferrer" style={{
+            color: "rgba(255,255,255,0.2)",
+            textDecoration: "none",
+          }}>
+            from Studio Ikigai
           </a>
+        </div>
+
+        <div style={{
+          fontFamily: "'DM Mono', monospace",
+          fontSize: "11px",
+          color: "rgba(255,255,255,0.2)",
+          opacity: 0.5,
+        }}>
+          Your feed. Your data. Your device.
         </div>
       </footer>
 
