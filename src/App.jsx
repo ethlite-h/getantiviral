@@ -1063,7 +1063,20 @@ export default function AntiviralLanding() {
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.25}>
+        <FadeIn delay={0.2}>
+          <p style={{
+            fontFamily: "'DM Mono', monospace",
+            fontSize: "13px",
+            lineHeight: 1.8,
+            color: "rgba(255,255,255,0.3)",
+            maxWidth: "540px",
+            margin: "24px auto 0",
+          }}>
+            Powered by Apple Foundation Models and an on-device sentence transformer. The AI that curates your feed never contacts a server — it runs entirely within Apple Intelligence on your iPhone.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.3}>
           <div style={{
             display: "flex",
             justifyContent: "center",
@@ -1299,10 +1312,11 @@ export default function AntiviralLanding() {
         borderTop: "1px solid rgba(255,255,255,0.06)",
         padding: "36px 40px",
         display: "flex",
-        flexDirection: "column",
-        alignItems: "flex-start",
+        justifyContent: "space-between",
+        alignItems: "center",
         maxWidth: "1000px",
         margin: "0 auto",
+        flexWrap: "wrap",
         gap: "12px",
       }}>
         <div style={{
