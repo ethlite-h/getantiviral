@@ -1316,7 +1316,6 @@ export default function AntiviralLanding() {
         alignItems: "center",
         maxWidth: "1000px",
         margin: "0 auto",
-        flexWrap: "wrap",
         gap: "12px",
       }}>
         <div style={{
