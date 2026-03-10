@@ -1072,7 +1072,7 @@ export default function AntiviralLanding() {
             maxWidth: "540px",
             margin: "24px auto 0",
           }}>
-            Powered by Apple Foundation Models and an on-device sentence transformer. The AI that curates your feed never contacts a server — it runs entirely within Apple Intelligence on your iPhone.
+            Powered by <a href="https://developer.apple.com/documentation/foundationmodels" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.45)", textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>Apple Foundation Models</a> and an on-device sentence transformer. The AI that curates your feed never contacts a server — it runs entirely within Apple Intelligence on your iPhone.
           </p>
         </FadeIn>
 
