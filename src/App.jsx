@@ -1290,9 +1290,9 @@ export default function AntiviralLanding() {
             </a>
           </div>
         </FadeIn>
-      </section>
 
-      <ConversationBar />
+        <ConversationBar />
+      </section>
 
       {/* FOOTER */}
       <footer style={{
