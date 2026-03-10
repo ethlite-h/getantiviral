@@ -1299,11 +1299,10 @@ export default function AntiviralLanding() {
         borderTop: "1px solid rgba(255,255,255,0.06)",
         padding: "36px 40px",
         display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
+        flexDirection: "column",
+        alignItems: "flex-start",
         maxWidth: "1000px",
         margin: "0 auto",
-        flexWrap: "wrap",
         gap: "12px",
       }}>
         <div style={{
