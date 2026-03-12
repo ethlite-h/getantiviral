@@ -695,7 +695,22 @@ function ConversationBar() {
 
 export default function AntiviralLanding() {
   const [scrollY, setScrollY] = useState(0);
-  const [heroCopy] = useState(() => HERO_COPIES[Math.floor(Math.random() * HERO_COPIES.length)]);
+  const [heroIndex, setHeroIndex] = useState(() => Math.floor(Math.random() * HERO_COPIES.length));
+  const [heroFade, setHeroFade] = useState(1);
+  const heroCopy = HERO_COPIES[heroIndex];
+
+  useEffect(() => {
+    const DISPLAY = 18000; // 18s visible
+    const FADE = 800;      // 0.8s fade out/in
+    const interval = setInterval(() => {
+      setHeroFade(0);
+      setTimeout(() => {
+        setHeroIndex(i => (i + 1) % HERO_COPIES.length);
+        setHeroFade(1);
+      }, FADE);
+    }, DISPLAY + FADE);
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
@@ -912,32 +927,37 @@ export default function AntiviralLanding() {
         maxWidth: "760px",
         margin: "0 auto",
       }}>
-        <FadeIn>
-          <div style={{ position: "relative", paddingLeft: "36px" }}>
-            <span className="quote-mark">"</span>
-            <p style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: "clamp(24px, 3.5vw, 34px)",
-              lineHeight: 1.55,
-              fontWeight: 400,
-              fontStyle: "italic",
-              color: "rgba(255,255,255,0.85)",
-            }}>
-              {heroCopy.quote}
-            </p>
-          </div>
-        </FadeIn>
+        <div style={{
+          opacity: heroFade,
+          transition: "opacity 0.8s ease-in-out",
+        }}>
+          <FadeIn>
+            <div style={{ position: "relative", paddingLeft: "36px" }}>
+              <span className="quote-mark">"</span>
+              <p style={{
+                fontFamily: "'Instrument Serif', Georgia, serif",
+                fontSize: "clamp(24px, 3.5vw, 34px)",
+                lineHeight: 1.55,
+                fontWeight: 400,
+                fontStyle: "italic",
+                color: "rgba(255,255,255,0.85)",
+              }}>
+                {heroCopy.quote}
+              </p>
+            </div>
+          </FadeIn>
 
-        <FadeIn delay={0.2}>
-          <p style={{
-            fontSize: "20px",
-            lineHeight: 1.75,
-            color: "rgba(255,255,255,0.5)",
-            marginTop: "48px",
-          }}>
-            {heroCopy.followup}
-          </p>
-        </FadeIn>
+          <FadeIn delay={0.2}>
+            <p style={{
+              fontSize: "20px",
+              lineHeight: 1.75,
+              color: "rgba(255,255,255,0.5)",
+              marginTop: "48px",
+            }}>
+              {heroCopy.followup}
+            </p>
+          </FadeIn>
+        </div>
       </section>
 
       <div className="section-divider" />
