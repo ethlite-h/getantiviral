@@ -16,6 +16,43 @@ const FAMILY_FEATURES = [
   "No screen time charts — a window into what they're curious about",
 ];
 
+// Hero copy rotation — each entry has a quote and a followup line.
+// Pulled from website-hero-copy-final.md. Rotates on each page load.
+const HERO_COPIES = [
+  {
+    quote: "You searched for a good pizza place. Three videos later you're watching a guy explain why the moon landing was staged. The algorithm didn't break. That's how it works.",
+    followup: <>Antiviral is a feed that does what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>actually</em> asked for.</>,
+  },
+  {
+    quote: "You've never been able to say \"I'm done with that\" to a search bar. Or \"more from this creator.\" Or \"surprise me with something I haven't thought about in a while.\"",
+    followup: <>Antiviral is a feed you talk to. And it <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>actually</em> listens.</>,
+  },
+  {
+    quote: "A YouTube video about pottery. A podcast episode about the philosophy of craft. A blog post about a ceramicist in Kyoto. From three different sources, in one feed, ranked by what you asked for.",
+    followup: <>No platform does this. Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>does</em>.</>,
+  },
+  {
+    quote: "YouTube's feed has 47 things competing for your attention right now. Thumbnails designed to make you click. Titles engineered to make you anxious. An autoplay queue that never ends.",
+    followup: <>Antiviral's feed has what you asked for. When you stop asking, it <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>stops</em> showing.</>,
+  },
+  {
+    quote: "Be honest. You've opened YouTube to watch one specific video and closed the app forty minutes later having watched none of the things you intended and all of the things you didn't.",
+    followup: <>That's not a lack of willpower. That's a billion-dollar recommendation engine working <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>exactly</em> as designed.</>,
+  },
+  {
+    quote: "You wanted a 10-minute dinner recipe. YouTube gave you a 10-minute dinner recipe, then a carnivore diet documentary, then a guy yelling about seed oils, then a two-hour lecture on why the food pyramid was a government conspiracy.",
+    followup: <>You just wanted pasta. Antiviral would have shown you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>pasta</em>.</>,
+  },
+  {
+    quote: "YouTube will never tell you \"you've been in a rabbit hole for two hours.\" It will never say \"you're only watching one kind of thing.\" It will never suggest you stop.",
+    followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>will</em>.</>,
+  },
+  {
+    quote: "You don't walk into a library and hand the librarian a keyword. You say \"I'm in the mood for something about that architect — the one who thought buildings could make people kinder.\"",
+    followup: <>That's Antiviral. A librarian for your YouTube, podcasts, and blogs. Running entirely on your <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>phone</em>.</>,
+  },
+];
+
 const FEED_COLORS = [
   { r: 107, g: 158, b: 111 }, // muted green (primary)
   { r: 111, g: 138, b: 168 }, // muted blue
@@ -658,6 +695,7 @@ function ConversationBar() {
 
 export default function AntiviralLanding() {
   const [scrollY, setScrollY] = useState(0);
+  const [heroCopy] = useState(() => HERO_COPIES[Math.floor(Math.random() * HERO_COPIES.length)]);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
@@ -885,7 +923,7 @@ export default function AntiviralLanding() {
               fontStyle: "italic",
               color: "rgba(255,255,255,0.85)",
             }}>
-              You know that feeling when YouTube nails it? That one perfect video, buried under seventeen things you didn't ask for?
+              {heroCopy.quote}
             </p>
           </div>
         </FadeIn>
@@ -897,7 +935,7 @@ export default function AntiviralLanding() {
             color: "rgba(255,255,255,0.5)",
             marginTop: "48px",
           }}>
-            Antiviral is a feed that's <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>only</em> that feeling.
+            {heroCopy.followup}
           </p>
         </FadeIn>
       </section>
