@@ -16,42 +16,88 @@ const FAMILY_FEATURES = [
   "No screen time charts — a window into what they're curious about",
 ];
 
-// Hero copy rotation — each entry has a quote and a followup line.
-// Pulled from website-hero-copy-final.md. Rotates on each page load.
+// Hero copy rotation — weighted per Recommended Rotation in website-hero-copy-final.md.
+// High-frequency = weight 3, medium = 2, lower = 1.
 const HERO_COPIES = [
+  // --- High-frequency ---
   {
+    weight: 3,
     quote: "You searched for a good pizza place. Three videos later you're watching a guy explain why the moon landing was staged. The algorithm didn't break. That's how it works.",
     followup: <>Antiviral is a feed that does what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>actually</em> asked for.</>,
   },
   {
+    weight: 3,
     quote: "You've never been able to say \"I'm done with that\" to a search bar. Or \"more from this creator.\" Or \"surprise me with something I haven't thought about in a while.\"",
     followup: <>Antiviral is a feed you talk to. And it <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>actually</em> listens.</>,
   },
   {
+    weight: 3,
     quote: "A YouTube video about pottery. A podcast episode about the philosophy of craft. A blog post about a ceramicist in Kyoto. From three different sources, in one feed, ranked by what you asked for.",
     followup: <>No platform does this. Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>does</em>.</>,
   },
   {
+    weight: 3,
     quote: "YouTube's feed has 47 things competing for your attention right now. Thumbnails designed to make you click. Titles engineered to make you anxious. An autoplay queue that never ends.",
     followup: <>Antiviral's feed has what you asked for. When you stop asking, it <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>stops</em> showing.</>,
   },
+  // --- Medium-frequency ---
   {
+    weight: 2,
     quote: "Be honest. You've opened YouTube to watch one specific video and closed the app forty minutes later having watched none of the things you intended and all of the things you didn't.",
     followup: <>That's not a lack of willpower. That's a billion-dollar recommendation engine working <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>exactly</em> as designed.</>,
   },
   {
+    weight: 2,
     quote: "You wanted a 10-minute dinner recipe. YouTube gave you a 10-minute dinner recipe, then a carnivore diet documentary, then a guy yelling about seed oils, then a two-hour lecture on why the food pyramid was a government conspiracy.",
     followup: <>You just wanted pasta. Antiviral would have shown you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>pasta</em>.</>,
   },
   {
+    weight: 2,
     quote: "YouTube will never tell you \"you've been in a rabbit hole for two hours.\" It will never say \"you're only watching one kind of thing.\" It will never suggest you stop.",
     followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>will</em>.</>,
   },
   {
+    weight: 2,
+    quote: "Your YouTube history lives on Google's servers. Your podcast data goes to Apple. Your reading habits go to whoever runs the blog. Every platform builds a profile of you that you've never seen and can't delete.",
+    followup: <>Antiviral keeps everything on your device. There's no server. There's no profile. There's nothing to <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>delete</em> because nothing ever left.</>,
+  },
+  // --- Lower-frequency ---
+  {
+    weight: 1,
+    quote: "You watched something last month. It was about buildings — not architecture exactly, but how spaces shape the way people feel. You can't remember the title. You can't remember the channel. YouTube certainly doesn't remember.",
+    followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>remembers</em>.</>,
+  },
+  {
+    weight: 1,
+    quote: "What if your feed could tell you what you've been circling lately? Not what the algorithm thinks you want — what you've actually watched, how often you came back to it, and what you quietly stopped caring about.",
+    followup: <>Antiviral is a map of your own <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>curiosity</em>.</>,
+  },
+  {
+    weight: 1,
+    quote: "YouTube's algorithm never says \"I don't have anything good for that.\" It always shows you something — even when it's garbage dressed up with a good thumbnail.",
+    followup: <>Antiviral will tell you the truth. Honest software. <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>Imagine</em>.</>,
+  },
+  {
+    weight: 1,
     quote: "You don't walk into a library and hand the librarian a keyword. You say \"I'm in the mood for something about that architect — the one who thought buildings could make people kinder.\"",
     followup: <>That's Antiviral. A librarian for your YouTube, podcasts, and blogs. Running entirely on your <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>phone</em>.</>,
   },
 ];
+
+// Pick a weighted random index, optionally excluding one index to avoid repeats.
+function weightedRandomIndex(exclude) {
+  let total = 0;
+  for (let i = 0; i < HERO_COPIES.length; i++) {
+    if (i !== exclude) total += HERO_COPIES[i].weight;
+  }
+  let r = Math.random() * total;
+  for (let i = 0; i < HERO_COPIES.length; i++) {
+    if (i === exclude) continue;
+    r -= HERO_COPIES[i].weight;
+    if (r <= 0) return i;
+  }
+  return 0;
+}
 
 const FEED_COLORS = [
   { r: 107, g: 158, b: 111 }, // muted green (primary)
@@ -695,7 +741,7 @@ function ConversationBar() {
 
 export default function AntiviralLanding() {
   const [scrollY, setScrollY] = useState(0);
-  const [heroIndex, setHeroIndex] = useState(() => Math.floor(Math.random() * HERO_COPIES.length));
+  const [heroIndex, setHeroIndex] = useState(() => weightedRandomIndex(-1));
   const [heroFade, setHeroFade] = useState(1);
   const heroCopy = HERO_COPIES[heroIndex];
 
@@ -705,7 +751,7 @@ export default function AntiviralLanding() {
     const interval = setInterval(() => {
       setHeroFade(0);
       setTimeout(() => {
-        setHeroIndex(i => (i + 1) % HERO_COPIES.length);
+        setHeroIndex(prev => weightedRandomIndex(prev));
         setHeroFade(1);
       }, FADE);
     }, DISPLAY + FADE);
