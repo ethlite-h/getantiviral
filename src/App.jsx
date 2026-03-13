@@ -82,6 +82,32 @@ const HERO_COPIES = [
     quote: "You don't walk into a library and hand the librarian a keyword. You say \"I'm in the mood for something about that architect — the one who thought buildings could make people kinder.\"",
     followup: <>That's Antiviral. A librarian for your YouTube, podcasts, and blogs. Running entirely on your <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>phone</em>.</>,
   },
+  // --- Discovery blocks (address "will I miss out?" objection) ---
+  {
+    weight: 3,
+    quote: "You follow 150 YouTube channels. YouTube shows you content from maybe 20 of them. The rest? Buried. The algorithm decided they weren't engaging enough to show you.",
+    followup: <>Antiviral searches <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>all</em> of them. You're not giving up discovery. You're discovering what was already yours.</>,
+  },
+  {
+    weight: 2,
+    quote: "Your subscriptions published 200 videos this week. YouTube showed you 15 of them. What about the other 185? They weren't buried because they were bad. They were buried because the algorithm thought something else would keep you watching longer.",
+    followup: <>Antiviral doesn't hide your own feed from you. It searches everything you follow and shows what actually matches what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>asked</em> for.</>,
+  },
+  {
+    weight: 2,
+    quote: "You've been watching pottery videos. You've also been reading about Japanese culture. You never thought to search for Japanese pottery specifically.",
+    followup: <>Antiviral noticed the overlap. Discovery doesn't require surveillance. It just requires paying attention to what you've <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>already</em> told it.</>,
+  },
+  {
+    weight: 1,
+    quote: "Remember when you were into woodworking? That was six months ago. You moved on. But three of your channels just posted new woodworking content. YouTube forgot.",
+    followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>didn't</em>. Your old interests aren't gone. They're archived. And when something new shows up that matches, the app lets you know.</>,
+  },
+  {
+    weight: 1,
+    quote: "Your YouTube subscriptions are your library. But who's finding the stuff you'd never think to search for? Add a subreddit. A community of people who share what they find across the entire internet — all showing up in your feed alongside your own subscriptions.",
+    followup: <>It's like joining a book club. You bring your taste. They bring the <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>surprises</em>.</>,
+  },
 ];
 
 // Pick a weighted random index, optionally excluding one index to avoid repeats.
@@ -1100,6 +1126,22 @@ export default function AntiviralLanding() {
                 <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
                 <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Everything runs on your device. Your interests, watch history, and conversations never leave your phone. There's no analytics, no tracking, no data collection.</span>
               </div>
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
+                <span style={{ color: "#6B9E6F" }}>you →</span>
+                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>surprise me</span>
+              </div>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
+                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>You haven't watched anything about astrophotography in two months, but one of your channels just posted a timelapse from the Atacama Desert. Also found a pottery video from a Japanese channel you rarely watch — it connects two things you've been into lately. Want to see either?</span>
+              </div>
+              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
+                <span style={{ color: "#6B9E6F" }}>you →</span>
+                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>I keep seeing the same pottery channels. show me what I'm missing</span>
+              </div>
+              <div>
+                <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
+                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>You could add r/pottery — it's a community that shares videos, articles, and tutorials from across the internet. I'll mix their finds into your feed alongside your own subscriptions. Want to add it?</span>
+              </div>
             </div>
           </div>
         </FadeIn>
@@ -1128,6 +1170,169 @@ export default function AntiviralLanding() {
             }}>
               No trial. No ads. No account. Your attention shouldn't be a product.
             </p>
+          </div>
+        </FadeIn>
+      </section>
+
+      <div className="section-divider" />
+
+      {/* BUT WILL I MISS OUT? */}
+      <section style={{
+        padding: "120px 40px",
+        maxWidth: "900px",
+        margin: "0 auto",
+      }}>
+        <FadeIn>
+          <h2 style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
+            fontSize: "clamp(32px, 5vw, 52px)",
+            fontWeight: 400,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            marginBottom: "20px",
+          }}>
+            You're already<br />
+            <span style={{ color: "rgba(255,255,255,0.35)" }}>missing out.</span>
+          </h2>
+        </FadeIn>
+
+        <FadeIn delay={0.15}>
+          <p style={{
+            fontSize: "19px",
+            lineHeight: 1.75,
+            color: "rgba(255,255,255,0.55)",
+            maxWidth: "620px",
+            marginBottom: "20px",
+          }}>
+            YouTube shows you content from a fraction of the channels you follow. The rest gets buried — not because it's bad, but because the algorithm decided something else would keep you scrolling longer.
+          </p>
+          <p style={{
+            fontSize: "19px",
+            lineHeight: 1.75,
+            color: "rgba(255,255,255,0.55)",
+            maxWidth: "620px",
+            marginBottom: "20px",
+          }}>
+            Antiviral searches everything you follow. Every channel. Every podcast. Every blog. When you ask for something, it looks through your entire library — not the 10% the algorithm picked for you.
+          </p>
+          <p style={{
+            fontSize: "19px",
+            lineHeight: 1.75,
+            color: "rgba(255,255,255,0.7)",
+            maxWidth: "620px",
+            marginBottom: "56px",
+          }}>
+            And it finds connections you haven't made yet.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.25}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gap: "20px",
+          }}>
+            {/* Panel 1: Your Hidden Library */}
+            <div style={{
+              padding: "32px",
+              borderRadius: "16px",
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}>
+              <p style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: "11px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.35)",
+                marginBottom: "16px",
+              }}>
+                Your Hidden Library
+              </p>
+              <p style={{
+                fontSize: "16px",
+                lineHeight: 1.75,
+                color: "rgba(255,255,255,0.55)",
+                marginBottom: "12px",
+              }}>
+                You follow 150 channels. You see content from maybe 20.
+              </p>
+              <p style={{
+                fontSize: "16px",
+                lineHeight: 1.75,
+                color: "rgba(255,255,255,0.7)",
+              }}>
+                Antiviral searches all of them — and ranks by what you asked for, not what gets the most clicks.
+              </p>
+            </div>
+
+            {/* Panel 2: Connections You Haven't Made */}
+            <div style={{
+              padding: "32px",
+              borderRadius: "16px",
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}>
+              <p style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: "11px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.35)",
+                marginBottom: "16px",
+              }}>
+                Connections You Haven't Made
+              </p>
+              <p style={{
+                fontSize: "16px",
+                lineHeight: 1.75,
+                color: "rgba(255,255,255,0.55)",
+                marginBottom: "12px",
+              }}>
+                You've been watching pottery. You've been reading about Japan. Antiviral finds a video about a ceramicist in Kyoto that's been sitting in your subscriptions for a week.
+              </p>
+              <p style={{
+                fontSize: "16px",
+                lineHeight: 1.75,
+                color: "rgba(255,255,255,0.7)",
+              }}>
+                Your interests have intersections. The algorithm ignores them. Antiviral doesn't.
+              </p>
+            </div>
+
+            {/* Panel 3: Interests Don't Expire */}
+            <div style={{
+              padding: "32px",
+              borderRadius: "16px",
+              background: "rgba(255,255,255,0.03)",
+              border: "1px solid rgba(255,255,255,0.06)",
+            }}>
+              <p style={{
+                fontFamily: "'DM Mono', monospace",
+                fontSize: "11px",
+                letterSpacing: "0.1em",
+                textTransform: "uppercase",
+                color: "rgba(255,255,255,0.35)",
+                marginBottom: "16px",
+              }}>
+                Interests Don't Expire
+              </p>
+              <p style={{
+                fontSize: "16px",
+                lineHeight: 1.75,
+                color: "rgba(255,255,255,0.55)",
+                marginBottom: "12px",
+              }}>
+                Remember when you were into astrophotography? Your channels are still posting about it. Antiviral remembers what you used to care about — and when something new matches, it lets you know.
+              </p>
+              <p style={{
+                fontSize: "16px",
+                lineHeight: 1.75,
+                color: "rgba(255,255,255,0.7)",
+              }}>
+                "Surprise me" means: show me something from a corner of my library I haven't visited in a while.
+              </p>
+            </div>
           </div>
         </FadeIn>
       </section>
