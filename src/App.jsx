@@ -51,6 +51,11 @@ const HERO_COPIES = [
     quote: "You wanted a 10-minute dinner recipe. YouTube gave you a 10-minute dinner recipe, then a carnivore diet documentary, then a guy yelling about seed oils, then a two-hour lecture on why the food pyramid was a government conspiracy.",
     followup: <>You just wanted pasta. Antiviral would have shown you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>pasta</em>.</>,
   },
+  {
+    weight: 2,
+    quote: "Your YouTube history lives on Google's servers. Your viewing habits go to whoever runs the network. Every platform builds a profile of you that you've never seen that serves the highest bidder - not you.",
+    followup: <>Antiviral keeps everything on your device. There's no server. There's no profile. Your data exists only to serve <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>you</em>.</>,
+  },
   // --- Lower-frequency ---
   {
     weight: 1,
@@ -82,6 +87,16 @@ const HERO_COPIES = [
     weight: 2,
     quote: "Your subscriptions published 200 videos this week. YouTube showed you 15 of them. What about the other 185? They weren't buried because they were bad. They were buried because the algorithm thought something else would keep you watching longer.",
     followup: <>Antiviral doesn't hide your own feed from you. It searches everything you follow and shows what actually matches what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>asked</em> for.</>,
+  },
+  {
+    weight: 2,
+    quote: "You've been watching pottery videos. You've also been reading about Japanese culture. You never thought to search for Japanese pottery specifically.",
+    followup: <>Antiviral noticed the overlap. Discovery doesn't require surveillance. It just requires paying attention to what you've <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>already</em> told it.</>,
+  },
+  {
+    weight: 1,
+    quote: "Remember when you were into woodworking? That was six months ago. You moved on. But three of your channels just posted new woodworking content. YouTube forgot.",
+    followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>didn't</em>. Your old interests aren't gone. They're archived. And when something new shows up that matches, the app lets you know.</>,
   },
   {
     weight: 1,
