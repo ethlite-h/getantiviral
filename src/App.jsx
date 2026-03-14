@@ -3,7 +3,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 const PERSONAL_FEATURES = [
   "Import your YouTube subscriptions, podcasts, and blogs",
   "AI builds a transparent topic list from what you actually watch",
-  "Talk to your feed — \"go deeper on this,\" \"I'm done with that\"",
+  "Talk to your feed — \"more like this,\" \"I'm done with that\"",
   "Feed reshapes itself around what you said, not what advertisers paid for",
   "Everything runs on your device. No servers. No accounts. No tracking.",
 ];
@@ -38,7 +38,7 @@ const HERO_COPIES = [
   {
     weight: 3,
     quote: "YouTube's feed has 47 things competing for your attention right now. Thumbnails designed to make you click. Titles engineered to make you anxious. An autoplay queue that never ends.",
-    followup: <>Antiviral's feed has what you asked for. When you stop asking, it <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>stops</em> showing.</>,
+    followup: <>Antiviral's feed has what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>asked</em> for. Nothing more.</>,
   },
   // --- Medium-frequency ---
   {
@@ -50,16 +50,6 @@ const HERO_COPIES = [
     weight: 2,
     quote: "You wanted a 10-minute dinner recipe. YouTube gave you a 10-minute dinner recipe, then a carnivore diet documentary, then a guy yelling about seed oils, then a two-hour lecture on why the food pyramid was a government conspiracy.",
     followup: <>You just wanted pasta. Antiviral would have shown you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>pasta</em>.</>,
-  },
-  {
-    weight: 2,
-    quote: "YouTube will never tell you \"you've been in a rabbit hole for two hours.\" It will never say \"you're only watching one kind of thing.\" It will never suggest you stop.",
-    followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>will</em>.</>,
-  },
-  {
-    weight: 2,
-    quote: "Your YouTube history lives on Google's servers. Your podcast data goes to Apple. Your reading habits go to whoever runs the blog. Every platform builds a profile of you that you've never seen and can't delete.",
-    followup: <>Antiviral keeps everything on your device. There's no server. There's no profile. There's nothing to <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>delete</em> because nothing ever left.</>,
   },
   // --- Lower-frequency ---
   {
@@ -92,16 +82,6 @@ const HERO_COPIES = [
     weight: 2,
     quote: "Your subscriptions published 200 videos this week. YouTube showed you 15 of them. What about the other 185? They weren't buried because they were bad. They were buried because the algorithm thought something else would keep you watching longer.",
     followup: <>Antiviral doesn't hide your own feed from you. It searches everything you follow and shows what actually matches what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>asked</em> for.</>,
-  },
-  {
-    weight: 2,
-    quote: "You've been watching pottery videos. You've also been reading about Japanese culture. You never thought to search for Japanese pottery specifically.",
-    followup: <>Antiviral noticed the overlap. Discovery doesn't require surveillance. It just requires paying attention to what you've <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>already</em> told it.</>,
-  },
-  {
-    weight: 1,
-    quote: "Remember when you were into woodworking? That was six months ago. You moved on. But three of your channels just posted new woodworking content. YouTube forgot.",
-    followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>didn't</em>. Your old interests aren't gone. They're archived. And when something new shows up that matches, the app lets you know.</>,
   },
   {
     weight: 1,
@@ -1104,11 +1084,11 @@ export default function AntiviralLanding() {
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               <div>
                 <span style={{ color: "#6B9E6F" }}>you →</span>
-                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>go deeper on pottery</span>
+                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>more like this</span>
               </div>
               <div>
                 <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Diving deeper into pottery for you.</span>
+                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Here's more along the same lines.</span>
               </div>
               <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
                 <span style={{ color: "#6B9E6F" }}>you →</span>
@@ -1132,15 +1112,7 @@ export default function AntiviralLanding() {
               </div>
               <div>
                 <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>You haven't watched anything about astrophotography in two months, but one of your channels just posted a timelapse from the Atacama Desert. Also found a pottery video from a Japanese channel you rarely watch — it connects two things you've been into lately. Want to see either?</span>
-              </div>
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
-                <span style={{ color: "#6B9E6F" }}>you →</span>
-                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>I keep seeing the same pottery channels. show me what I'm missing</span>
-              </div>
-              <div>
-                <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>You could add r/pottery — it's a community that shares videos, articles, and tutorials from across the internet. I'll mix their finds into your feed alongside your own subscriptions. Want to add it?</span>
+                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Here's something a little different — enjoy!</span>
               </div>
             </div>
           </div>
