@@ -56,6 +56,21 @@ const HERO_COPIES = [
     quote: "Your YouTube history lives on Google's servers. Your viewing habits go to whoever runs the network. Every platform builds a profile of you that you've never seen that serves the highest bidder - not you.",
     followup: <>Antiviral keeps everything on your device. There's no server. There's no profile. Your data exists only to serve <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>you</em>.</>,
   },
+  {
+    weight: 2,
+    quote: "You've been watching YouTube for years. Can you describe what you're interested in right now? Not what you were into six months ago. Right now. You can't — because no platform ever told you.",
+    followup: <>Antiviral can. It shows you a living map of your interests — what's <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>growing</em>, what's fading, and what you didn't realize you'd started caring about.</>,
+  },
+  {
+    weight: 2,
+    quote: "YouTube shows you a video. You don't know why. Was it because you watched something similar? Because it's trending? Because an advertiser paid for it? You'll never know. The algorithm doesn't explain itself.",
+    followup: <>Tap anything in Antiviral and it tells you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>exactly</em> why it's there. Which interest matched. How strong the match was. No black boxes. No mysteries. Just honesty.</>,
+  },
+  {
+    weight: 2,
+    quote: "You watch pottery on YouTube. You listen to podcasts about design. You read blogs about craft. But none of these platforms talk to each other. Your interests are scattered across apps that will never connect the dots.",
+    followup: <>Antiviral searches all of them at once. One feed. Every source. Ranked by what <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>you</em> care about — not which platform published it.</>,
+  },
   // --- Lower-frequency ---
   {
     weight: 1,
@@ -1629,11 +1644,20 @@ export default function AntiviralLanding() {
         </div>
 
         <div style={{
+          display: "flex",
+          alignItems: "center",
+          gap: "20px",
           fontFamily: "'DM Mono', monospace",
           fontSize: "11px",
           color: "rgba(255,255,255,0.35)",
         }}>
-          Your feed. Your data. Your device.
+          <span>Your feed. Your data. Your device.</span>
+          <a href="/privacy" style={{
+            color: "rgba(255,255,255,0.25)",
+            textDecoration: "none",
+          }}>
+            Privacy
+          </a>
         </div>
       </footer>
     </div>
