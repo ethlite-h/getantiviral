@@ -117,7 +117,7 @@ export default function Privacy() {
           <P>Nothing.</P>
           <Ul>
             <Li>No analytics</Li>
-            <Li>No crash reporting</Li>
+            <Li>Crash reporting only through Apple's infrastructure, which strips all personally identifiable information before we see it</Li>
             <Li>No telemetry</Li>
             <Li>No account system</Li>
             <Li>No user identifiers</Li>
