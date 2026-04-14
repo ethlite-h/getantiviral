@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://getantiviral.app/sitemap.xml

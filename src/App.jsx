@@ -894,9 +894,44 @@ export default function AntiviralLanding() {
           user-select: none;
         }
 
+        a, button, input, textarea { outline: none; }
+        a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
+          outline: 2px solid #6B9E6F;
+          outline-offset: 3px;
+          border-radius: 4px;
+        }
+        .cta-btn:focus-visible {
+          outline: 2px solid #6B9E6F;
+          outline-offset: 4px;
+        }
+
         @media (max-width: 768px) {
           .conv-bar-anchor {
             bottom: 64px !important;
+          }
+          nav {
+            padding: 16px 20px !important;
+          }
+          section {
+            padding-left: 20px !important;
+            padding-right: 20px !important;
+          }
+          section.hero {
+            padding-top: 100px !important;
+            padding-bottom: 60px !important;
+          }
+        }
+        @media (max-width: 400px) {
+          nav .cta-btn {
+            padding: 8px 14px !important;
+            font-size: 12px !important;
+          }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
           }
         }
 
@@ -949,7 +984,7 @@ export default function AntiviralLanding() {
       </nav>
 
       {/* HERO */}
-      <section style={{
+      <section className="hero" style={{
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",

@@ -9,8 +9,16 @@ export default function Privacy() {
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        a { color: rgba(255,255,255,0.5); }
+        a { color: rgba(255,255,255,0.5); outline: none; }
         a:hover { color: rgba(255,255,255,0.8); }
+        a:focus-visible {
+          outline: 2px solid #6B9E6F;
+          outline-offset: 3px;
+          border-radius: 2px;
+        }
+        @media (max-width: 768px) {
+          nav, main { padding-left: 20px !important; padding-right: 20px !important; }
+        }
       `}</style>
 
       <nav style={{
