@@ -1,140 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 
-const PERSONAL_FEATURES = [
-  "Import your YouTube subscriptions, podcasts, and blogs",
-  "AI builds a transparent topic list from what you actually watch",
-  "Talk to your feed — \"more like this,\" \"I'm done with that\"",
-  "Feed reshapes itself around what you said, not what advertisers paid for",
-  "Everything runs on your device. No servers. No accounts. No tracking.",
-];
-
-const FAMILY_FEATURES = [
-  "Individual feeds for every family member",
-  "Content sources chosen together, boundaries set by parents",
-  "Kids talk to their own feed — they feel in control, because they are",
-  "Parent dashboard shows what topics your kids are exploring",
-  "No screen time charts — a window into what they're curious about",
-];
-
-// Hero copy rotation — weighted per Recommended Rotation in website-hero-copy-final.md.
-// High-frequency = weight 3, medium = 2, lower = 1.
-const HERO_COPIES = [
-  // --- High-frequency ---
-  {
-    weight: 3,
-    quote: "You searched for a good pizza place. Three videos later you're watching a guy explain why the moon landing was staged. The algorithm didn't break. That's how it works.",
-    followup: <>Antiviral is a feed that does what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>actually</em> asked for.</>,
-  },
-  {
-    weight: 3,
-    quote: "You've never been able to say \"I'm done with that\" to a search bar. Or \"more from this creator.\" Or \"surprise me with something I haven't thought about in a while.\"",
-    followup: <>Antiviral is a feed you talk to. And it <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>actually</em> listens.</>,
-  },
-  {
-    weight: 3,
-    quote: "A YouTube video about pottery. A podcast episode about the philosophy of craft. A blog post about a ceramicist in Kyoto. From three different sources, in one feed, ranked by what you asked for.",
-    followup: <>No platform does this. Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>does</em>.</>,
-  },
-  {
-    weight: 3,
-    quote: "YouTube's feed has 47 things competing for your attention right now. Thumbnails designed to make you click. Titles engineered to make you anxious. An autoplay queue that never ends.",
-    followup: <>Antiviral's feed has what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>asked</em> for. Nothing more.</>,
-  },
-  // --- Medium-frequency ---
-  {
-    weight: 2,
-    quote: "Be honest. You've opened YouTube to watch one specific video and closed the app forty minutes later having watched none of the things you intended and all of the things you didn't.",
-    followup: <>That's not a lack of willpower. That's a billion-dollar recommendation engine working <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>exactly</em> as designed.</>,
-  },
-  {
-    weight: 2,
-    quote: "You wanted a 10-minute dinner recipe. YouTube gave you a 10-minute dinner recipe, then a carnivore diet documentary, then a guy yelling about seed oils, then a two-hour lecture on why the food pyramid was a government conspiracy.",
-    followup: <>You just wanted pasta. Antiviral would have shown you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>pasta</em>.</>,
-  },
-  {
-    weight: 2,
-    quote: "Your YouTube history lives on Google's servers. Your viewing habits go to whoever runs the network. Every platform builds a profile of you that you've never seen that serves the highest bidder - not you.",
-    followup: <>Antiviral keeps everything on your device. There's no server. There's no profile. Your data exists only to serve <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>you</em>.</>,
-  },
-  {
-    weight: 2,
-    quote: "You've been watching YouTube for years. Can you describe what you're interested in right now? Not what you were into six months ago. Right now. You can't — because no platform ever told you.",
-    followup: <>Antiviral can. It shows you a living map of your interests — what's <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>growing</em>, what's fading, and what you didn't realize you'd started caring about.</>,
-  },
-  {
-    weight: 2,
-    quote: "YouTube shows you a video. You don't know why. Was it because you watched something similar? Because it's trending? Because an advertiser paid for it? You'll never know. The algorithm doesn't explain itself.",
-    followup: <>Tap anything in Antiviral and it tells you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>exactly</em> why it's there. Which interest matched. How strong the match was. No black boxes. No mysteries. Just honesty.</>,
-  },
-  {
-    weight: 2,
-    quote: "You watch pottery on YouTube. You listen to podcasts about design. You read blogs about craft. But none of these platforms talk to each other. Your interests are scattered across apps that will never connect the dots.",
-    followup: <>Antiviral searches all of them at once. One feed. Every source. Ranked by what <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>you</em> care about — not which platform published it.</>,
-  },
-  // --- Lower-frequency ---
-  {
-    weight: 1,
-    quote: "You watched something last month. It was about buildings — not architecture exactly, but how spaces shape the way people feel. You can't remember the title. You can't remember the channel. YouTube certainly doesn't remember.",
-    followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>remembers</em>.</>,
-  },
-  {
-    weight: 1,
-    quote: "What if your feed could tell you what you've been circling lately? Not what the algorithm thinks you want — what you've actually watched, how often you came back to it, and what you quietly stopped caring about.",
-    followup: <>Antiviral is a map of your own <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>curiosity</em>.</>,
-  },
-  {
-    weight: 1,
-    quote: "YouTube's algorithm never says \"I don't have anything good for that.\" It always shows you something — even when it's garbage dressed up with a good thumbnail.",
-    followup: <>Antiviral will tell you the truth. Honest software. <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>Imagine</em>.</>,
-  },
-  {
-    weight: 1,
-    quote: "You don't walk into a library and hand the librarian a keyword. You say \"I'm in the mood for something about that architect — the one who thought buildings could make people kinder.\"",
-    followup: <>That's Antiviral. A librarian for your YouTube, podcasts, and blogs. Running entirely on your <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>phone</em>.</>,
-  },
-  // --- Discovery blocks (address "will I miss out?" objection) ---
-  {
-    weight: 3,
-    quote: "You follow 150 YouTube channels. YouTube shows you content from maybe 20 of them. The rest? Buried. The algorithm decided they weren't engaging enough to show you.",
-    followup: <>Antiviral searches <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>all</em> of them. You're not giving up discovery. You're discovering what was already yours.</>,
-  },
-  {
-    weight: 2,
-    quote: "Your subscriptions published 200 videos this week. YouTube showed you 15 of them. What about the other 185? They weren't buried because they were bad. They were buried because the algorithm thought something else would keep you watching longer.",
-    followup: <>Antiviral doesn't hide your own feed from you. It searches everything you follow and shows what actually matches what you <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>asked</em> for.</>,
-  },
-  {
-    weight: 2,
-    quote: "You've been watching pottery videos. You've also been reading about Japanese culture. You never thought to search for Japanese pottery specifically.",
-    followup: <>Antiviral noticed the overlap. Discovery doesn't require surveillance. It just requires paying attention to what you've <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>already</em> told it.</>,
-  },
-  {
-    weight: 1,
-    quote: "Remember when you were into woodworking? That was six months ago. You moved on. But three of your channels just posted new woodworking content. YouTube forgot.",
-    followup: <>Antiviral <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>didn't</em>. Your old interests aren't gone. They're archived. And when something new shows up that matches, the app lets you know.</>,
-  },
-  {
-    weight: 1,
-    quote: "Your YouTube subscriptions are your library. But who's finding the stuff you'd never think to search for? Add a subreddit. A community of people who share what they find across the entire internet — all showing up in your feed alongside your own subscriptions.",
-    followup: <>It's like joining a book club. You bring your taste. They bring the <em style={{ color: "rgba(255,255,255,0.85)", fontStyle: "italic" }}>surprises</em>.</>,
-  },
-];
-
-// Pick a weighted random index, optionally excluding one index to avoid repeats.
-function weightedRandomIndex(exclude) {
-  let total = 0;
-  for (let i = 0; i < HERO_COPIES.length; i++) {
-    if (i !== exclude) total += HERO_COPIES[i].weight;
-  }
-  let r = Math.random() * total;
-  for (let i = 0; i < HERO_COPIES.length; i++) {
-    if (i === exclude) continue;
-    r -= HERO_COPIES[i].weight;
-    if (r <= 0) return i;
-  }
-  return 0;
-}
-
 const FEED_COLORS = [
   { r: 107, g: 158, b: 111 }, // muted green (primary)
   { r: 111, g: 138, b: 168 }, // muted blue
@@ -319,90 +184,6 @@ function FeedVisualization() {
   );
 }
 
-function AnimatedLogo({ size = 28 }) {
-  const canvasRef = useRef(null);
-  const animRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    const dpr = window.devicePixelRatio || 2;
-    canvas.width = size * dpr;
-    canvas.height = size * dpr;
-    canvas.style.width = size + "px";
-    canvas.style.height = size + "px";
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    const streaks = [
-      { color: [100, 230, 160], dotX: 0.15, yStart: 0.42, yMid: 0.55, yEnd: 0.48 },
-      { color: [230, 110, 140], dotX: 0.50, yStart: 0.55, yMid: 0.45, yEnd: 0.52 },
-      { color: [160, 140, 240], dotX: 0.85, yStart: 0.50, yMid: 0.52, yEnd: 0.45 },
-    ];
-
-    const draw = (time) => {
-      ctx.clearRect(0, 0, size, size);
-      const t = time * 0.001;
-
-      for (const s of streaks) {
-        const [r, g, b] = s.color;
-        const wave = Math.sin(t * 0.8 + s.dotX * 6) * 0.04;
-        const y0 = (s.yStart + wave) * size;
-        const y1 = (s.yMid - wave * 0.7) * size;
-        const y2 = (s.yEnd + wave * 0.5) * size;
-
-        // Draw streak line
-        ctx.beginPath();
-        ctx.moveTo(-2, y0);
-        ctx.quadraticCurveTo(size * 0.35, y1, size * 0.5, (y0 + y2) / 2 + wave * size * 2);
-        ctx.quadraticCurveTo(size * 0.65, y2, size + 2, y2);
-        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.35)`;
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-
-        // Second thinner parallel line for richness
-        ctx.beginPath();
-        ctx.moveTo(-2, y0 + 2);
-        ctx.quadraticCurveTo(size * 0.35, y1 + 1.5, size * 0.5, (y0 + y2) / 2 + wave * size * 2 + 2);
-        ctx.quadraticCurveTo(size * 0.65, y2 + 1.5, size + 2, y2 + 2);
-        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, 0.15)`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        // Glowing dot
-        const pulse = 0.6 + 0.4 * Math.sin(t * 1.5 + s.dotX * 10);
-        const dx = s.dotX * size;
-        const dy = s.dotX < 0.3 ? y0 : s.dotX > 0.7 ? y2 : (y0 + y2) / 2 + wave * size * 2;
-        const dotR = 2.5 + pulse * 1.5;
-
-        const grad = ctx.createRadialGradient(dx, dy, 0, dx, dy, dotR * 2);
-        grad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${0.9 * pulse})`);
-        grad.addColorStop(0.4, `rgba(${r}, ${g}, ${b}, ${0.4 * pulse})`);
-        grad.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-        ctx.fillStyle = grad;
-        ctx.fillRect(dx - dotR * 2, dy - dotR * 2, dotR * 4, dotR * 4);
-      }
-
-      animRef.current = requestAnimationFrame(draw);
-    };
-    animRef.current = requestAnimationFrame(draw);
-
-    return () => cancelAnimationFrame(animRef.current);
-  }, [size]);
-
-  return (
-    <canvas
-      ref={canvasRef}
-      style={{
-        width: size + "px",
-        height: size + "px",
-        borderRadius: "6px",
-        flexShrink: 0,
-      }}
-    />
-  );
-}
-
 function useInView(threshold = 0.15) {
   const ref = useRef(null);
   const [visible, setVisible] = useState(false);
@@ -454,43 +235,115 @@ function Pill({ children }) {
   );
 }
 
-function FeatureItem({ text, index }) {
-  return (
-    <div style={{
-      display: "flex",
-      gap: "16px",
-      alignItems: "flex-start",
-      opacity: 0,
-      animation: `fadeSlideIn 0.5s ease forwards ${0.1 + index * 0.08}s`,
-    }}>
-      <div style={{
-        width: "6px",
-        height: "6px",
-        borderRadius: "50%",
-        background: "#6B9E6F",
-        marginTop: "9px",
-        flexShrink: 0,
-      }} />
-      <p style={{
-        margin: 0,
-        fontSize: "17px",
-        lineHeight: 1.65,
-        color: "rgba(255,255,255,0.75)",
-        fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
+// Email capture for the pre-launch waitlist. Posts to /api/waitlist.
+function WaitlistForm({ id }) {
+  const [email, setEmail] = useState("");
+  const [state, setState] = useState("idle"); // idle | loading | done | error
+  const [message, setMessage] = useState("");
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (state === "loading") return;
+    const trimmed = email.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+      setState("error");
+      setMessage("That doesn't look like an email.");
+      return;
+    }
+    setState("loading");
+    try {
+      const res = await fetch("/api/waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: trimmed }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (res.ok) {
+        setState("done");
+        setMessage("You're on the list. We'll write when it's ready.");
+      } else {
+        setState("error");
+        setMessage(data.error || "Something went wrong. Try again in a moment.");
+      }
+    } catch {
+      setState("error");
+      setMessage("Couldn't reach the list. Try again in a moment.");
+    }
+  };
+
+  if (state === "done") {
+    return (
+      <p id={id} style={{
+        fontFamily: "'DM Mono', monospace",
+        fontSize: "15px",
+        color: "#6B9E6F",
+        padding: "8px 0",
       }}>
-        {text}
+        {message}
       </p>
-    </div>
+    );
+  }
+
+  return (
+    <form id={id} onSubmit={submit} style={{ width: "100%", maxWidth: "440px" }}>
+      <div style={{
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
+        background: "rgba(255,255,255,0.04)",
+        border: "1px solid rgba(255,255,255,0.15)",
+        borderRadius: "100px",
+        padding: "5px 6px 5px 20px",
+      }}>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => { setEmail(e.target.value); if (state === "error") setState("idle"); }}
+          placeholder="your@email.com"
+          maxLength={254}
+          aria-label="Email address"
+          style={{
+            flex: 1,
+            background: "none",
+            border: "none",
+            outline: "none",
+            color: "rgba(255,255,255,0.9)",
+            fontSize: "16px",
+            fontFamily: "'DM Mono', monospace",
+            caretColor: "#6B9E6F",
+            minWidth: 0,
+          }}
+        />
+        <button type="submit" className="cta-btn cta-primary" disabled={state === "loading"} style={{
+          padding: "12px 24px",
+          fontSize: "14px",
+          opacity: state === "loading" ? 0.6 : 1,
+          whiteSpace: "nowrap",
+        }}>
+          {state === "loading" ? "…" : "Join the waitlist"}
+        </button>
+      </div>
+      {state === "error" && (
+        <p style={{
+          margin: "10px 4px 0",
+          fontFamily: "'DM Mono', monospace",
+          fontSize: "13px",
+          color: "rgba(220,140,140,0.9)",
+        }}>
+          {message}
+        </p>
+      )}
+    </form>
   );
 }
 
 const CONV_PLACEHOLDERS = [
-  { text: "Ask me anything about Antiviral", weight: 0.283 },
-  { text: "How is the feed built?", weight: 0.283 },
-  { text: "Is this really free?", weight: 0.284 },
+  { text: "Ask me anything about Antiviral", weight: 0.30 },
+  { text: "How does the daily Edition work?", weight: 0.24 },
+  { text: "What does it cost?", weight: 0.18 },
+  { text: "When does it launch?", weight: 0.12 },
+  { text: "Is my data private?", weight: 0.10 },
   { text: "Who made this app?", weight: 0.06 },
-  { text: "How does the AI work?", weight: 0.06 },
-  { text: "Tell me a secret", weight: 0.03 },
 ];
 
 function pickStartIndex() {
@@ -571,7 +424,7 @@ function ConversationBar() {
     if (!trimmed) return;
 
     if (questionCount >= maxQuestions) {
-      setAnswer("That's a lot of questions — download the app for the full experience.");
+      setAnswer("That's a lot of questions — join the waitlist and you'll have the whole app soon enough.");
       setPhase("response");
       return;
     }
@@ -775,24 +628,23 @@ function ConversationBar() {
   );
 }
 
+const LOOP_STEPS = [
+  {
+    label: "Feed",
+    body: "Honest curation of the sources you already follow, ranked by what you actually care about — not what keeps you scrolling.",
+  },
+  {
+    label: "Shortlist",
+    body: "A finite hand of cards for when you want a little more in the moment. Still an end, not a hole.",
+  },
+  {
+    label: "Edition",
+    body: "One issue a day, composed from your sources, with a genuine last page. Read it, reach the end, and you're done.",
+  },
+];
+
 export default function AntiviralLanding() {
   const [scrollY, setScrollY] = useState(0);
-  const [heroIndex, setHeroIndex] = useState(() => weightedRandomIndex(-1));
-  const [heroFade, setHeroFade] = useState(1);
-  const heroCopy = HERO_COPIES[heroIndex];
-
-  useEffect(() => {
-    const DISPLAY = 18000; // 18s visible
-    const FADE = 800;      // 0.8s fade out/in
-    const interval = setInterval(() => {
-      setHeroFade(0);
-      setTimeout(() => {
-        setHeroIndex(prev => weightedRandomIndex(prev));
-        setHeroFade(1);
-      }, FADE);
-    }, DISPLAY + FADE);
-    return () => clearInterval(interval);
-  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrollY(window.scrollY);
@@ -816,17 +668,6 @@ export default function AntiviralLanding() {
         @keyframes fadeSlideIn {
           to { opacity: 1; transform: translateY(0); }
           from { opacity: 0; transform: translateY(16px); }
-        }
-
-        @keyframes pulse {
-          0%, 100% { opacity: 0.4; }
-          50% { opacity: 0.8; }
-        }
-
-        @keyframes gradientShift {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
         }
 
         ::selection {
@@ -978,8 +819,7 @@ export default function AntiviralLanding() {
           antiviral
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
-          <a href="#personal" className="cta-btn cta-secondary" style={{ padding: "10px 24px", fontSize: "13px" }}>Personal</a>
-          <a href="#family" className="cta-btn cta-secondary" style={{ padding: "10px 24px", fontSize: "13px" }}>Family</a>
+          <a href="#waitlist" className="cta-btn cta-secondary" style={{ padding: "10px 24px", fontSize: "13px" }}>Join the waitlist</a>
         </div>
       </nav>
 
@@ -997,7 +837,7 @@ export default function AntiviralLanding() {
         <FeedVisualization />
 
         <div style={{ marginBottom: "40px" }}>
-          <Pill>Free — no catch</Pill>
+          <Pill>Fall 2026 · Built for iOS 27</Pill>
         </div>
 
         <h1 style={{
@@ -1016,78 +856,67 @@ export default function AntiviralLanding() {
           fontSize: "clamp(18px, 2.5vw, 22px)",
           lineHeight: 1.7,
           color: "rgba(255,255,255,0.55)",
-          maxWidth: "600px",
+          maxWidth: "620px",
           marginBottom: "48px",
           opacity: 0,
           animation: "fadeSlideIn 0.7s ease forwards 0.6s",
         }}>
-          An AI that runs on your phone, shapes your feed around what you actually care about, and answers to nobody but you.
+          One honest daily edition from the YouTube channels, podcasts, and blogs you already follow — with a real last page. It runs on your device, works for you instead of an advertiser, and shows you why it chose every piece.
         </p>
 
         <div style={{
-          display: "flex",
-          gap: "16px",
-          flexWrap: "wrap",
           opacity: 0,
           animation: "fadeSlideIn 0.7s ease forwards 0.9s",
         }}>
-          <a href="https://testflight.apple.com/join/sQH5sdCw" target="_blank" rel="noopener noreferrer" className="cta-btn cta-primary">
-            Get Antiviral
-            <span style={{ fontSize: "18px" }}>↗</span>
-          </a>
+          <WaitlistForm />
         </div>
       </section>
 
-      {/* THE PROBLEM */}
+      {/* THE PROBLEM — cessation hook (the kept paragraph) */}
       <section style={{
         padding: "120px 40px",
         maxWidth: "760px",
         margin: "0 auto",
       }}>
-        <div style={{
-          opacity: heroFade,
-          transition: "opacity 0.8s ease-in-out",
-        }}>
-          <FadeIn>
-            <div style={{ position: "relative", paddingLeft: "36px" }}>
-              <span className="quote-mark">"</span>
-              <p style={{
-                fontFamily: "'Instrument Serif', Georgia, serif",
-                fontSize: "clamp(24px, 3.5vw, 34px)",
-                lineHeight: 1.55,
-                fontWeight: 400,
-                fontStyle: "italic",
-                color: "rgba(255,255,255,0.85)",
-              }}>
-                {heroCopy.quote}
-              </p>
-            </div>
-          </FadeIn>
-
-          <FadeIn delay={0.2}>
+        <FadeIn>
+          <div style={{ position: "relative", paddingLeft: "36px" }}>
+            <span className="quote-mark">"</span>
             <p style={{
-              fontSize: "20px",
-              lineHeight: 1.75,
-              color: "rgba(255,255,255,0.5)",
-              marginTop: "48px",
+              fontFamily: "'Instrument Serif', Georgia, serif",
+              fontSize: "clamp(24px, 3.5vw, 34px)",
+              lineHeight: 1.55,
+              fontWeight: 400,
+              fontStyle: "italic",
+              color: "rgba(255,255,255,0.85)",
             }}>
-              {heroCopy.followup}
+              You searched for a good pizza place. Three videos later you're watching a guy explain why the moon landing was staged. The algorithm didn't break. That's how it works.
             </p>
-          </FadeIn>
-        </div>
+          </div>
+        </FadeIn>
+
+        <FadeIn delay={0.2}>
+          <p style={{
+            fontSize: "20px",
+            lineHeight: 1.75,
+            color: "rgba(255,255,255,0.5)",
+            marginTop: "48px",
+          }}>
+            The feed is infinite. Your attention isn't. Antiviral is built for the thing that's actually worth something.
+          </p>
+        </FadeIn>
       </section>
 
       <div className="section-divider" />
 
-      {/* PERSONAL EDITION */}
-      <section id="personal" style={{
+      {/* THE EDITION — the answer */}
+      <section style={{
         padding: "120px 40px",
         maxWidth: "900px",
         margin: "0 auto",
       }}>
         <FadeIn>
           <div style={{ marginBottom: "16px" }}>
-            <Pill>Personal Edition</Pill>
+            <Pill>The Edition</Pill>
           </div>
           <h2 style={{
             fontFamily: "'Instrument Serif', Georgia, serif",
@@ -1097,8 +926,8 @@ export default function AntiviralLanding() {
             letterSpacing: "-0.02em",
             marginBottom: "20px",
           }}>
-            Talk to your feed.<br />
-            <span style={{ color: "rgba(255,255,255,0.35)" }}>It actually listens.</span>
+            One edition a day.<br />
+            <span style={{ color: "rgba(255,255,255,0.35)" }}>Then you're done.</span>
           </h2>
         </FadeIn>
 
@@ -1110,273 +939,49 @@ export default function AntiviralLanding() {
             maxWidth: "620px",
             marginBottom: "56px",
           }}>
-            Bring your subscriptions. The app builds a topic list from what you actually watch. Then you have a conversation with it — and the feed becomes yours.
-          </p>
-        </FadeIn>
-
-        <FadeIn delay={0.25}>
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            padding: "40px",
-            borderRadius: "16px",
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.06)",
-          }}>
-            {PERSONAL_FEATURES.map((f, i) => (
-              <FeatureItem key={i} text={f} index={i} />
-            ))}
-          </div>
-        </FadeIn>
-
-        {/* Conversation demo */}
-        <FadeIn delay={0.3}>
-          <div style={{
-            marginTop: "64px",
-            padding: "32px",
-            borderRadius: "16px",
-            background: "rgba(255,255,255,0.02)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            fontFamily: "'DM Mono', monospace",
-            fontSize: "14px",
-            lineHeight: 1.8,
-          }}>
-            <div style={{ color: "rgba(255,255,255,0.35)", marginBottom: "20px", fontSize: "11px", letterSpacing: "0.1em", textTransform: "uppercase" }}>
-              How it feels
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-              <div>
-                <span style={{ color: "#6B9E6F" }}>you →</span>
-                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>more like this</span>
-              </div>
-              <div>
-                <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Here's more along the same lines.</span>
-              </div>
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
-                <span style={{ color: "#6B9E6F" }}>you →</span>
-                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>I'm done with politics</span>
-              </div>
-              <div>
-                <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Got it — I'll stop showing politics content.</span>
-              </div>
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
-                <span style={{ color: "#6B9E6F" }}>you →</span>
-                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>is my data private?</span>
-              </div>
-              <div>
-                <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Everything runs on your device. Your interests, watch history, and conversations never leave your phone. There's no analytics, no tracking, no data collection.</span>
-              </div>
-              <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "16px" }}>
-                <span style={{ color: "#6B9E6F" }}>you →</span>
-                <span style={{ color: "rgba(255,255,255,0.8)", marginLeft: "8px" }}>surprise me</span>
-              </div>
-              <div>
-                <span style={{ color: "rgba(255,255,255,0.35)" }}>antiviral →</span>
-                <span style={{ color: "rgba(255,255,255,0.55)", marginLeft: "8px" }}>Here's something a little different — enjoy!</span>
-              </div>
-            </div>
-          </div>
-        </FadeIn>
-
-        <FadeIn delay={0.35}>
-          <div style={{
-            marginTop: "56px",
-            padding: "32px 40px",
-            borderRadius: "16px",
-            background: "linear-gradient(135deg, rgba(94,140,97,0.1), rgba(94,140,97,0.03))",
-            border: "1px solid rgba(94,140,97,0.2)",
-            textAlign: "center",
-          }}>
-            <p style={{
-              fontFamily: "'Instrument Serif', Georgia, serif",
-              fontSize: "28px",
-              fontWeight: 400,
-              marginBottom: "8px",
-              letterSpacing: "-0.01em",
-            }}>
-              Free. Completely free.
-            </p>
-            <p style={{
-              fontSize: "16px",
-              color: "rgba(255,255,255,0.45)",
-            }}>
-              No trial. No ads. No account. Your attention shouldn't be a product.
-            </p>
-          </div>
-        </FadeIn>
-      </section>
-
-      <div className="section-divider" />
-
-      {/* BUT WILL I MISS OUT? */}
-      <section style={{
-        padding: "120px 40px",
-        maxWidth: "900px",
-        margin: "0 auto",
-      }}>
-        <FadeIn>
-          <h2 style={{
-            fontFamily: "'Instrument Serif', Georgia, serif",
-            fontSize: "clamp(32px, 5vw, 52px)",
-            fontWeight: 400,
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            marginBottom: "20px",
-          }}>
-            You're already<br />
-            <span style={{ color: "rgba(255,255,255,0.35)" }}>missing out.</span>
-          </h2>
-        </FadeIn>
-
-        <FadeIn delay={0.15}>
-          <p style={{
-            fontSize: "19px",
-            lineHeight: 1.75,
-            color: "rgba(255,255,255,0.55)",
-            maxWidth: "620px",
-            marginBottom: "20px",
-          }}>
-            YouTube shows you content from a fraction of the channels you follow. The rest gets buried — not because it's bad, but because the algorithm decided something else would keep you scrolling longer.
-          </p>
-          <p style={{
-            fontSize: "19px",
-            lineHeight: 1.75,
-            color: "rgba(255,255,255,0.55)",
-            maxWidth: "620px",
-            marginBottom: "20px",
-          }}>
-            Antiviral searches everything you follow. Every channel. Every podcast. Every blog. When you ask for something, it looks through your entire library — not the 10% the algorithm picked for you.
-          </p>
-          <p style={{
-            fontSize: "19px",
-            lineHeight: 1.75,
-            color: "rgba(255,255,255,0.7)",
-            maxWidth: "620px",
-            marginBottom: "56px",
-          }}>
-            And it finds connections you haven't made yet.
+            Antiviral turns the sources you already follow into a single honest issue — an editor's note, a few sections that actually hang together, and a genuine last page. No infinite scroll. No algorithm angling to keep you. You read it, you reach the end, and you get on with your day.
           </p>
         </FadeIn>
 
         <FadeIn delay={0.25}>
           <div style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
             gap: "20px",
           }}>
-            {/* Panel 1: Your Hidden Library */}
-            <div style={{
-              padding: "32px",
-              borderRadius: "16px",
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.06)",
-            }}>
-              <p style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "11px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.35)",
-                marginBottom: "16px",
+            {LOOP_STEPS.map((step, i) => (
+              <div key={i} style={{
+                padding: "32px",
+                borderRadius: "16px",
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.06)",
               }}>
-                Your Hidden Library
-              </p>
-              <p style={{
-                fontSize: "16px",
-                lineHeight: 1.75,
-                color: "rgba(255,255,255,0.55)",
-                marginBottom: "12px",
-              }}>
-                You follow 150 channels. You see content from maybe 20.
-              </p>
-              <p style={{
-                fontSize: "16px",
-                lineHeight: 1.75,
-                color: "rgba(255,255,255,0.7)",
-              }}>
-                Antiviral searches all of them — and ranks by what you asked for, not what gets the most clicks.
-              </p>
-            </div>
-
-            {/* Panel 2: Connections You Haven't Made */}
-            <div style={{
-              padding: "32px",
-              borderRadius: "16px",
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.06)",
-            }}>
-              <p style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "11px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.35)",
-                marginBottom: "16px",
-              }}>
-                Connections You Haven't Made
-              </p>
-              <p style={{
-                fontSize: "16px",
-                lineHeight: 1.75,
-                color: "rgba(255,255,255,0.55)",
-                marginBottom: "12px",
-              }}>
-                You've been watching pottery. You've been reading about Japan. Antiviral finds a video about a ceramicist in Kyoto that's been sitting in your subscriptions for a week.
-              </p>
-              <p style={{
-                fontSize: "16px",
-                lineHeight: 1.75,
-                color: "rgba(255,255,255,0.7)",
-              }}>
-                Your interests have intersections. The algorithm ignores them. Antiviral doesn't.
-              </p>
-            </div>
-
-            {/* Panel 3: Interests Don't Expire */}
-            <div style={{
-              padding: "32px",
-              borderRadius: "16px",
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.06)",
-            }}>
-              <p style={{
-                fontFamily: "'DM Mono', monospace",
-                fontSize: "11px",
-                letterSpacing: "0.1em",
-                textTransform: "uppercase",
-                color: "rgba(255,255,255,0.35)",
-                marginBottom: "16px",
-              }}>
-                Interests Don't Expire
-              </p>
-              <p style={{
-                fontSize: "16px",
-                lineHeight: 1.75,
-                color: "rgba(255,255,255,0.55)",
-                marginBottom: "12px",
-              }}>
-                Remember when you were into astrophotography? Your channels are still posting about it. Antiviral remembers what you used to care about — and when something new matches, it lets you know.
-              </p>
-              <p style={{
-                fontSize: "16px",
-                lineHeight: 1.75,
-                color: "rgba(255,255,255,0.7)",
-              }}>
-                "Surprise me" means: show me something from a corner of my library I haven't visited in a while.
-              </p>
-            </div>
+                <p style={{
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: "11px",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "#6B9E6F",
+                  marginBottom: "16px",
+                }}>
+                  {`0${i + 1} · ${step.label}`}
+                </p>
+                <p style={{
+                  fontSize: "16px",
+                  lineHeight: 1.75,
+                  color: "rgba(255,255,255,0.6)",
+                }}>
+                  {step.body}
+                </p>
+              </div>
+            ))}
           </div>
         </FadeIn>
       </section>
 
       <div className="section-divider" />
 
-      {/* NEVER CALLS HOME */}
+      {/* TRUST ARCHITECTURE */}
       <section style={{
         padding: "120px 40px",
         maxWidth: "760px",
@@ -1392,8 +997,8 @@ export default function AntiviralLanding() {
             letterSpacing: "-0.02em",
             marginBottom: "28px",
           }}>
-            It never calls home.<br />
-            <span style={{ color: "#6B9E6F" }}>So it never betrays you.</span>
+            On your device. Working for you.<br />
+            <span style={{ color: "#6B9E6F" }}>Showing its reasoning.</span>
           </h2>
         </FadeIn>
 
@@ -1402,23 +1007,10 @@ export default function AntiviralLanding() {
             fontSize: "18px",
             lineHeight: 1.75,
             color: "rgba(255,255,255,0.5)",
-            maxWidth: "540px",
+            maxWidth: "560px",
             margin: "0 auto",
           }}>
-            Every bit of intelligence runs on your device. Your topics, your watch patterns, your conversations with the app — none of it ever leaves your phone. There's no server to breach because there's no server.
-          </p>
-        </FadeIn>
-
-        <FadeIn delay={0.2}>
-          <p style={{
-            fontFamily: "'DM Mono', monospace",
-            fontSize: "13px",
-            lineHeight: 1.8,
-            color: "rgba(255,255,255,0.3)",
-            maxWidth: "540px",
-            margin: "24px auto 0",
-          }}>
-            Powered by <a href="https://developer.apple.com/documentation/foundationmodels" target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.45)", textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>Apple Foundation Models</a> and an on-device sentence transformer. The AI that curates your feed never contacts a server — it runs entirely within Apple Intelligence on your iPhone.
+            The curation runs on your phone — no ad profile, nothing sold, no server we operate that stores you. Once a day, to compose your edition, it borrows Apple's Private Cloud Compute, which is built so that no one — including Apple and us — can keep or see what it processes. And you can tap anything to see exactly why it's there.
           </p>
         </FadeIn>
 
@@ -1426,30 +1018,29 @@ export default function AntiviralLanding() {
           <div style={{
             display: "flex",
             justifyContent: "center",
-            gap: "48px",
+            gap: "40px",
             marginTop: "56px",
             flexWrap: "wrap",
           }}>
             {[
-              { label: "No account", icon: "⊘" },
-              { label: "No tracking", icon: "⊘" },
-              { label: "No servers", icon: "⊘" },
-              { label: "No ads", icon: "⊘" },
-            ].map((item, i) => (
+              "No ads",
+              "No tracking",
+              "On-device AI",
+              "One private daily call",
+            ].map((label, i) => (
               <div key={i} style={{
                 display: "flex",
-                flexDirection: "column",
                 alignItems: "center",
                 gap: "8px",
               }}>
-                <span style={{ color: "#6B9E6F", fontSize: "20px" }}>{item.icon}</span>
+                <span style={{ color: "#6B9E6F", fontSize: "18px" }}>—</span>
                 <span style={{
                   fontFamily: "'DM Mono', monospace",
                   fontSize: "13px",
                   color: "rgba(255,255,255,0.5)",
                   letterSpacing: "0.05em",
                 }}>
-                  {item.label}
+                  {label}
                 </span>
               </div>
             ))}
@@ -1459,155 +1050,8 @@ export default function AntiviralLanding() {
 
       <div className="section-divider" />
 
-      {/* FAMILY EDITION */}
-      <section id="family" style={{
-        padding: "120px 40px",
-        maxWidth: "900px",
-        margin: "0 auto",
-      }}>
-        <FadeIn>
-          <div style={{ marginBottom: "16px" }}>
-            <Pill>Family Edition</Pill>
-          </div>
-          <h2 style={{
-            fontFamily: "'Instrument Serif', Georgia, serif",
-            fontSize: "clamp(32px, 5vw, 52px)",
-            fontWeight: 400,
-            lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            marginBottom: "20px",
-          }}>
-            See what your kids<br />
-            <span style={{ color: "rgba(255,255,255,0.35)" }}>are curious about.</span>
-          </h2>
-        </FadeIn>
-
-        <FadeIn delay={0.15}>
-          <p style={{
-            fontSize: "19px",
-            lineHeight: 1.75,
-            color: "rgba(255,255,255,0.55)",
-            maxWidth: "620px",
-            marginBottom: "24px",
-          }}>
-            You don't know what your kids' feed is teaching them. Neither do they. The algorithm decides, and it optimizes for one thing: keeping them watching. Not learning. Not growing. Watching.
-          </p>
-          <p style={{
-            fontSize: "19px",
-            lineHeight: 1.75,
-            color: "rgba(255,255,255,0.55)",
-            maxWidth: "620px",
-            marginBottom: "56px",
-          }}>
-            Antiviral Family gives every person in your household their own feed, built from sources you choose together. You set the boundaries. They own the experience.
-          </p>
-        </FadeIn>
-
-        <FadeIn delay={0.25}>
-          <div style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: "20px",
-            padding: "40px",
-            borderRadius: "16px",
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.06)",
-          }}>
-            {FAMILY_FEATURES.map((f, i) => (
-              <FeatureItem key={i} text={f} index={i} />
-            ))}
-          </div>
-        </FadeIn>
-
-        {/* Parent dashboard preview */}
-        <FadeIn delay={0.3}>
-          <div style={{
-            marginTop: "64px",
-            padding: "32px",
-            borderRadius: "16px",
-            background: "rgba(255,255,255,0.02)",
-            border: "1px solid rgba(255,255,255,0.06)",
-          }}>
-            <div style={{
-              fontFamily: "'DM Mono', monospace",
-              fontSize: "11px",
-              letterSpacing: "0.1em",
-              textTransform: "uppercase",
-              color: "rgba(255,255,255,0.35)",
-              marginBottom: "24px",
-            }}>
-              What parents see
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-              {[
-                { topic: "Astronomy", trend: "↑ growing", weeks: "3 weeks", status: "active", color: "#6B9E6F" },
-                { topic: "Minecraft", trend: "→ steady", weeks: "6 months", status: "active", color: "rgba(255,255,255,0.4)" },
-                { topic: "Drawing", trend: "↑ new", weeks: "1 week", status: "growing", color: "#6B9E6F" },
-                { topic: "Slime videos", trend: "↓ fading", weeks: "2 months", status: "fading", color: "rgba(255,255,255,0.2)" },
-              ].map((item, i) => (
-                <div key={i} style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "12px 0",
-                  borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.04)" : "none",
-                }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div style={{
-                      width: "8px",
-                      height: "8px",
-                      borderRadius: "50%",
-                      background: item.color,
-                    }} />
-                    <span style={{
-                      fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
-                      fontSize: "17px",
-                      color: "rgba(255,255,255,0.8)",
-                    }}>
-                      {item.topic}
-                    </span>
-                  </div>
-                  <div style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "20px",
-                    fontFamily: "'DM Mono', monospace",
-                    fontSize: "12px",
-                    color: "rgba(255,255,255,0.35)",
-                  }}>
-                    <span>{item.weeks}</span>
-                    <span style={{
-                      padding: "3px 10px",
-                      borderRadius: "100px",
-                      background: "rgba(255,255,255,0.05)",
-                      fontSize: "11px",
-                    }}>
-                      {item.status}
-                    </span>
-                    <span style={{ color: item.color }}>{item.trend}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <p style={{
-              fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
-              fontSize: "15px",
-              fontStyle: "italic",
-              color: "rgba(255,255,255,0.3)",
-              marginTop: "24px",
-            }}>
-              Not a screen time report. A map of a mind becoming itself.
-            </p>
-          </div>
-        </FadeIn>
-      </section>
-
-      <div className="section-divider" />
-
       {/* CLOSING */}
-      <section style={{
+      <section id="waitlist" style={{
         padding: "140px 40px 160px",
         maxWidth: "760px",
         margin: "0 auto",
@@ -1631,7 +1075,7 @@ export default function AntiviralLanding() {
             lineHeight: 1.4,
             letterSpacing: "-0.01em",
             color: "rgba(255,255,255,0.85)",
-            marginBottom: "48px",
+            marginBottom: "40px",
           }}>
             Every platform built a model of your interests<br />
             and <em>hid it from you</em>.<br />
@@ -1639,14 +1083,20 @@ export default function AntiviralLanding() {
           </h2>
         </FadeIn>
 
-        <FadeIn delay={0.2}>
-          <div style={{ display: "flex", gap: "16px", justifyContent: "center", flexWrap: "wrap" }}>
-            <a href="https://testflight.apple.com/join/sQH5sdCw" target="_blank" rel="noopener noreferrer" className="cta-btn cta-primary">
-              Get Antiviral — Free
-            </a>
-            <a href="#family" className="cta-btn cta-secondary">
-              Explore Family Edition
-            </a>
+        <FadeIn delay={0.15}>
+          <p style={{
+            fontSize: "16px",
+            lineHeight: 1.7,
+            color: "rgba(255,255,255,0.45)",
+            marginBottom: "32px",
+          }}>
+            Coming Fall 2026, day-and-date with iOS 27. Requires an iPhone 15 Pro or newer with Apple Intelligence.
+          </p>
+        </FadeIn>
+
+        <FadeIn delay={0.25}>
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <WaitlistForm />
           </div>
         </FadeIn>
 
@@ -1686,7 +1136,7 @@ export default function AntiviralLanding() {
           fontSize: "11px",
           color: "rgba(255,255,255,0.35)",
         }}>
-          <span>Your feed. Your data. Your device.</span>
+          <span>Finite by design.</span>
           <a href="/privacy" style={{
             color: "rgba(255,255,255,0.25)",
             textDecoration: "none",

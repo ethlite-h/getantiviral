@@ -63,36 +63,49 @@ export default function Privacy() {
           color: "rgba(255,255,255,0.35)",
           marginBottom: "64px",
         }}>
-          Last updated: March 17, 2026
+          Last updated: June 11, 2026
         </p>
 
         {/* INTRO */}
         <Section>
           <P>
-            Antiviral is built on a simple principle: your data is yours. The AI that curates your feed runs entirely on your iPhone. There is no Studio Ikigai server. We never see your interests, your watch history, your conversations with the app, or anything else you do inside it.
+            Antiviral is built on a simple principle: your data is yours. The intelligence that curates your feed runs on your iPhone, and we run no server that stores you. Once a day, to compose your Edition, Antiviral borrows Apple's Private Cloud Compute — Apple's infrastructure, not ours — which is built so that no one, including Apple and us, can see or keep what it processes.
           </P>
           <P>
-            This isn't a legal document designed to obscure what we do. It's a plain-English explanation of exactly how Antiviral handles your information.
+            This isn't a legal document designed to obscure what we do. It's a plain-English explanation of exactly how Antiviral handles your information — including the one moment it leaves your phone.
           </P>
         </Section>
 
         {/* WHAT STAYS ON YOUR DEVICE */}
         <Section title="What stays on your device">
-          <P>Everything the AI uses to understand you stays on your phone:</P>
+          <P>Almost everything. The intelligence that understands you lives on your phone:</P>
           <Ul>
             <Li>Your interest graph — every topic, weight, and preference</Li>
-            <Li>Your watch history (automatically deleted after 90 days)</Li>
-            <Li>Your conversations with the app (automatically deleted after 90 days)</Li>
+            <Li>Your watch and reading history</Li>
+            <Li>Your conversations with the app</Li>
             <Li>Your subscriptions and sources</Li>
             <Li>Your saved content and annotations</Li>
           </Ul>
           <P>
-            The AI runs on Apple Foundation Models and an on-device sentence transformer — both part of Apple Intelligence on your iPhone. Your data never leaves your phone to be processed. There is no cloud AI.
+            The on-device intelligence runs on Apple Foundation Models and an on-device sentence transformer — both part of Apple Intelligence on your iPhone. Ranking, search, the Shortlist, and learning your taste all happen here, on your device. None of it is sent to a server we operate.
+          </P>
+        </Section>
+
+        {/* THE ONE DAILY CLOUD CALL */}
+        <Section title="The one daily cloud call (Apple Private Cloud Compute)">
+          <P>
+            Composing your Edition — reading across a whole day of pieces to find the genuine threads — is the one job too large for the on-device model. Once a day, Antiviral sends the day's items (titles and short descriptions) plus a compact summary of your preferences to Apple's Private Cloud Compute to write that issue.
+          </P>
+          <P>
+            Private Cloud Compute is Apple's privacy-hardened cloud. It is designed so that your data isn't stored, isn't accessible to Apple or to Studio Ikigai, and is discarded the moment the request completes. We operate no server in this path — the request goes from your device to Apple, and the finished Edition comes back. Everything else stays on your phone.
+          </P>
+          <P style={{ color: "rgba(255,255,255,0.35)", fontSize: "15px" }}>
+            If you're offline, over your daily allowance, or on an ineligible device, Antiviral assembles a simpler Edition entirely on-device instead. The daily ritual never depends on a connection you don't have.
           </P>
         </Section>
 
         {/* WHAT LEAVES YOUR DEVICE */}
-        <Section title="What leaves your device">
+        <Section title="What else leaves your device">
           <P>
             Antiviral fetches content from the internet. When you ask for something, the app sends search queries to find it. Here's exactly what goes where:
           </P>
@@ -107,9 +120,15 @@ export default function Privacy() {
             </Ul>
           </SubSection>
 
+          <SubSection title="Video playback">
+            <P>
+              Videos play in YouTube's own official embedded player, so creators are paid exactly as they normally would be. That embedded player can't sign you in, so inside Antiviral you see the logged-out experience — including ads. If you want your signed-in YouTube account or your Premium subscription, open the video in YouTube. Antiviral never strips ads or extracts streams.
+            </P>
+          </SubSection>
+
           <SubSection title="YouTube import (optional)">
             <P>
-              If you choose to import your YouTube subscriptions, Antiviral uses Google OAuth to read your subscription list and liked video categories. The access is read-only. Your OAuth token is stored in your device's Keychain — encrypted, device-only, never backed up to iCloud. When you sign out, the token is revoked at Google and deleted from your device.
+              If you choose to import your YouTube subscriptions, Antiviral uses Google OAuth to read your subscription list and liked video categories. The access is read-only and one-way — nothing flows back to Google. Your OAuth token is stored in your device's Keychain, encrypted and device-only. When you sign out, the token is revoked at Google and deleted from your device.
             </P>
           </SubSection>
 
@@ -120,6 +139,16 @@ export default function Privacy() {
           </SubSection>
         </Section>
 
+        {/* ICLOUD SYNC */}
+        <Section title="iCloud sync (optional)">
+          <P>
+            If you turn on sync, your sources, saves, annotations, interest graph, and preferences move between your own devices through your own iCloud account, using Apple's CloudKit. It's end-to-end encrypted under Apple's Advanced Data Protection — your iCloud, not a server we run. We never see it.
+          </P>
+          <P>
+            Sync is optional. If you'd rather keep everything on a single device, a device-local-only mode does exactly that.
+          </P>
+        </Section>
+
         {/* WHAT WE COLLECT */}
         <Section title="What Studio Ikigai collects">
           <P>Nothing.</P>
@@ -127,11 +156,11 @@ export default function Privacy() {
             <Li>No analytics</Li>
             <Li>Crash reporting only through Apple's infrastructure, which strips all personally identifiable information before we see it</Li>
             <Li>No telemetry</Li>
-            <Li>No account system</Li>
+            <Li>No Studio Ikigai account system</Li>
             <Li>No user identifiers</Li>
           </Ul>
           <P>
-            We have no server infrastructure that receives data from the app. We don't know who you are, what you watch, or how you use Antiviral. We can't — the app doesn't send us anything.
+            We operate no server that receives your personal data from the app. We don't know who you are, what you watch, or how you use Antiviral. The one daily Edition call goes to Apple's Private Cloud Compute, not to us — and Apple is designed to keep nothing from it either.
           </P>
           <P style={{ color: "rgba(255,255,255,0.35)", fontSize: "15px" }}>
             This website uses Vercel Analytics, which collects anonymous page view data (no cookies, no personal information). The app itself has zero analytics.
@@ -140,26 +169,19 @@ export default function Privacy() {
 
         {/* DATA RETENTION */}
         <Section title="Data retention">
-          <P>All data lives on your device and follows these rules:</P>
+          <P>All of your data lives on your device (and, if you enable sync, in your own iCloud). You're always in control of it:</P>
           <Ul>
-            <Li>Conversations and watch history are automatically deleted after 90 days</Li>
-            <Li>Interests that you stop engaging with gradually fade over 30+ days</Li>
+            <Li>Watch history and conversations are kept only as long as they're useful, and you can clear them at any time</Li>
+            <Li>Interests you stop engaging with gradually fade over time</Li>
             <Li>Cached media (thumbnails, articles) is managed by a local cache with a size limit — oldest items are evicted first</Li>
-            <Li>If you delete the app, everything is gone. There's nothing on our end to delete because we never had it.</Li>
+            <Li>If you delete the app, everything local is gone. There's nothing on our end to delete, because we never had it.</Li>
           </Ul>
-        </Section>
-
-        {/* CHILDREN */}
-        <Section title="Children">
-          <P>
-            Antiviral's Family Edition includes parental controls where parents set content boundaries for managed profiles. The AI enforces these boundaries on-device. No child data is collected or transmitted — the same on-device privacy applies to every profile.
-          </P>
         </Section>
 
         {/* THIRD-PARTY SERVICES */}
         <Section title="Third-party services">
           <P>
-            Antiviral sends search queries to Brave Search and fetches content from YouTube, Reddit, podcast directories, and RSS feeds. These services have their own privacy policies. Antiviral does not share any user profile, device identifier, or personal information with them — only the search queries needed to find content.
+            Antiviral sends search queries to Brave Search and fetches content from YouTube, Reddit, podcast directories, and RSS feeds, and uses Apple's Private Cloud Compute to compose your daily Edition. These services have their own privacy policies. Antiviral does not share any user profile, device identifier, or personal information with them — only the search queries needed to find content, and, for the Edition, the day's titles and a preference summary that Apple is built to discard.
           </P>
         </Section>
 
