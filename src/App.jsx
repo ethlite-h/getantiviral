@@ -71,6 +71,7 @@ function FeedVisualization() {
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
     const dpr = window.devicePixelRatio || 2;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const resize = () => {
       const rect = canvas.parentElement.getBoundingClientRect();
@@ -90,7 +91,7 @@ function FeedVisualization() {
       ctx.clearRect(0, 0, w, h);
 
       const lines = dataRef.current;
-      if (!lines) { animRef.current = requestAnimationFrame(draw); return; }
+      if (!lines) { if (!reduceMotion) animRef.current = requestAnimationFrame(draw); return; }
 
       // Convergence pulse: mostly spread, brief merge to single line
       const phase = ((time * 0.001) / 12) % 1;
@@ -159,9 +160,11 @@ function FeedVisualization() {
         }
       }
 
-      animRef.current = requestAnimationFrame(draw);
+      if (!reduceMotion) animRef.current = requestAnimationFrame(draw);
     };
-    animRef.current = requestAnimationFrame(draw);
+    // Reduced motion: paint a single static frame and skip the rAF loop.
+    if (reduceMotion) draw(0);
+    else animRef.current = requestAnimationFrame(draw);
 
     return () => {
       cancelAnimationFrame(animRef.current);
@@ -172,6 +175,7 @@ function FeedVisualization() {
   return (
     <canvas
       ref={canvasRef}
+      aria-hidden="true"
       style={{
         position: "absolute",
         top: 0,
@@ -273,7 +277,7 @@ function WaitlistForm({ id }) {
 
   if (state === "done") {
     return (
-      <p id={id} style={{
+      <p id={id} role="status" style={{
         fontFamily: "'DM Mono', monospace",
         fontSize: "15px",
         color: "#6B9E6F",
@@ -324,7 +328,7 @@ function WaitlistForm({ id }) {
         </button>
       </div>
       {state === "error" && (
-        <p style={{
+        <p role="alert" style={{
           margin: "10px 4px 0",
           fontFamily: "'DM Mono', monospace",
           fontSize: "13px",
@@ -481,7 +485,7 @@ function ConversationBar() {
             border: "1px solid rgba(107,158,111,0.2)",
             borderRadius: "100px",
             padding: "12px 24px",
-            color: "rgba(255,255,255,0.4)",
+            color: "rgba(255,255,255,0.55)",
             fontSize: "13px",
             fontFamily: "'DM Mono', monospace",
             cursor: "pointer",
@@ -526,7 +530,7 @@ function ConversationBar() {
       }}>
       {/* Response panel */}
       {phase === "response" && answer && (
-        <div style={{
+        <div role="status" aria-live="polite" style={{
           background: "rgba(10,10,10,0.85)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
@@ -540,6 +544,7 @@ function ConversationBar() {
         }}>
           <button
             onClick={handleDismiss}
+            aria-label="Close answer"
             style={{
               position: "absolute",
               top: "12px",
@@ -554,7 +559,7 @@ function ConversationBar() {
               fontFamily: "'DM Mono', monospace",
             }}
           >
-            &times;
+            <span aria-hidden="true">&times;</span>
           </button>
           <p style={{
             margin: 0,
@@ -589,6 +594,7 @@ function ConversationBar() {
           placeholder={placeholder}
           maxLength={500}
           disabled={phase === "loading"}
+          aria-label="Ask a question about Antiviral"
           style={{
             flex: 1,
             background: "none",
@@ -603,6 +609,7 @@ function ConversationBar() {
         <button
           type="submit"
           disabled={phase === "loading"}
+          aria-label="Send question"
           style={{
             background: "#6B9E6F",
             border: "none",
@@ -620,7 +627,7 @@ function ConversationBar() {
             opacity: phase === "loading" ? 0.5 : 1,
           }}
         >
-          &uarr;
+          <span aria-hidden="true">&uarr;</span>
         </button>
       </form>
     </div>
@@ -631,7 +638,7 @@ function ConversationBar() {
 const LOOP_STEPS = [
   {
     label: "Feed",
-    body: "Honest curation of the sources you already follow, ranked by what you actually care about — not what keeps you scrolling.",
+    body: "Honest curation of the sources you already follow. Talk to it — “less crypto, more long-form interviews” — and the feed rebuilds around what you actually care about, not what keeps you scrolling.",
   },
   {
     label: "Shortlist",
@@ -643,11 +650,29 @@ const LOOP_STEPS = [
   },
 ];
 
+const PRICING_TIERS = [
+  {
+    label: "Free",
+    body: "the Feed, the Shortlist, and a Sunday Edition every week, free forever.",
+  },
+  {
+    label: "Antiviral",
+    body: "$4.99/month or $49.99/year. The daily Edition, every day.",
+  },
+  {
+    label: "Founding Reader",
+    body: "$79.99/year, price-locked for as long as you keep it.",
+  },
+];
+
 export default function AntiviralLanding() {
-  const [scrollY, setScrollY] = useState(0);
+  const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrollY(window.scrollY);
+    const onScroll = () => {
+      const s = window.scrollY > 50;
+      setScrolled((p) => (p === s ? p : s));
+    };
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
@@ -661,8 +686,6 @@ export default function AntiviralLanding() {
       overflowX: "hidden",
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
-
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         @keyframes fadeSlideIn {
@@ -803,8 +826,8 @@ export default function AntiviralLanding() {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        background: scrollY > 50 ? "rgba(10,10,10,0.9)" : "transparent",
-        backdropFilter: scrollY > 50 ? "blur(20px)" : "none",
+        background: scrolled ? "rgba(10,10,10,0.9)" : "transparent",
+        backdropFilter: scrolled ? "blur(20px)" : "none",
         transition: "all 0.3s ease",
       }}>
         <div style={{
@@ -981,6 +1004,43 @@ export default function AntiviralLanding() {
 
       <div className="section-divider" />
 
+      {/* ASK THE EDITOR — correction loop */}
+      <section style={{
+        padding: "120px 40px",
+        maxWidth: "900px",
+        margin: "0 auto",
+      }}>
+        <FadeIn>
+          <div style={{ marginBottom: "16px" }}>
+            <Pill>Ask the Editor</Pill>
+          </div>
+          <h2 style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
+            fontSize: "clamp(32px, 5vw, 52px)",
+            fontWeight: 400,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            marginBottom: "20px",
+          }}>
+            Don’t like what you see?<br />
+            <span style={{ color: "#6B9E6F" }}>Tell it.</span>
+          </h2>
+        </FadeIn>
+
+        <FadeIn delay={0.15}>
+          <p style={{
+            fontSize: "19px",
+            lineHeight: 1.75,
+            color: "rgba(255,255,255,0.55)",
+            maxWidth: "620px",
+          }}>
+            See something that doesn’t belong? Tell Antiviral “this doesn’t belong here” and it writes a rule — one you can read, and change — that re-ranks your feed from then on. It runs on your device, and you can see every rule it’s keeping. Every platform built a model of your taste and hid it. This one you edit.
+          </p>
+        </FadeIn>
+      </section>
+
+      <div className="section-divider" />
+
       {/* TRUST ARCHITECTURE */}
       <section style={{
         padding: "120px 40px",
@@ -1026,7 +1086,7 @@ export default function AntiviralLanding() {
               "No ads",
               "No tracking",
               "On-device AI",
-              "One private daily call",
+              "Edition on Apple PCC",
             ].map((label, i) => (
               <div key={i} style={{
                 display: "flex",
@@ -1050,6 +1110,67 @@ export default function AntiviralLanding() {
 
       <div className="section-divider" />
 
+      {/* PRICING */}
+      <section style={{
+        padding: "120px 40px",
+        maxWidth: "900px",
+        margin: "0 auto",
+      }}>
+        <FadeIn>
+          <div style={{ marginBottom: "16px" }}>
+            <Pill>Pricing</Pill>
+          </div>
+          <h2 style={{
+            fontFamily: "'Instrument Serif', Georgia, serif",
+            fontSize: "clamp(32px, 5vw, 52px)",
+            fontWeight: 400,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            marginBottom: "56px",
+          }}>
+            Pay for the product.<br />
+            <span style={{ color: "#6B9E6F" }}>Never with your attention.</span>
+          </h2>
+        </FadeIn>
+
+        <FadeIn delay={0.15}>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+            gap: "20px",
+          }}>
+            {PRICING_TIERS.map((tier, i) => (
+              <div key={i} style={{
+                padding: "32px",
+                borderRadius: "16px",
+                background: "rgba(255,255,255,0.03)",
+                border: "1px solid rgba(255,255,255,0.06)",
+              }}>
+                <p style={{
+                  fontFamily: "'DM Mono', monospace",
+                  fontSize: "11px",
+                  letterSpacing: "0.1em",
+                  textTransform: "uppercase",
+                  color: "#6B9E6F",
+                  marginBottom: "16px",
+                }}>
+                  {tier.label}
+                </p>
+                <p style={{
+                  fontSize: "16px",
+                  lineHeight: 1.75,
+                  color: "rgba(255,255,255,0.6)",
+                }}>
+                  {tier.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </FadeIn>
+      </section>
+
+      <div className="section-divider" />
+
       {/* CLOSING */}
       <section id="waitlist" style={{
         padding: "140px 40px 160px",
@@ -1063,7 +1184,7 @@ export default function AntiviralLanding() {
             fontSize: "13px",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
-            color: "rgba(255,255,255,0.3)",
+            color: "rgba(255,255,255,0.55)",
             marginBottom: "32px",
           }}>
             The thesis
@@ -1090,7 +1211,7 @@ export default function AntiviralLanding() {
             color: "rgba(255,255,255,0.45)",
             marginBottom: "32px",
           }}>
-            Coming Fall 2026, day-and-date with iOS 27. Requires an iPhone 15 Pro or newer with Apple Intelligence.
+            Coming Fall 2026 for iPhone and Mac, day-and-date with iOS 27. Requires an iPhone 15 Pro or newer, or a Mac with Apple silicon — with Apple Intelligence.
           </p>
         </FadeIn>
 
@@ -1134,14 +1255,20 @@ export default function AntiviralLanding() {
           gap: "20px",
           fontFamily: "'DM Mono', monospace",
           fontSize: "11px",
-          color: "rgba(255,255,255,0.35)",
+          color: "rgba(255,255,255,0.55)",
         }}>
           <span>Finite by design.</span>
           <a href="/privacy" style={{
-            color: "rgba(255,255,255,0.25)",
+            color: "rgba(255,255,255,0.55)",
             textDecoration: "none",
           }}>
             Privacy
+          </a>
+          <a href="/terms" style={{
+            color: "rgba(255,255,255,0.55)",
+            textDecoration: "none",
+          }}>
+            Terms
           </a>
         </div>
       </footer>

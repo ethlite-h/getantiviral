@@ -7,7 +7,6 @@ export default function Privacy() {
       fontFamily: "'Karla', 'Helvetica Neue', sans-serif",
     }}>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Karla:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap');
         * { box-sizing: border-box; margin: 0; padding: 0; }
         a { color: rgba(255,255,255,0.5); outline: none; }
         a:hover { color: rgba(255,255,255,0.8); }
@@ -60,10 +59,10 @@ export default function Privacy() {
         <p style={{
           fontFamily: "'DM Mono', monospace",
           fontSize: "13px",
-          color: "rgba(255,255,255,0.35)",
+          color: "rgba(255,255,255,0.55)",
           marginBottom: "64px",
         }}>
-          Last updated: June 11, 2026
+          Last updated: June 29, 2026
         </p>
 
         {/* INTRO */}
@@ -72,7 +71,7 @@ export default function Privacy() {
             Antiviral is built on a simple principle: your data is yours. The intelligence that curates your feed runs on your iPhone, and we run no server that stores you. Once a day, to compose your Edition, Antiviral borrows Apple's Private Cloud Compute — Apple's infrastructure, not ours — which is built so that no one, including Apple and us, can see or keep what it processes.
           </P>
           <P>
-            This isn't a legal document designed to obscure what we do. It's a plain-English explanation of exactly how Antiviral handles your information — including the one moment it leaves your phone.
+            This isn't a legal document designed to obscure what we do. It's a plain-English explanation of exactly how Antiviral handles your information — including the few moments it does leave: syncing to your own iCloud, fetching the content you ask for, and the one daily call to Apple's Private Cloud Compute.
           </P>
         </Section>
 
@@ -87,7 +86,7 @@ export default function Privacy() {
             <Li>Your saved content and annotations</Li>
           </Ul>
           <P>
-            The on-device intelligence runs on Apple Foundation Models and an on-device sentence transformer — both part of Apple Intelligence on your iPhone. Ranking, search, the Shortlist, and learning your taste all happen here, on your device. None of it is sent to a server we operate.
+            The on-device intelligence runs on Apple Foundation Models and Apple's on-device text embeddings (part of the Natural Language framework) — both part of Apple Intelligence on your iPhone. Ranking, search, the Shortlist, and learning your taste all happen here, on your device. None of it is sent to a server we operate.
           </P>
         </Section>
 
@@ -97,9 +96,9 @@ export default function Privacy() {
             Composing your Edition — reading across a whole day of pieces to find the genuine threads — is the one job too large for the on-device model. Once a day, Antiviral sends the day's items (titles and short descriptions) plus a compact summary of your preferences to Apple's Private Cloud Compute to write that issue.
           </P>
           <P>
-            Private Cloud Compute is Apple's privacy-hardened cloud. It is designed so that your data isn't stored, isn't accessible to Apple or to Studio Ikigai, and is discarded the moment the request completes. We operate no server in this path — the request goes from your device to Apple, and the finished Edition comes back. Everything else stays on your phone.
+            Private Cloud Compute is Apple's privacy-hardened cloud. It is designed so that your data isn't stored, isn't accessible to Apple or to Studio Ikigai, and is discarded the moment the request completes. We operate no server in this path — the request goes from your device to Apple, and the finished Edition comes back.
           </P>
-          <P style={{ color: "rgba(255,255,255,0.35)", fontSize: "15px" }}>
+          <P style={{ color: "rgba(255,255,255,0.55)", fontSize: "15px" }}>
             If you're offline, over your daily allowance, or on an ineligible device, Antiviral assembles a simpler Edition entirely on-device instead. The daily ritual never depends on a connection you don't have.
           </P>
         </Section>
@@ -128,7 +127,37 @@ export default function Privacy() {
 
           <SubSection title="YouTube import (optional)">
             <P>
-              If you choose to import your YouTube subscriptions, Antiviral uses Google OAuth to read your subscription list and liked video categories. The access is read-only and one-way — nothing flows back to Google. Your OAuth token is stored in your device's Keychain, encrypted and device-only. When you sign out, the token is revoked at Google and deleted from your device.
+              If you choose to import your YouTube subscriptions, Antiviral uses YouTube API
+              Services (via Google OAuth) to read your subscription list and liked-video
+              categories. The access is read-only and one-way — nothing flows back to Google,
+              and the data is used only on your device to seed your content sources. Your OAuth
+              token is stored in your device's Keychain, encrypted and device-only. When you
+              sign out, the token is revoked at Google and deleted from your device, and you can
+              revoke Antiviral's access at any time from your{" "}
+              <a href="https://myaccount.google.com/permissions"
+                 target="_blank" rel="noopener noreferrer"
+                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
+                Google Account permissions
+              </a>. Antiviral's use of YouTube API Services is also governed by the{" "}
+              <a href="https://policies.google.com/privacy"
+                 target="_blank" rel="noopener noreferrer"
+                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
+                Google Privacy Policy
+              </a>.
+            </P>
+          </SubSection>
+
+          <SubSection title="Google API Limited Use">
+            <P>
+              Antiviral's use and transfer of information received from Google APIs to any
+              other app adheres to the{" "}
+              <a href="https://developers.google.com/terms/api-services-user-data-policy"
+                 target="_blank" rel="noopener noreferrer"
+                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
+                Google API Services User Data Policy
+              </a>, including the Limited Use requirements. Your YouTube subscription data is
+              used only on your device to seed your sources — it is never sold, transferred,
+              or used for advertising, and never reaches a server we operate.
             </P>
           </SubSection>
 
@@ -140,12 +169,9 @@ export default function Privacy() {
         </Section>
 
         {/* ICLOUD SYNC */}
-        <Section title="iCloud sync (optional)">
+        <Section title="iCloud sync">
           <P>
-            If you turn on sync, your sources, saves, annotations, interest graph, and preferences move between your own devices through your own iCloud account, using Apple's CloudKit. It's end-to-end encrypted under Apple's Advanced Data Protection — your iCloud, not a server we run. We never see it.
-          </P>
-          <P>
-            Sync is optional. If you'd rather keep everything on a single device, a device-local-only mode does exactly that.
+            Antiviral keeps your sources, saves, annotations, interest graph, and preferences in sync across your devices through your own private iCloud account, using Apple's CloudKit. It's on by default — it's your iCloud, not a server we run, and we never see it. If you've enabled Apple's Advanced Data Protection, that sync is end-to-end encrypted.
           </P>
         </Section>
 
@@ -162,14 +188,14 @@ export default function Privacy() {
           <P>
             We operate no server that receives your personal data from the app. We don't know who you are, what you watch, or how you use Antiviral. The one daily Edition call goes to Apple's Private Cloud Compute, not to us — and Apple is designed to keep nothing from it either.
           </P>
-          <P style={{ color: "rgba(255,255,255,0.35)", fontSize: "15px" }}>
-            This website uses Vercel Analytics, which collects anonymous page view data (no cookies, no personal information). The app itself has zero analytics.
+          <P style={{ color: "rgba(255,255,255,0.55)", fontSize: "15px" }}>
+            This website uses Vercel Analytics, which collects anonymous page view data (no cookies, no personal information). The app itself has zero analytics. If you use the “ask” box on this site, your typed question is sent to Anthropic to generate a reply — it isn't used to identify you and isn't linked to anything on your device.
           </P>
         </Section>
 
         {/* DATA RETENTION */}
         <Section title="Data retention">
-          <P>All of your data lives on your device (and, if you enable sync, in your own iCloud). You're always in control of it:</P>
+          <P>All of your data lives on your device (and, through iCloud sync, in your own iCloud). You're always in control of it:</P>
           <Ul>
             <Li>Watch history and conversations are kept only as long as they're useful, and you can clear them at any time</Li>
             <Li>Interests you stop engaging with gradually fade over time</Li>
@@ -201,10 +227,10 @@ export default function Privacy() {
           borderTop: "1px solid rgba(255,255,255,0.06)",
           fontFamily: "'DM Mono', monospace",
           fontSize: "12px",
-          color: "rgba(255,255,255,0.3)",
+          color: "rgba(255,255,255,0.55)",
         }}>
           <a href="https://studioikigai.ai" target="_blank" rel="noopener noreferrer" style={{
-            color: "rgba(255,255,255,0.3)",
+            color: "rgba(255,255,255,0.55)",
             textDecoration: "none",
           }}>
             from Studio Ikigai

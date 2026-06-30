@@ -23,6 +23,20 @@ export default async function handler(req, res) {
 
   const normalized = email.trim().toLowerCase();
 
+  // Per-IP rate limit (5/min). Fail open on KV errors so an outage never blocks signups.
+  const ip = (req.headers["x-forwarded-for"] || "").split(",")[0] || "unknown";
+  try {
+    const bucket = Math.floor(Date.now() / 60000);
+    const key = `wl:rl:${ip}:${bucket}`;
+    const n = await kv.incr(key);
+    if (n === 1) await kv.expire(key, 60);
+    if (n > 5) {
+      return res.status(429).json({ error: "One moment — too many signups too fast." });
+    }
+  } catch (err) {
+    console.error("Rate limit check failed (failing open):", err.message);
+  }
+
   try {
     // Store as a set so duplicate signups are idempotent.
     await kv.sadd("waitlist:emails", normalized);
