@@ -1237,19 +1237,6 @@ export default function AntiviralLanding() {
         gap: "12px",
       }}>
         <div style={{
-          fontFamily: "'DM Mono', monospace",
-          fontSize: "12px",
-          color: "rgba(255,255,255,0.4)",
-        }}>
-          <a href="https://studioikigai.ai" target="_blank" rel="noopener noreferrer" style={{
-            color: "rgba(255,255,255,0.4)",
-            textDecoration: "none",
-          }}>
-            from Studio Ikigai
-          </a>
-        </div>
-
-        <div style={{
           display: "flex",
           alignItems: "center",
           gap: "20px",
@@ -1269,6 +1256,19 @@ export default function AntiviralLanding() {
             textDecoration: "none",
           }}>
             Terms
+          </a>
+        </div>
+
+        <div style={{
+          fontFamily: "'DM Mono', monospace",
+          fontSize: "12px",
+          color: "rgba(255,255,255,0.4)",
+        }}>
+          <a href="https://studioikigai.ai" target="_blank" rel="noopener noreferrer" style={{
+            color: "rgba(255,255,255,0.4)",
+            textDecoration: "none",
+          }}>
+            from Studio Ikigai
           </a>
         </div>
       </footer>
