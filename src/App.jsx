@@ -657,11 +657,11 @@ const PRICING_TIERS = [
   },
   {
     label: "Antiviral",
-    body: "$4.99/month or $49.99/year. The daily Edition, every day.",
+    body: "$5/month or $50/year. The daily Edition, every day.",
   },
   {
     label: "Founding Reader",
-    body: "$79.99/year, price-locked for as long as you keep it.",
+    body: "$199, once. Yours for good.",
   },
 ];
 
