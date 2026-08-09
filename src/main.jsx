@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/react"
 import App from "./App.jsx"
 import Privacy from "./Privacy.jsx"
 import Terms from "./Terms.jsx"
+import DevLog from "./DevLog.jsx"
 
 const path = window.location.pathname;
 
@@ -14,7 +15,7 @@ if (canonical) {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {path === "/terms" ? <Terms /> : path === "/privacy" ? <Privacy /> : <App />}
+    {path === "/terms" ? <Terms /> : path === "/privacy" ? <Privacy /> : path === "/devlog" ? <DevLog /> : <App />}
     <Analytics />
   </React.StrictMode>,
 )

@@ -1257,6 +1257,12 @@ export default function AntiviralLanding() {
           }}>
             Terms
           </a>
+          <a href="/devlog" style={{
+            color: "rgba(255,255,255,0.55)",
+            textDecoration: "none",
+          }}>
+            Dev Log
+          </a>
         </div>
 
         <div style={{
