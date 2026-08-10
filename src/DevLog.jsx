@@ -158,7 +158,6 @@ const ENTRIES = [
     title: "Bring your own subscriptions",
     body: [
       "Early architectural decision: don't live on the YouTube Data API. Daily content comes from YouTube's public RSS feeds instead — no quota anxiety, no standing credentials. To get your subscriptions in, you export a Google Takeout ZIP and hand the app the file: bring your own graph, rather than granting a permanent token. (A read-only, revocable OAuth import exists too, for the impatient.)",
-      "Minor confession from this stretch: I wrote a ZIP parser by hand, and two days later threw it away for a proper library. Some wheels deserve their reinventions; ZIP is not one of them.",
     ],
   },
   {
