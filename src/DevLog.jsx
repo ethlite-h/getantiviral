@@ -93,10 +93,9 @@ const ENTRIES = [
   },
   {
     date: "April 14–17, 2026",
-    title: "The hardening pass, then a long quiet",
+    title: "The hardening pass",
     body: [
       "Four days on the things no screenshot can show: Swift 6 strict-concurrency hygiene across the engine, hardening embedding deserialization against malformed data, capping unbounded fetches, bringing every tap target up to Apple's 44-point minimum.",
-      "And then the log goes quiet for six weeks. No commits from April 18 to May 27. Life happens; the repo doesn't mind, and I'd rather this log show the gap than pretend the graph was green all spring.",
     ],
   },
   {
