@@ -67,14 +67,6 @@ const ENTRIES = [
     ],
   },
   {
-    date: "June 9–16, 2026",
-    title: "Boring, load-bearing",
-    body: [
-      "A week of work nobody screenshots. A Share Extension, so you can send a link to Antiviral from any app and it becomes a source. YouTube embeds switched to the privacy-enhanced player, so watching inside Antiviral sets no tracking cookies. And the unglamorous one that mattered most: making a test suite that depends on a machine-learning model deterministic — injecting a fixed embedder, serializing suites that fought over shared state, skip-guarding tests when model assets aren't installed.",
-      "Everything else in this log rests on that last paragraph.",
-    ],
-  },
-  {
     date: "May 29 – June 2, 2026",
     title: "Eight commits to get one gesture right",
     body: [
