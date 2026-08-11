@@ -39,7 +39,7 @@ const ENTRIES = [
     title: "The relevance war",
     body: [
       "A search returning something is not the same as a search returning what you asked for. This week was about that gap. The worst offender: single-word matching, where a query about modeling aircraft would happily surface a video about threat modeling because one word overlapped. Matching is now coverage-aware — a result has to hit enough of the query to plausibly be about it.",
-      "Also fixed: the same podcast episode syndicated under three different show names no longer shows up three times. And I ran a spike on a Wikipedia-style “which one did you mean?” disambiguation picker, and wrote down the honest verdict: no. Not every idea survives contact with a prototype, and the repo remembers the ones that didn't.",
+      "Also fixed: the same podcast episode syndicated under three different show names no longer shows up three times.",
     ],
   },
   {
