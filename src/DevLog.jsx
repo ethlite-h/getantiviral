@@ -88,7 +88,7 @@ const ENTRIES = [
     title: "To the car and the lock screen",
     body: [
       "Back at it — and straight to where audio actually gets listened to. CarPlay support, lock-screen artwork, scrubbing and playback-rate controls from the lock screen, and the proper spoken-audio session category so podcasts behave like podcasts.",
-      "Fixed a crash where lock-screen artwork was being requested on a background queue, and pinned it with a regression test before moving on. House rule: a bug isn't fixed until there's a test that would catch its return.",
+      "Fixed a crash where lock-screen artwork was being requested on a background queue, and pinned it with a regression test before moving on.",
     ],
   },
   {
