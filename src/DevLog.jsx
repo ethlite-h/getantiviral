@@ -55,7 +55,6 @@ const ENTRIES = [
     title: "A Mac-assed Mac app",
     body: [
       "Twenty-five commits in one day turning the macOS version from “SwiftUI app that happens to launch on a Mac” into something that behaves like it belongs there: a real menu bar, window state restoration, light mode, keyboard navigation, and ⌘Z that actually un-saves the thing you just saved.",
-      "The commit I'll remember: I had put dismiss on ⌘D, and a review pass caught that ⌘D is bookmark by Mac convention — the exact opposite of dismissing something. It's ⌘⌫ now. Platform conventions exist because someone else already made your mistake.",
     ],
   },
   {
