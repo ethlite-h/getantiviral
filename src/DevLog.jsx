@@ -79,8 +79,7 @@ const ENTRIES = [
     title: "Eight commits to get one gesture right",
     body: [
       "There's a stretch in the history where you can watch a single gesture get designed in public. Drag a card to react: first the reaction bar revealed on release, then continuously as you drag. Then the preview chip appeared at drag start instead of mid-drag. Then it floated near your finger. Then above your finger — because your finger is exactly on top of where the chip was.",
-      "The final commit in the sequence deletes the confirmation step I had built earlier that same week. Arming the gesture and tapping is the confirmation; asking again is just friction wearing a safety costume.",
-      "Same week, the input bar got re-skinned as what it actually is — on-device AI you talk to, not a search field. The product had outgrown its own label.",
+      "The final commit in the sequence deletes the confirmation step I had built earlier that same week. Arming the gesture and tapping is the confirmation.",
     ],
   },
   {
