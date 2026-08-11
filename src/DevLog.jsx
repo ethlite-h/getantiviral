@@ -63,7 +63,7 @@ const ENTRIES = [
     title: "Grounding the feed in the real world",
     body: [
       "Antiviral now grounds topics against Wikipedia and Wikidata — so it knows whether your “Mercury” is the planet, the element, or the singer, and stays silent when it isn't sure rather than guessing. That grounding spine also powers a line I decided to draw hard: encyclopedias, dictionaries, and lookup sites are reference. Reference is infrastructure you consult, not content that belongs in a feed — so it's excluded from feed candidacy entirely, at every layer.",
-      "Also new: press and hold any card to ask “why this item?” and get the actual scoring breakdown. Getting press-and-hold to coexist with scrolling took five consecutive commits of fighting SwiftUI's gesture system — attempt, revert, revert again — before I gave up and wrote it in UIKit by hand. Sometimes the modern framework loses.",
+      "Also new: press and hold any card to ask “why this item?” and get the actual scoring breakdown. Getting press-and-hold to coexist with scrolling took five consecutive commits of fighting SwiftUI's gesture system.",
     ],
   },
   {
