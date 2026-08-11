@@ -143,7 +143,7 @@ const ENTRIES = [
     title: "The model was making things up",
     body: [
       "First real fight with the LLM. The curator message would confidently describe results it had never seen — “here are some great videos about X” attached to a feed that contained no such thing. The fix that stuck: split generation into two phases. Phase one plans the searches. Phase two writes the message — only after the real results are back, and only about them. The model never gets to describe content it hasn't seen. This constraint ends up mattering for the entire life of the project.",
-      "The conversation bar also got promoted this week from a search field on one screen to the app's persistent spine — one bar, everywhere, aware of which screen you're on. And 32 App Store review findings got fixed in a single commit, along with the privacy manifest and export compliance. Glamorous work, shipping.",
+      "The conversation bar also got promoted this week from a search field on one screen to the app's persistent spine — one bar, everywhere, aware of which screen you're on.",
     ],
   },
   {
