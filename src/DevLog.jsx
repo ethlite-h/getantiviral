@@ -47,7 +47,6 @@ const ENTRIES = [
     title: "The audit machine",
     body: [
       "I audited the entire codebase and turned every finding into a numbered plan — they run from 001 to 079 — with each one landing as its own commit. Three weeks of this, peaking at 44 commits in a single day.",
-      "The haul: security fixes (ZIP imports now extract into a confined directory; user content redacted from logs), performance wins (caching taxonomy embeddings skips 809 embedding computations on every cold launch; one decorative animated border turned out to be pinning 21% idle CPU), and continuous integration, finally. My favorite commit from the stretch is a dead-code sweep: 666 deletions, 5 insertions. Deleting code you've verified is dead is one of the purest joys in this job.",
     ],
   },
   {
