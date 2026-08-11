@@ -112,7 +112,7 @@ const ENTRIES = [
     title: "“Why am I seeing this?”",
     body: [
       "Three features in two days. Every card can now explain why it's in front of you — computed deterministically from the actual scoring signals, no model in the loop, so the explanation is the truth rather than a plausible story. Ask “what was that video about sourdough from last week?” and Antiviral searches your own watch history, on-device. Describe a creator in plain words and it finds the channel.",
-      "One feature also got retired this week, honestly. “Go deeper” couldn't be done properly with the pipeline as it stood — so rather than fake depth, the command now answers like HAL 9000. I'm sorry, Dave. (A real depth pipeline is on the roadmap; HAL is keeping the seat warm.)",
+      "One feature also got retired this week, honestly. “Go deeper” couldn't be done properly with the pipeline as it stood — so rather than fake depth, the command now answers like HAL 9000.",
     ],
   },
   {
