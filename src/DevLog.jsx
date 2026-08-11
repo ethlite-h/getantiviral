@@ -15,7 +15,6 @@ const ENTRIES = [
     title: "“No politics today”",
     body: [
       "You can now tell Antiviral “no politics today” and it means exactly that: today. The mute expands to cover the whole category, holds until your local calendar day rolls over, then quietly expires. A mute with a fuse — not a permanent setting you'll forget you flipped and wonder six months later why your feed feels lobotomized.",
-      "Underneath it, I landed the plumbing for open-vocabulary mutes — arbitrary constraints, not just known categories — as a dormant seam. There's a head-to-head planned between Apple's model and a small local model for interpreting them; when one wins, it switches on without re-plumbing anything.",
     ],
   },
   {
@@ -23,7 +22,6 @@ const ENTRIES = [
     title: "Breaking up the god object",
     body: [
       "The curation engine had slowly become the classic god object: one actor that planned, scored, paginated, and assembled everything. This week I broke it up — but in the safe order. First, characterization tests that pin the engine's observable behavior exactly as it is. Then carve out one named collaborator at a time — the turn planner, the load-more scorer, the update assembly, the pagination bookkeeping — one extraction per commit, tests green after each.",
-      "The engine's behavior didn't change at all. That was the whole point.",
     ],
   },
   {
@@ -31,7 +29,6 @@ const ENTRIES = [
     title: "You can argue with the feed",
     body: [
       "The correction loop shipped. When something shows up that shouldn't, you say “this doesn't belong” — and instead of a mystery thumbs-down that vanishes into a black box, Antiviral mints a durable rule. Your rules live in a Standing Instructions list you can read, inspect, and delete. Related rules get consolidated so the list doesn't sprawl into a hundred variations of the same complaint. And the feed tells you what your rules are doing: “3 items hidden by your rules,” right there in the open.",
-      "My favorite detail is a small honesty thing: if a rule only down-ranks something rather than removing it outright, the acknowledgment says you'll see “fewer” of it — not “gone.” The app doesn't get to overpromise, even in a confirmation message.",
     ],
   },
   {
