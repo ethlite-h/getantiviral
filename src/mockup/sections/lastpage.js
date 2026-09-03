@@ -76,7 +76,7 @@ export const html = `
       <div class="lastpage__colophon-grid">
         <div class="lastpage__colophon-brand">
           ${WORDMARK('lastpage__wordmark')}
-          <p class="lastpage__tagline">The name is aggressive. The product is gentle.</p>
+          <p class="lastpage__tagline">Your protection against social media mind virus.</p>
         </div>
         <nav class="lastpage__links" aria-label="Colophon links">
           <a href="/privacy">Privacy</a>
