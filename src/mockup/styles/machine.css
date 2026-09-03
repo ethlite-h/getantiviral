@@ -1,0 +1,90 @@
+/* 03 — The machine, exploded. Dark world. Three blueprint plates, drawn on scroll. */
+.machine { --machine-grid: rgba(243, 239, 231, 0.05); --machine-plate: #100E0C; }
+
+/* ---------- head ---------- */
+.machine__head { display: grid; gap: clamp(16px, 2.4vw, 26px); }
+.machine__h2 { max-width: 24ch; }
+.machine__h2 em { display: block; }
+.machine__lead { color: var(--muted); }
+
+/* ---------- the parts ---------- */
+.machine__parts { list-style: none; margin: clamp(48px, 7vw, 96px) 0 0; padding: 0; }
+.machine__part {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(24px, 4vw, 36px);
+  padding-block: clamp(40px, 6vw, 88px); border-top: 1px solid var(--line);
+}
+.machine__part:last-child { border-bottom: 1px solid var(--line); }
+/* phones read drawing → copy → drawing; give each new sheet room after the previous footnotes */
+@media (max-width: 879px) { .machine__part { padding-top: 64px; } }
+/* a shorter foot: the citations are the last thing on the page and the turn follows at once */
+.machine { padding-bottom: clamp(48px, 7vw, 104px); }
+@media (min-width: 880px) {
+  .machine__part { grid-template-columns: 5fr 7fr; column-gap: clamp(48px, 6vw, 96px); align-items: center; }
+  .machine__text { order: -1; }
+}
+
+/* the plate: a sheet of blueprint paper, dark, with a faint grid and corner marks */
+.machine__plate {
+  position: relative; margin: 0; padding: 14px 14px 16px;
+  border: 1px solid var(--line); border-radius: 6px;
+  background: var(--machine-plate); color: var(--ink);
+  overflow: hidden; -webkit-tap-highlight-color: transparent; user-select: none;
+}
+@media (hover: hover) { .machine__plate { cursor: pointer; } }
+.machine__plate::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background-image: linear-gradient(to right, var(--machine-grid) 1px, transparent 1px), linear-gradient(to bottom, var(--machine-grid) 1px, transparent 1px);
+  background-size: 20px 20px; background-position: 7px 7px;
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000 30%, transparent 100%);
+  mask-image: radial-gradient(70% 70% at 50% 50%, #000 30%, transparent 100%);
+}
+.machine__plate-bar {
+  position: relative; display: flex; justify-content: space-between; gap: 12px;
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.machine__tick { position: absolute; width: 9px; height: 9px; border: 0 solid var(--faint); opacity: 0.55; pointer-events: none; }
+.machine__tick--tl { top: 5px; left: 5px; border-top-width: 1px; border-left-width: 1px; }
+.machine__tick--tr { top: 5px; right: 5px; border-top-width: 1px; border-right-width: 1px; }
+.machine__tick--bl { bottom: 5px; left: 5px; border-bottom-width: 1px; border-left-width: 1px; }
+.machine__tick--br { bottom: 5px; right: 5px; border-bottom-width: 1px; border-right-width: 1px; }
+
+/* the drawing: hairlines in the current ink at 0.6 */
+.machine__svg {
+  position: relative; display: block; width: 100%; height: auto; aspect-ratio: 356 / 236; margin-top: 8px;
+  fill: none; stroke: currentColor; stroke-width: 1; stroke-opacity: 0.6; stroke-linecap: round; stroke-linejoin: round;
+  overflow: visible;
+}
+@media (min-width: 880px) { .machine__svg { stroke-width: 0.75; } }
+.machine__late, [data-late] { opacity: 0; }
+.machine__svg text { fill: currentColor; stroke: none; font-family: var(--font-mono); font-weight: 500; font-size: 11px; letter-spacing: 0.1em; opacity: 0.55; }
+@media (min-width: 880px) { .machine__svg text { font-size: 10.5px; } }
+.machine__reel { stroke-opacity: 0.85; }
+.machine__card { stroke-opacity: 0.85; }
+.machine__flame { stroke: var(--hot-orange); stroke-opacity: 0.95; }
+
+/* the text column */
+.machine__text { display: grid; gap: clamp(14px, 2vw, 20px); align-content: start; }
+.machine__part-h { display: flex; align-items: baseline; gap: 12px; font-size: clamp(1.6rem, 2.3vw, 2.1rem); line-height: 1.1; }
+.machine__no { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.14em; color: var(--accent); white-space: nowrap; }
+.machine__p { max-width: 46ch; font-size: var(--t-body); line-height: 1.6; color: var(--ink); }
+.machine__fns { list-style: none; margin: 4px 0 0; padding: 14px 0 0; border-top: 1px solid var(--line); display: grid; gap: 10px; max-width: 48ch; }
+.machine__fns li { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); gap: 4px; font-size: 0.92rem; line-height: 1.5; color: var(--muted); }
+.machine__fn-n { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent); padding-top: 0.22em; }
+
+/* ---------- drawing note, closing line, citations ---------- */
+.machine__after { margin-top: clamp(40px, 6vw, 72px); display: grid; gap: clamp(22px, 3.5vw, 36px); }
+.machine__dnote { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.06em; color: var(--faint); }
+.machine__dnote::before { content: ''; display: inline-block; width: 18px; height: 1px; background: var(--accent); margin-right: 10px; vertical-align: middle; }
+.machine__close { max-width: 20ch; font-size: clamp(1.9rem, 4.4vw, 3.4rem); line-height: 1.04; }
+.machine__cite {
+  list-style: none; margin: 24px 0 0; padding: 16px 0 0; border-top: 1px solid var(--line);
+  display: grid; gap: 8px; max-width: 78ch; font-size: 0.76rem; line-height: 1.55;
+}
+.machine__cite li { display: grid; grid-template-columns: 1.5rem minmax(0, 1fr); gap: 4px; }
+.machine__cite-n { color: var(--accent); }
+.machine__cite i { font-style: italic; }
+.machine__cite a { position: relative; color: var(--muted); transition: color 220ms, border-color 220ms; }
+/* a larger tap area for the links without moving their hairline */
+.machine__cite a::after { content: ''; position: absolute; inset: -14px 0; }
+.machine__cite a:hover { color: var(--ink); border-color: var(--ink); }

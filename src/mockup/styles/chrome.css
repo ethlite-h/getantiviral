@@ -1,0 +1,43 @@
+/* Masthead, folio and global chrome */
+.masthead {
+  position: fixed; inset: 0 0 auto 0; z-index: 50;
+  padding: calc(10px + var(--safe-top)) var(--gutter) 10px;
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  color: var(--ink);
+  pointer-events: none;
+  transition: color var(--world-ease);
+}
+.masthead > * { pointer-events: auto; }
+.masthead::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--bg) 92%, transparent), color-mix(in srgb, var(--bg) 70%, transparent) 60%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  mask-image: linear-gradient(to bottom, #000 55%, transparent);
+  opacity: 0; transition: opacity 400ms;
+}
+.masthead.is-scrolled::before { opacity: 1; }
+.wordmark { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-display); font-size: 1.45rem; letter-spacing: -0.01em; line-height: 1; }
+.wordmark .wave-mark { color: var(--accent); transition: color var(--world-ease); }
+.masthead__right { display: flex; align-items: center; gap: 14px; }
+.folio {
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--muted); display: inline-flex; align-items: baseline; gap: 6px; font-variant-numeric: tabular-nums;
+}
+.folio b { color: var(--ink); font-weight: 500; }
+.masthead .btn { min-height: 38px; padding: 0 16px; font-size: 0.92rem; }
+@media (max-width: 879px) {
+  .masthead .btn { display: none; }
+}
+.masthead.is-ending .folio { color: var(--accent); }
+
+/* progress hairline at the very top — the page's own "how much is left" */
+.progress { position: fixed; top: 0; left: 0; height: 2px; width: 100%; z-index: 60; transform-origin: 0 50%; transform: scaleX(0); background: var(--accent); transition: background-color var(--world-ease); }
+
+/* skip link */
+.skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--ink); color: var(--bg); padding: 8px 12px; border-radius: 8px; }
+.skip:focus { top: calc(12px + var(--safe-top)); }
+
+/* the infinity glyph twitches like an odometer that cannot settle */
+.masthead.is-infinite [data-folio-total] { display: inline-block; animation: twitch 1.6s steps(1) infinite; }
+@keyframes twitch { 0%, 100% { transform: translateY(0); } 12% { transform: translateY(-1px); } 40% { transform: translateY(1px) rotate(2deg); } 63% { transform: translateY(0) rotate(-2deg); } 80% { transform: translateY(-1px); } }

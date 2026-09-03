@@ -1,0 +1,92 @@
+/* Antiviral — design tokens
+   Two "worlds": the feed (dark, restless) and the edition (paper, calm).
+   The page starts in the feed and turns into paper at the story's pivot.
+   Every color below is referenced through the world-agnostic aliases
+   (--bg, --ink, --muted, --line, --accent) so a world switch is one attribute. */
+:root {
+  /* families */
+  --font-display: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+  --font-body: 'Instrument Sans', 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* the feed world */
+  --feed-bg: #0B0A09;
+  --feed-bg-2: #15120F;
+  --feed-ink: #F3EFE7;
+  --feed-muted: rgba(243, 239, 231, 0.62);
+  --feed-faint: rgba(243, 239, 231, 0.38);
+  --feed-line: rgba(243, 239, 231, 0.13);
+  --feed-accent: #86BF8A;
+
+  /* the paper world */
+  --paper-bg: #F5F2EB;
+  --paper-bg-2: #ECE7DC;
+  --paper-ink: #1C1917;
+  --paper-muted: #6F675F;
+  --paper-faint: #9C948A;
+  --paper-line: rgba(28, 25, 23, 0.16);
+  --paper-accent: #5E8C61;
+
+  /* brand constants */
+  --green: #6B9E6F;
+  --green-deep: #4E7C52;
+  --amber: #D97706;
+  --amber-soft: #F0B15C;
+  /* the machine's palette — used only where the feed is being described */
+  --hot-red: #FF4B3E;
+  --hot-orange: #FF8A1F;
+  --hot-blue: #3D8BFF;
+  --hot-violet: #B45CFF;
+  --hot-cyan: #22D3EE;
+
+  /* world aliases: default = feed */
+  --bg: var(--feed-bg);
+  --bg-2: var(--feed-bg-2);
+  --ink: var(--feed-ink);
+  --muted: var(--feed-muted);
+  --faint: var(--feed-faint);
+  --line: var(--feed-line);
+  --accent: var(--feed-accent);
+
+  /* rhythm */
+  --container: 1120px;
+  --gutter: clamp(20px, 5vw, 48px);
+  --section-y: clamp(88px, 14vw, 176px);
+  --radius: 14px;
+  --radius-lg: 24px;
+  --world-ease: 900ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* type scale (mobile-first, fluid) */
+  --t-hero: clamp(2.75rem, 11.5vw, 7.25rem);
+  --t-h2: clamp(2.1rem, 6.4vw, 4.6rem);
+  --t-h3: clamp(1.5rem, 3.6vw, 2.4rem);
+  --t-lead: clamp(1.125rem, 1.4vw + 0.8rem, 1.5rem);
+  --t-body: clamp(1.0rem, 0.35vw + 0.95rem, 1.125rem);
+  --t-small: 0.9rem;
+  --t-eyebrow: 0.74rem;
+
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+
+html[data-world='paper'] {
+  --bg: var(--paper-bg);
+  --bg-2: var(--paper-bg-2);
+  --ink: var(--paper-ink);
+  --muted: var(--paper-muted);
+  --faint: var(--paper-faint);
+  --line: var(--paper-line);
+  --accent: var(--paper-accent);
+}
+
+/* A section can pin itself to a world regardless of the page state. */
+[data-world-lock='feed'] {
+  --bg: var(--feed-bg); --bg-2: var(--feed-bg-2); --ink: var(--feed-ink); --muted: var(--feed-muted);
+  --faint: var(--feed-faint); --line: var(--feed-line); --accent: var(--feed-accent);
+}
+[data-world-lock='paper'] {
+  --bg: var(--paper-bg); --bg-2: var(--paper-bg-2); --ink: var(--paper-ink); --muted: var(--paper-muted);
+  --faint: var(--paper-faint); --line: var(--paper-line); --accent: var(--paper-accent);
+}

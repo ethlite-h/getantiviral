@@ -1,0 +1,164 @@
+/* 11 — The ledger: a printed price list with ruled hairlines, tabular figures,
+   and one rubber stamp. Scoped to .ledger__… */
+.ledger {
+  --ledger-cols: 2.2rem 1fr auto;
+  --ledger-gap: 12px;
+}
+@media (min-width: 880px) {
+  .ledger { --ledger-cols: 3.5rem 1fr 11rem 9.5rem; --ledger-gap: 24px; }
+}
+
+/* head */
+.ledger__title { margin-top: clamp(18px, 3vw, 28px); line-height: 1.02; }
+.ledger__l { display: block; }
+.ledger__l + .ledger__l { margin-top: 0.02em; }
+.ledger__lead { margin-top: clamp(20px, 3vw, 34px); color: var(--muted); }
+
+/* the ledger */
+.ledger__table { margin-top: clamp(44px, 7vw, 84px); }
+.ledger__thead,
+.ledger__row,
+.ledger__foot {
+  display: grid;
+  grid-template-columns: var(--ledger-cols);
+  column-gap: var(--ledger-gap);
+}
+.ledger__thead {
+  align-items: baseline;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.ledger__th--price { text-align: right; }
+.ledger__th--date { display: none; }
+@media (min-width: 880px) { .ledger__th--date { display: block; } }
+
+.ledger__rows { list-style: none; margin: 0; padding: 0; }
+.ledger__row {
+  position: relative;
+  align-items: baseline;
+  padding-block: clamp(18px, 2.6vw, 26px);
+  border-bottom: 1px solid var(--line);
+}
+/* the foot of a ledger is a double rule */
+.ledger__row:last-child::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px; background: var(--line);
+}
+.ledger__no {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.ledger__item { display: block; min-width: 0; }
+.ledger__name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 1.1vw + 0.85rem, 1.6rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+.ledger__date {
+  display: block;
+  margin-top: 7px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ledger__price {
+  font-family: var(--font-mono);
+  font-size: clamp(0.95rem, 0.3vw + 0.85rem, 1.05rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.01em;
+  text-align: right;
+  white-space: nowrap;
+  color: var(--ink);
+}
+@media (min-width: 880px) {
+  .ledger__item { display: contents; }
+  .ledger__date { margin-top: 0; }
+}
+
+/* the rubber stamp */
+.ledger__stamp {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-left: 0.4em;
+  vertical-align: 0.14em;
+  padding: 0.62em 0.95em 0.56em;
+  border: 2px solid var(--amber);
+  border-radius: 4px;
+  color: var(--amber);
+  font-family: var(--font-mono);
+  font-size: clamp(0.74rem, 0.45vw + 0.56rem, 0.86rem);
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  white-space: nowrap;
+  transform: rotate(-8deg);
+  transform-origin: 50% 50%;
+  mix-blend-mode: multiply;
+  /* ink texture: turbulence in the alpha channel, mostly solid with worn pits */
+  -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n' x='0' y='0' width='120' height='120' filterUnits='userSpaceOnUse'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.9 -0.6'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n' x='0' y='0' width='120' height='120' filterUnits='userSpaceOnUse'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.6' numOctaves='3' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 2.9 -0.6'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)'/%3E%3C/svg%3E");
+  -webkit-mask-size: 110px 110px; mask-size: 110px 110px;
+  -webkit-mask-repeat: repeat; mask-repeat: repeat;
+  will-change: transform, opacity;
+  pointer-events: none;
+}
+/* the inner rule of a double-ruled stamp */
+.ledger__stamp::before {
+  content: ''; position: absolute; inset: 3px; border: 1px solid currentColor; border-radius: 2px; opacity: 0.55;
+}
+.ledger__stamp-text { position: relative; }
+@media (max-width: 879px) {
+  .ledger__row--founding .ledger__name { display: flex; flex-wrap: wrap; align-items: center; row-gap: 8px; }
+  .ledger__stamp { margin-left: 0.15em; margin-bottom: -2px; }
+}
+
+/* foot: notes sit under the item column, the printer's mark under the price */
+.ledger__foot { margin-top: clamp(30px, 4vw, 48px); row-gap: 22px; align-items: start; }
+.ledger__notes { grid-column: 2 / -1; max-width: 52ch; }
+.ledger__note { color: var(--ink); }
+.ledger__note--muted { color: var(--muted); margin-top: 0.75em; }
+.ledger__mark-wrap { grid-column: 2 / -1; }
+@media (min-width: 880px) {
+  .ledger__notes { grid-column: 2; }
+  .ledger__mark-wrap { grid-column: 3 / 5; justify-self: end; }
+}
+.ledger__mark {
+  display: inline-flex; align-items: center; gap: 12px;
+  min-height: 44px;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+}
+.ledger__mark-glyph { color: var(--amber); flex: none; transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.ledger__mark-text { border-bottom: 1px solid var(--line); padding-bottom: 3px; transition: border-color 200ms; }
+.ledger__mark:hover .ledger__mark-glyph, .ledger__mark:focus-visible .ledger__mark-glyph { transform: rotate(90deg); }
+.ledger__mark:hover .ledger__mark-text, .ledger__mark:focus-visible .ledger__mark-text { border-color: var(--ink); }
+
+/* reduced motion and no JS: everything is already in its end state */
+@media (prefers-reduced-motion: reduce) {
+  .ledger__row { opacity: 1 !important; transform: none !important; }
+  .ledger__stamp { opacity: 1 !important; transform: rotate(-8deg) !important; filter: none !important; }
+}
+
+/* phone: the stamp takes its own line and keeps clear of the date beneath */
+@media (max-width: 879px) {
+  .ledger__row--founding .ledger__stamp { flex-basis: 100%; width: max-content; margin: 6px 0 4px; }
+  .ledger__row--founding .ledger__date { margin-top: 12px; display: block; }
+}

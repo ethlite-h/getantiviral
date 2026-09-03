@@ -1,0 +1,85 @@
+/* 08 — Missing: the contact sheet of everything you follow */
+.missing__head .eyebrow { margin-bottom: clamp(18px, 3vw, 28px); }
+.missing__head h2 { max-width: 12ch; }
+.missing__lead { margin-top: clamp(18px, 2.5vw, 28px); color: var(--muted); }
+
+/* the stage: a tall scrub track with a sticky viewport inside */
+.missing__stage { height: 240svh; min-height: 240vh; margin-top: clamp(8px, 2vw, 24px); }
+.missing__sticky {
+  position: sticky; top: 0; height: 100svh; min-height: 100vh;
+  display: flex; flex-direction: column; justify-content: center;
+  padding-top: calc(56px + var(--safe-top)); padding-bottom: calc(16px + var(--safe-bottom));
+}
+.missing__frame { display: flex; flex-direction: column; gap: 10px; }
+.missing__caption { display: flex; justify-content: space-between; gap: 12px; white-space: nowrap; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faint); }
+.missing__legend { display: inline-flex; align-items: center; gap: 8px; }
+.missing__legend i { display: inline-block; width: 12px; height: 10px; border-radius: 2px; background: var(--ink); position: relative; }
+.missing__legend i::after { content: ''; position: absolute; right: 2px; bottom: 2px; width: 3px; height: 3px; border-radius: 50%; background: var(--accent); }
+
+/* the sheet: 10 × 20 on phones, 20 × 10 on desktop; always exactly 200 */
+.missing__sheet { position: relative; display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+@media (min-width: 880px) { .missing__sheet { grid-template-columns: repeat(20, 1fr); gap: 6px; } }
+.missing__tile {
+  display: block; position: relative; aspect-ratio: 5 / 4; border-radius: 2px;
+  background: var(--ink); opacity: 0.12;
+  transition: opacity 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.missing__tile.is-shown, .missing__tile.is-lit { opacity: 1; }
+/* the fifteen the feed chose keep a small mark, so the choice stays visible once everything is lit */
+.missing__tile.is-shown::after { content: ''; position: absolute; right: 3px; bottom: 3px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); }
+/* the developing front: a hairline at the row currently lighting */
+.missing__front { position: absolute; left: 0; right: 0; top: 0; height: 1px; background: var(--accent); opacity: 0; pointer-events: none; will-change: transform; transition: opacity 240ms; }
+.missing__front::after { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px; box-shadow: 0 0 10px 1px var(--accent); }
+.missing__sheet.is-sweeping .missing__front { opacity: 0.9; }
+
+/* the counter beneath: the number is the count of lit tiles */
+.missing__counter {
+  display: flex; flex-direction: column; gap: 6px;
+  margin-top: 10px; padding-top: 14px; border-top: 1px solid var(--line);
+}
+@media (min-width: 880px) { .missing__counter { gap: 8px; margin-top: 16px; padding-top: 20px; } }
+.missing__figure { display: inline-flex; align-items: baseline; gap: 12px; font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.missing__num { font-size: clamp(3.4rem, 15vw, 7.5rem); line-height: 0.9; letter-spacing: -0.05em; font-weight: 500; color: var(--ink); transition: color 500ms; }
+.missing__of { font-size: clamp(0.95rem, 3vw, 1.35rem); letter-spacing: 0.04em; color: var(--faint); }
+.missing__label { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.missing__counter.is-full .missing__num { color: var(--accent); }
+
+/* after the stage */
+.missing__after { padding-top: clamp(56px, 8vw, 112px); }
+.missing__body { font-size: clamp(1.05rem, 0.6vw + 0.9rem, 1.3rem); line-height: 1.5; }
+
+.missing__panels { list-style: none; margin: clamp(40px, 6vw, 72px) 0 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 14px; }
+@media (min-width: 880px) { .missing__panels { grid-template-columns: repeat(3, 1fr); gap: 18px; } }
+.missing__panel {
+  position: relative; display: flex; flex-direction: column; gap: 14px;
+  padding: clamp(22px, 3vw, 30px); border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--bg); transition: border-color var(--world-ease), background-color var(--world-ease);
+}
+.missing__panel-n { font-size: 0.7rem; letter-spacing: 0.14em; color: var(--faint); }
+.missing__panel-title { font-size: clamp(1.6rem, 2.2vw, 2rem); line-height: 1.05; }
+.missing__panel > p { color: var(--ink); }
+.missing__convo { margin: auto 0 0; padding-top: 14px; border-top: 1px solid var(--line); display: grid; gap: 10px; font-size: 0.96rem; line-height: 1.45; }
+.missing__turn { display: grid; grid-template-columns: 8ch 1fr; gap: 10px; align-items: start; }
+.missing__turn dt { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.08em; color: var(--faint); padding-top: 0.32em; white-space: nowrap; }
+.missing__turn dd { margin: 0; color: var(--muted); }
+.missing__turn--av dt { color: var(--accent); }
+.missing__turn--av dd { color: var(--ink); }
+.missing__foot { margin-top: auto; padding-top: 14px; border-top: 1px solid var(--line); display: flex; flex-direction: column; gap: 10px; }
+.missing__foot-label { font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faint); }
+.missing__marks { display: flex; gap: 12px; color: var(--faint); }
+.missing__marks .brand-mark { width: 18px; height: 18px; }
+.missing__mini { display: grid; grid-template-columns: repeat(15, 1fr); gap: 3px; max-width: 220px; }
+.missing__mini i { display: block; aspect-ratio: 5 / 4; border-radius: 1.5px; background: var(--ink); opacity: 0.12; }
+.missing__mini i.is-on { opacity: 1; }
+
+.missing__close { margin-top: clamp(48px, 7vw, 96px); max-width: 24ch; font-size: clamp(1.7rem, 3.6vw, 2.8rem); }
+
+/* end state, statically, when motion is reduced */
+.missing.is-static .missing__stage { height: auto; min-height: 0; margin-top: clamp(40px, 8vw, 72px); }
+.missing.is-static .missing__sticky { position: static; height: auto; min-height: 0; padding-top: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .missing__stage { height: auto; min-height: 0; margin-top: clamp(40px, 8vw, 72px); }
+  .missing__sticky { position: static; height: auto; min-height: 0; padding-top: 0; }
+  .missing__tile { opacity: 1; }
+  .missing__front { display: none; }
+}

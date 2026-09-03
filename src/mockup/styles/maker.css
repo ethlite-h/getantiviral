@@ -1,0 +1,138 @@
+/* 12 — The studio. Paper, still, editorial: a headline, a tipped-in plate,
+   two paragraphs, three principles on hairlines, one amber sign-off.
+   Scoped to .maker__… */
+
+/* head */
+.maker__title { margin-top: clamp(18px, 3vw, 28px); line-height: 1.02; max-width: 22ch; }
+.maker__l { display: block; }
+.maker__l + .maker__l { margin-top: 0.02em; }
+
+/* body + plate */
+.maker__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: clamp(32px, 6vw, 56px) clamp(28px, 5vw, 72px);
+  align-items: start;
+  margin-top: clamp(36px, 6vw, 72px);
+}
+.maker__body { color: var(--ink); }
+.maker__body p { text-wrap: pretty; }
+
+/* the plate: a paper mat, a hairline, the near-black picture inside */
+.maker__plate { margin: 0; min-width: 0; }
+.maker__plate-frame {
+  padding: clamp(8px, 1.4vw, 14px);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg-2);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  transition: background-color var(--world-ease), border-color var(--world-ease);
+}
+.maker__plate-media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  border-radius: 2px;
+  background: #0B0A09;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+  /* Safari: keep the rounded clip on the moving picture */
+  isolation: isolate;
+  transform: translateZ(0);
+}
+.maker__video,
+.maker__poster {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+  background: #0B0A09;
+}
+.maker__poster { z-index: 1; opacity: 1; transition: opacity 900ms ease; }
+.maker__plate.is-playing .maker__poster { opacity: 0; }
+/* if there is no picture at all, the app icon sits where the wave would be */
+.maker__plate--icon .maker__poster {
+  inset: auto; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  width: 36%; height: auto; aspect-ratio: 1;
+  object-fit: contain;
+  border-radius: 22.5%;
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.9);
+}
+.maker__plate--icon .maker__video { display: none; }
+
+.maker__plate-cap {
+  margin-top: 12px;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+.maker__fig { color: var(--ink); }
+
+/* the three principles: ruled, numbered, no icons */
+.maker__principles {
+  list-style: none;
+  margin: clamp(48px, 8vw, 96px) 0 0;
+  padding: 0;
+  border-bottom: 1px solid var(--line);
+}
+.maker__principle {
+  display: grid;
+  grid-template-columns: 2.6rem minmax(0, 1fr);
+  column-gap: 12px;
+  align-items: baseline;
+  padding-block: clamp(16px, 2.4vw, 22px);
+  border-top: 1px solid var(--line);
+  will-change: transform, opacity;
+}
+.maker__principle-no {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.1em;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+.maker__principle-text {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 1.1vw + 1rem, 1.7rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* sign-off: the one amber line on the page */
+.maker__foot { margin-top: clamp(28px, 4vw, 44px); }
+.maker__credit {
+  display: inline-flex; align-items: center; gap: 10px;
+  min-height: 44px;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  color: var(--amber);
+  -webkit-tap-highlight-color: transparent;
+}
+.maker__credit::before { content: ''; width: 18px; height: 1px; background: currentColor; flex: none; }
+.maker__credit span { border-bottom: 1px solid transparent; transition: border-color 220ms; }
+.maker__credit:hover span { border-bottom-color: currentColor; }
+.maker__credit:focus-visible { outline-color: var(--amber); }
+
+/* desktop: body keeps the headline's column, the plate sits opposite */
+@media (min-width: 880px) {
+  .maker__grid { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
+  .maker__body { grid-column: 1; grid-row: 1; }
+  .maker__plate { grid-column: 2; grid-row: 1; margin-top: 0.35em; }
+  .maker__principles {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: clamp(24px, 3vw, 40px);
+    border-bottom: 0;
+  }
+  .maker__principle {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    align-content: start;
+    row-gap: 10px;
+    padding-block: 18px 0;
+  }
+  .maker__principle-no { line-height: 1; }
+  .maker__foot { margin-top: clamp(56px, 7vw, 88px); }
+}

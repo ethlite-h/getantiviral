@@ -1,0 +1,151 @@
+/* 10 · Architecture: privacy by floor plan.
+   An architect's sheet (inline SVG, hairlines in currentColor, mono labels)
+   with a key beneath it that doubles as an accordion. Scoped: .architecture__… */
+.architecture { --architecture-paper: color-mix(in srgb, var(--bg) 56%, #fff); }
+
+/* ---------- head ---------- */
+.architecture__head { display: grid; grid-template-columns: 1fr; gap: 22px 56px; }
+.architecture__eyebrow { grid-column: 1 / -1; margin-bottom: 4px; }
+.architecture__h { grid-column: 1; }
+.architecture__nowrap { white-space: nowrap; }
+.architecture__lead { color: var(--muted); }
+@media (min-width: 880px) {
+  .architecture__head { grid-template-columns: 7fr 5fr; align-items: end; }
+  .architecture__lead { max-width: 36ch; padding-bottom: 0.4em; }
+}
+
+/* ---------- the sheet ---------- */
+.architecture__sheet {
+  margin: clamp(40px, 6vw, 64px) 0 0;
+  background: var(--architecture-paper);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  overflow: hidden;
+  color: var(--ink);
+}
+.architecture__paper { padding: clamp(10px, 2.2vw, 26px); }
+.architecture__titleblock {
+  display: flex; align-items: stretch;
+  font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted);
+  border-top: 1px solid var(--line);
+}
+.architecture__titleblock > span { display: inline-flex; align-items: center; padding: 10px 14px; border-right: 1px solid var(--line); white-space: nowrap; }
+.architecture__titleblock > span:last-child { border-right: 0; }
+.architecture__tb-grow { flex: 1; }
+@media (max-width: 879px) {
+  .architecture__sheet { margin-inline: calc(var(--gutter) * -1); border-inline: 0; border-radius: 0; }
+  .architecture__paper { padding: 8px 0 4px; }
+  .architecture__titleblock > .hide-mobile + span { flex: 1; }
+  .architecture__titleblock > span { padding: 12px 20px; }
+}
+
+/* ---------- the drawing ---------- */
+.architecture__plan { width: 100%; height: auto; display: block; color: var(--ink); font-family: var(--font-mono); overflow: visible; }
+.architecture__plan text { fill: currentColor; user-select: none; -webkit-user-select: none; }
+.architecture__border { fill: none; stroke: currentColor; stroke-opacity: 0.28; stroke-width: 0.8; }
+.architecture__lotline { fill: none; stroke: currentColor; stroke-opacity: 0.5; stroke-width: 0.8; stroke-dasharray: 10 4 2 4; }
+.architecture__curb { fill: none; stroke: currentColor; stroke-opacity: 0.32; stroke-width: 0.8; }
+.architecture__wall { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linejoin: miter; stroke-linecap: square; }
+.architecture__door { fill: none; stroke: currentColor; stroke-width: 0.8; stroke-opacity: 0.75; }
+.architecture__lotedge { fill: none; stroke: currentColor; stroke-opacity: 0.55; stroke-width: 0.8; stroke-dasharray: 5 4; }
+.architecture__floor { fill: var(--accent); fill-opacity: 0; transition: fill-opacity 320ms ease; }
+.architecture__hit { fill: transparent; }
+.architecture__room { cursor: pointer; pointer-events: all; -webkit-tap-highlight-color: transparent; }
+@media (hover: hover) { .architecture__room:hover .architecture__floor { fill-opacity: 0.05; } }
+.architecture__room.is-open .architecture__floor { fill-opacity: 0.11; }
+.architecture__room.is-open .architecture__name,
+.architecture__room.is-open .architecture__num { fill: var(--accent); }
+.architecture__room.is-open .architecture__shaft,
+.architecture__room.is-open .architecture__head { stroke: var(--accent); }
+.architecture__room.is-open .architecture__lbl { fill: var(--accent); }
+
+.architecture__num { font-size: 11px; letter-spacing: 0.14em; fill: var(--muted); transition: fill 240ms; }
+.architecture__name { font-size: 13px; letter-spacing: 0.02em; transition: fill 240ms; }
+.architecture__detail { font-size: 11.3px; fill: var(--muted); }
+.architecture__lbl { font-size: 11.3px; fill: var(--ink); transition: fill 240ms; }
+.architecture__tiny { font-size: 11px; fill: var(--faint); letter-spacing: 0.12em; text-transform: uppercase; }
+.architecture__north line, .architecture__north path { fill: none; stroke: currentColor; stroke-opacity: 0.6; stroke-width: 0.8; stroke-linecap: round; stroke-linejoin: round; }
+.architecture__north text { font-size: 10px; letter-spacing: 0.1em; fill: var(--faint); }
+.architecture__glyph rect, .architecture__glyph path { fill: none; stroke: currentColor; stroke-opacity: 0.6; stroke-width: 0.8; }
+.architecture__here-dot { fill: var(--accent); transform-box: fill-box; transform-origin: center; animation: architecture-pulse 2.6s ease-in-out infinite; }
+.architecture__here { fill: var(--accent); }
+.architecture__shaft { fill: none; stroke: currentColor; stroke-width: 1.2; transition: stroke 240ms; }
+.architecture__head { fill: none; stroke: currentColor; stroke-width: 1.2; stroke-linecap: round; stroke-linejoin: round; transition: stroke 240ms; }
+
+/* the empty lot: hatch, halo the text so it stays legible on the hatching */
+.architecture__lot text { paint-order: stroke; stroke: var(--architecture-paper); stroke-width: 4px; stroke-linejoin: round; }
+.architecture__sign line { stroke: currentColor; stroke-width: 1; }
+.architecture__sign rect { fill: var(--architecture-paper); stroke: currentColor; stroke-width: 0.8; }
+.architecture__sign text { font-size: 9px; letter-spacing: 0.12em; fill: var(--ink); paint-order: normal; stroke: none; }
+.architecture__sign-board { transform-box: view-box; animation: architecture-sway 7s ease-in-out infinite; }
+.architecture__sign--d .architecture__sign-board { transform-origin: 650px 364px; }
+.architecture__sign--m .architecture__sign-board { transform-origin: 322px 312px; }
+@keyframes architecture-sway { 0%, 100% { transform: rotate(-1.6deg); } 50% { transform: rotate(1.6deg); } }
+@keyframes architecture-pulse { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.6); opacity: 0.55; } }
+
+/* two drawings of the same building: the wide sheet on desktop, the taller sheet on phones.
+   The phone sheet renders at ~1 unit per CSS pixel, so its type is sized in real pixels. */
+.architecture__plan--m { display: none; }
+@media (max-width: 879px) {
+  .architecture__plan--d { display: none; }
+  .architecture__plan--m { display: block; }
+  .architecture__plan--m .architecture__num { font-size: 11.5px; letter-spacing: 0.1em; }
+  .architecture__plan--m .architecture__name { font-size: 13.5px; }
+  .architecture__plan--m .architecture__detail, .architecture__plan--m .architecture__lbl { font-size: 12.5px; }
+  .architecture__plan--m .architecture__tiny { font-size: 11.5px; letter-spacing: 0.08em; }
+  .architecture__plan--m .architecture__north text { font-size: 10px; }
+  .architecture__plan--m .architecture__sign text { font-size: 10px; letter-spacing: 0.12em; }
+  .architecture__plan--m .architecture__lot text { stroke-width: 5px; }
+  .architecture__plan--m .architecture__wall { stroke-width: 1.7; }
+  .architecture__plan--m .architecture__door { stroke-width: 1; }
+  .architecture__plan--m .architecture__shaft, .architecture__plan--m .architecture__head { stroke-width: 1.4; }
+  .architecture__plan--m .architecture__border, .architecture__plan--m .architecture__lotline, .architecture__plan--m .architecture__curb, .architecture__plan--m .architecture__lotedge { stroke-width: 1; }
+  .architecture__plan--m .architecture__sign line { stroke-width: 1.2; }
+  .architecture__plan--m .architecture__sign rect { stroke-width: 1; }
+}
+
+/* ---------- key + body ---------- */
+.architecture__grid { display: grid; grid-template-columns: 1fr; gap: clamp(44px, 6vw, 72px); margin-top: clamp(40px, 6vw, 72px); align-items: start; }
+@media (min-width: 880px) { .architecture__grid { grid-template-columns: 6fr 6fr; } }
+
+.architecture__key-h {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  font-family: var(--font-mono); font-size: var(--t-eyebrow); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  padding-bottom: 12px; border-bottom: 1px solid var(--ink);
+}
+.architecture__key-h .faint { letter-spacing: 0.08em; }
+.architecture__item { border-bottom: 1px solid var(--line); }
+.architecture__item-h { margin: 0; font: inherit; letter-spacing: 0; line-height: inherit; text-wrap: initial; }
+.architecture__toggle {
+  display: grid; grid-template-columns: 2.6rem 1fr 20px; column-gap: 12px; align-items: baseline;
+  width: 100%; min-height: 60px; padding: 16px 0 15px; text-align: left; color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+}
+.architecture__toggle:focus-visible { outline-offset: -2px; }
+.architecture__n { font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.1em; color: var(--muted); transition: color 240ms; }
+.architecture__title { font-family: var(--font-display); font-size: clamp(1.35rem, 1.1vw + 0.9rem, 1.6rem); line-height: 1.1; letter-spacing: -0.005em; }
+.architecture__sub { grid-column: 2; grid-row: 2; margin-top: 7px; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.01em; color: var(--muted); line-height: 1.45; }
+.architecture__plus { grid-column: 3; grid-row: 1; position: relative; width: 14px; height: 14px; align-self: center; margin-top: 2px; }
+.architecture__plus::before, .architecture__plus::after { content: ''; position: absolute; left: 0; top: 50%; width: 14px; height: 1px; background: var(--ink); transition: transform 360ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.architecture__plus::after { transform: rotate(90deg); }
+.architecture__item.is-open .architecture__plus::after { transform: rotate(0deg); }
+.architecture__item.is-open .architecture__n { color: var(--accent); }
+.architecture__note { display: grid; grid-template-rows: 0fr; transition: grid-template-rows 480ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+.architecture__note > div { min-height: 0; overflow: hidden; }
+.architecture__note p { padding: 2px 0 22px calc(2.6rem + 12px); max-width: 46ch; color: var(--ink); opacity: 0; transform: translateY(6px); transition: opacity 300ms ease, transform 300ms ease; }
+.architecture__item.is-open .architecture__note { grid-template-rows: 1fr; }
+.architecture__item.is-open .architecture__note p { opacity: 1; transform: none; transition-delay: 110ms; }
+.architecture__key-note { margin-top: 14px; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.02em; color: var(--faint); }
+
+.architecture__body > p { color: var(--ink); }
+.architecture__body > p + p { margin-top: 1.1em; }
+.architecture__req { list-style: none; margin: clamp(28px, 4vw, 40px) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.architecture__req li { flex: 0 1 auto; font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.04em; padding: 9px 13px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); line-height: 1.2; }
+.architecture__req li:first-child { color: var(--ink); border-color: var(--ink); }
+@media (max-width: 879px) { .architecture__req li { letter-spacing: 0.01em; padding: 9px 11px; } }
+.architecture__close { margin-top: clamp(24px, 3.5vw, 36px); font-family: var(--font-display); font-size: clamp(1.5rem, 1.3vw + 1rem, 2rem); line-height: 1.15; letter-spacing: -0.01em; max-width: 24ch; text-wrap: balance; }
+
+@media (prefers-reduced-motion: reduce) {
+  .architecture__here-dot, .architecture__sign-board { animation: none; }
+  .architecture__note, .architecture__note p, .architecture__plus::before, .architecture__plus::after, .architecture__floor { transition: none; }
+}

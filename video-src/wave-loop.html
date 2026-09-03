@@ -1,0 +1,208 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>wave-loop</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #0B0A09; overflow: hidden; width: 100%; height: 100%; }
+  canvas { display: block; width: 100vw; height: 100vh; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<script>
+(function () {
+  // "The wave": a handful of luminous fibre bundles rise, crest, and end on
+  // the right in a single glowing dot. Every time term is sin/cos(2*pi*k*t/T)
+  // with integer k so the 12 s loop is seamless. No Date, no Math.random.
+  var T = 12;
+  var TAU = Math.PI * 2;
+  var DW = 1600, DH = 900;               // design space
+  var canvas = document.getElementById('c');
+  var ctx = canvas.getContext('2d', { alpha: false });
+
+  // Muted palette (from the Antiviral icon).
+  var C = {
+    green: [107, 158, 111],
+    blue:  [111, 138, 168],
+    rust:  [158, 107, 107],
+    gold:  [158, 152, 112]
+  };
+  function rgba(c, a) { return 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + a + ')'; }
+  function lift(c, k) { return [c[0] + (255 - c[0]) * k | 0, c[1] + (255 - c[1]) * k | 0, c[2] + (255 - c[2]) * k | 0]; }
+
+  // Geometry: the line starts faint at X0 and ends at the dot at X1.
+  var X0 = 150, X1 = 1330, YEND = 438;
+  var N = 220;                           // samples per line
+
+  // Each bundle: colour, phase offsets, harmonic weights, and a slow drift k.
+  var LINES = [
+    { c: C.green, p: 0.00, a: 0.70, b: 0.24, k1: 1, k2: 2, s: 1 },
+    { c: C.blue,  p: 1.30, a: 0.62, b: 0.30, k1: 1, k2: 3, s: -1 },
+    { c: C.rust,  p: 2.55, a: 0.72, b: 0.22, k1: 2, k2: 1, s: 1 },
+    { c: C.gold,  p: 3.85, a: 0.58, b: 0.32, k1: 1, k2: 2, s: -1 },
+    { c: C.green, p: 5.10, a: 0.66, b: 0.26, k1: 2, k2: 3, s: 1 }
+  ];
+
+  // Spine: rise, crest at ~60% of the run, settle towards the end dot.
+  function centerY(u, t) {
+    var rise = Math.sin(Math.PI * u * 0.86);       // 0 at start, ~0.43 at end
+    var breathe = 10 * Math.sin(TAU * t / T + u * 2.2);
+    var base = 540 - 205 * rise;                    // 540 -> ~335 crest
+    // pull the tail onto the end dot exactly
+    var tail = smooth((u - 0.82) / 0.18);
+    return (base + breathe) * (1 - tail) + YEND * tail;
+  }
+  function smooth(x) { x = x < 0 ? 0 : x > 1 ? 1 : x; return x * x * (3 - 2 * x); }
+
+  // Spread envelope: gathered at the left, open through the crest, zero at the dot.
+  function spread(u) {
+    var open = Math.pow(Math.sin(Math.PI * u), 0.85) * 82;
+    var head = 26 * (1 - u);
+    var tail = 1 - smooth((u - 0.80) / 0.20);
+    return (open + head) * tail;
+  }
+
+  function braid(L, u, t) {
+    var w = TAU * t / T;
+    var v1 = Math.sin(TAU * 1.05 * u + L.p + L.s * L.k1 * w);
+    var v2 = Math.sin(TAU * 1.95 * u - L.p * 1.3 - L.s * L.k2 * w * 0.5 + w * 0.5);
+    return L.a * v1 + L.b * v2;
+  }
+
+  // Path point in design space.
+  function point(L, u, t) {
+    var x = X0 + (X1 - X0) * u;
+    var y = centerY(u, t) + spread(u) * braid(L, u, t);
+    return [x, y];
+  }
+
+  // Sample the whole line once per frame, with tangents for fibre offsets.
+  function sample(L, t) {
+    var pts = new Array(N + 1);
+    for (var i = 0; i <= N; i++) pts[i] = point(L, i / N, t);
+    return pts;
+  }
+
+  function strokePath(pts, offsetFn, width, style) {
+    ctx.lineWidth = width;
+    ctx.strokeStyle = style;
+    ctx.beginPath();
+    for (var i = 0; i <= N; i++) {
+      var p = pts[i];
+      var q = pts[i < N ? i + 1 : i], r = pts[i > 0 ? i - 1 : i];
+      var dx = q[0] - r[0], dy = q[1] - r[1];
+      var len = Math.hypot(dx, dy) || 1;
+      var nx = -dy / len, ny = dx / len;
+      var o = offsetFn(i / N);
+      var x = p[0] + nx * o, y = p[1] + ny * o;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.stroke();
+  }
+
+  // Alpha envelope along x: fade in over the first 18%, hold, fade out into the dot.
+  function envelopeGradient(c, peak) {
+    var g = ctx.createLinearGradient(X0, 0, X1, 0);
+    g.addColorStop(0.00, rgba(c, 0));
+    g.addColorStop(0.20, rgba(c, peak));
+    g.addColorStop(0.78, rgba(c, peak));
+    g.addColorStop(0.955, rgba(c, peak * 0.35));
+    g.addColorStop(1.00, rgba(c, 0));
+    return g;
+  }
+
+  function drawLine(L, t) {
+    var pts = sample(L, t);
+    var c = L.c;
+    // soft halo under the bundle
+    strokePath(pts, function () { return 0; }, 10, envelopeGradient(c, 0.050));
+    strokePath(pts, function () { return 0; }, 3.2, envelopeGradient(c, 0.09));
+    // six hairline fibres with slight, slowly moving offsets
+    var fibres = 6;
+    var hair = envelopeGradient(lift(c, 0.22), 0.36);
+    for (var j = 0; j < fibres; j++) {
+      var base = (j - (fibres - 1) / 2) * 1.15;
+      var ph = L.p + j * 1.7;
+      strokePath(pts, function (u) {
+        return base + 1.6 * Math.sin(TAU * 1.8 * u + ph + TAU * t / T * L.s) ;
+      }, 0.8, hair);
+    }
+    return pts;
+  }
+
+  function glow(x, y, r, c, a) {
+    var g = ctx.createRadialGradient(x, y, 0, x, y, r);
+    g.addColorStop(0.00, rgba(lift(c, 0.55), a));
+    g.addColorStop(0.18, rgba(lift(c, 0.25), a * 0.55));
+    g.addColorStop(0.50, rgba(c, a * 0.20));
+    g.addColorStop(1.00, rgba(c, 0));
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, TAU);
+    ctx.fill();
+  }
+
+  // Travelling nodes: (line index, start phase, loops per cycle)
+  var NODES = [
+    { line: 0, u0: 0.10, k: 1 },
+    { line: 2, u0: 0.55, k: 1 },
+    { line: 1, u0: 0.82, k: 1 }
+  ];
+
+  function pathPoint(pts, u) {
+    var f = u * N, i = Math.floor(f), fr = f - i;
+    if (i >= N) return pts[N];
+    var a = pts[i], b = pts[i + 1];
+    return [a[0] + (b[0] - a[0]) * fr, a[1] + (b[1] - a[1]) * fr];
+  }
+
+  window.__renderFrame = function (t) {
+    t = ((t % T) + T) % T;
+    var W = window.innerWidth, H = window.innerHeight;
+    if (canvas.width !== W || canvas.height !== H) { canvas.width = W; canvas.height = H; }
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.fillStyle = '#0B0A09';
+    ctx.fillRect(0, 0, W, H);
+
+    var s = Math.min(W / DW, H / DH);
+    ctx.setTransform(s, 0, 0, s, (W - DW * s) / 2, (H - DH * s) / 2);
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    ctx.globalCompositeOperation = 'lighter';
+
+    var paths = [];
+    for (var i = 0; i < LINES.length; i++) paths.push(drawLine(LINES[i], t));
+
+    // travelling nodes
+    for (var n = 0; n < NODES.length; n++) {
+      var nd = NODES[n];
+      var u = (nd.u0 + nd.k * t / T) % 1;
+      var fade = Math.pow(Math.sin(Math.PI * u), 0.6);          // in from the dark, out into the dot
+      var p = pathPoint(paths[nd.line], u);
+      var L = LINES[nd.line];
+      glow(p[0], p[1], 42, L.c, 0.9 * fade);
+      ctx.fillStyle = rgba(lift(L.c, 0.8), 0.9 * fade);
+      ctx.beginPath(); ctx.arc(p[0], p[1], 1.9, 0, TAU); ctx.fill();
+    }
+
+    // the end: a single glowing dot, breathing once per loop
+    var pulse = 0.5 + 0.5 * Math.sin(TAU * t / T - Math.PI / 2);
+    var endC = [196, 186, 150];
+    glow(X1, YEND, 46 + 6 * pulse, endC, 0.55 + 0.2 * pulse);
+    ctx.fillStyle = rgba([250, 245, 230], 0.95);
+    ctx.beginPath(); ctx.arc(X1, YEND, 2.4, 0, TAU); ctx.fill();
+
+    ctx.globalCompositeOperation = 'source-over';
+  };
+
+  // Live preview when opened in a browser (the renderer drives frames itself).
+  if (!navigator.webdriver) {
+    var start = performance.now();
+    (function tick() { window.__renderFrame((performance.now() - start) / 1000); requestAnimationFrame(tick); })();
+  }
+})();
+</script>
+</body>
+</html>

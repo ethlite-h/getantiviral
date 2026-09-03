@@ -1,0 +1,146 @@
+/* 04 · turn — the pivot. No world lock: this section's colors follow the page
+   world, so the feed → paper change is seen happening on this very ground. */
+.turn {
+  --turn-d: 130svh;                /* pinned scroll distance */
+  --turn-h2: clamp(2.5rem, min(11.5vw, 8.6svh), 5.8rem);
+  --turn-ease: cubic-bezier(0.3, 1.25, 0.5, 1);
+}
+@media (min-width: 880px) { .turn { --turn-d: 120vh; } }
+
+.turn__pin { height: calc(100svh + var(--turn-d)); min-height: calc(100vh + var(--turn-d)); }
+.turn__stage { position: sticky; top: 0; height: 100svh; min-height: 100vh; overflow: hidden; }
+.turn__frame {
+  height: 100%;
+  display: flex; flex-direction: column; justify-content: center;
+  gap: clamp(18px, 3.4svh, 40px);
+  padding-top: calc(60px + var(--safe-top));
+  padding-bottom: calc(20px + var(--safe-bottom));
+}
+
+/* the statement */
+.turn__title { font-size: var(--turn-h2); line-height: 0.96; letter-spacing: -0.02em; }
+.turn__line { display: block; overflow: hidden; padding-bottom: 0.22em; margin-bottom: -0.22em; padding-left: 0.06em; margin-left: -0.06em; }
+.turn__inner { display: block; }
+.turn__line--you { margin-top: 0.08em; }
+.turn__you { font-size: 1.45em; line-height: 0.95; color: var(--accent); transition: color var(--world-ease); }
+
+/* the deck: switch + comparison */
+.turn__deck { display: grid; gap: clamp(20px, 3.5svh, 36px); }
+@media (min-width: 880px) {
+  .turn__deck { grid-template-columns: 5fr 7fr; gap: clamp(48px, 6vw, 96px); align-items: start; margin-top: 1vh; }
+}
+
+.turn__q { font-family: var(--font-display); font-style: italic; font-size: clamp(1.2rem, 1vw + 0.9rem, 1.5rem); line-height: 1.2; color: var(--ink); margin-bottom: 14px; max-width: 24ch; transition: color var(--world-ease); }
+
+/* a physical switch: recessed track, raised knob, two printed positions */
+.turn__switch {
+  --pad: 5px;
+  position: relative; display: block; width: min(100%, 360px); height: 60px;
+  padding: var(--pad); border-radius: 999px; overflow: hidden;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05),
+    0 1px 0 rgba(255, 255, 255, 0.04);
+  transition: background-color var(--world-ease), border-color var(--world-ease), box-shadow var(--world-ease);
+  -webkit-tap-highlight-color: transparent; touch-action: manipulation; user-select: none; -webkit-user-select: none;
+  color: var(--ink);
+}
+html[data-world='paper'] .turn__switch {
+  box-shadow:
+    inset 0 2px 8px rgba(28, 25, 23, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.6),
+    0 1px 0 rgba(255, 255, 255, 0.5);
+}
+@media (min-width: 880px) { .turn__switch { height: 68px; --pad: 6px; width: min(100%, 420px); } .turn__opt { font-size: 1.06rem; } .turn__q { margin-bottom: 18px; } }
+.turn__switch:focus-visible { outline-offset: 4px; }
+@media (hover: hover) { .turn__switch:hover { border-color: color-mix(in srgb, var(--ink) 28%, transparent); } }
+.turn__knob {
+  position: absolute; top: var(--pad); bottom: var(--pad); left: var(--pad);
+  width: calc(50% - var(--pad));
+  border-radius: 999px;
+  background: linear-gradient(to bottom, color-mix(in srgb, var(--ink) 90%, #fff), var(--ink) 70%);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  transform: translateX(calc(var(--kx, 0%) + var(--lean, 0px)));
+  transition: transform 260ms var(--turn-ease), background var(--world-ease), box-shadow var(--world-ease);
+  will-change: transform;
+}
+.turn[data-state='you'] .turn__knob { --kx: 100%; }
+.turn__switch:active .turn__knob { box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.22); }
+.turn__lamp {
+  position: absolute; top: 50%; left: 12px; width: 6px; height: 6px; margin-top: -3px; border-radius: 50%;
+  background: var(--bg); opacity: 0.45;
+  transition: background-color 260ms, box-shadow 260ms, opacity 260ms;
+}
+.turn[data-state='you'] .turn__lamp { background: var(--accent); opacity: 1; box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12), 0 0 10px var(--accent); }
+.turn__opts { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 1fr; height: 100%; }
+.turn__opt {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-body); font-weight: 500; font-size: 1rem; letter-spacing: -0.005em;
+  color: var(--muted); transition: color 260ms var(--turn-ease);
+}
+.turn[data-state='adv'] .turn__opt--adv, .turn[data-state='you'] .turn__opt--you { color: var(--bg); }
+.turn__switch.is-thunk { animation: turn-thunk 260ms var(--turn-ease); }
+@keyframes turn-thunk { 35% { transform: scale(0.985); } 100% { transform: none; } }
+
+/* comparison rows: a label column and a value column whose two readings roll over as a pair */
+.turn__rows { width: 100%; }
+.turn__list { margin: 0; }
+.turn__head, .turn__row {
+  display: grid; grid-template-columns: minmax(0, 8.6em) minmax(0, 1fr); column-gap: 18px; align-items: baseline;
+  border-top: 1px solid var(--line); transition: border-color var(--world-ease);
+}
+.turn__row { min-height: 46px; padding: 9px 0; }
+.turn__row:last-child { border-bottom: 1px solid var(--line); }
+.turn__head { border-top: 0; padding: 0 0 7px; }
+.turn__head .turn__key { font-size: 0.74rem; }
+.turn__head .turn__v { font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+.turn__head .turn__v--you { color: var(--accent); }
+.turn__key { margin: 0; font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.02em; color: var(--muted); transition: color var(--world-ease); }
+.turn__val { margin: 0; display: grid; overflow: hidden; }
+.turn__v {
+  grid-area: 1 / 1; display: block; min-width: 0;
+  font-family: var(--font-display); font-size: clamp(1.28rem, 1vw + 1rem, 1.6rem); line-height: 1.12; letter-spacing: -0.01em;
+  color: var(--ink);
+  transition: opacity 280ms ease, transform 460ms cubic-bezier(0.2, 0.8, 0.2, 1), color var(--world-ease);
+  transition-delay: calc(var(--i, 0) * 55ms), calc(var(--i, 0) * 55ms), 0ms;
+}
+.turn__v--you { opacity: 0; transform: translateY(0.75em); }
+.turn[data-state='you'] .turn__v--adv { opacity: 0; transform: translateY(-0.75em); }
+.turn[data-state='you'] .turn__v--you { opacity: 1; transform: none; }
+
+/* after the pin: the argument, on paper */
+.turn__after { padding-block: clamp(40px, 6vw, 88px) var(--section-y); }
+.turn__lead { font-size: clamp(1.125rem, 0.9vw + 0.9rem, 1.45rem); line-height: 1.45; color: var(--ink); }
+.turn__coda { margin-top: 1.4em; }
+.turn__coda .i { color: var(--accent); transition: color var(--world-ease); }
+
+@media (max-width: 879px) {
+  .turn__frame { justify-content: flex-start; padding-top: calc(96px + var(--safe-top)); }
+  .turn__q { font-size: 1.15rem; margin-bottom: 12px; }
+  .turn__switch { width: min(100%, 440px); height: 58px; }
+  .turn__opt { font-size: 1rem; }
+  .turn__head, .turn__row { grid-template-columns: minmax(0, 10.4em) minmax(0, 1fr); column-gap: 12px; }
+  .turn__key { font-size: 0.76rem; }
+  .turn__row { min-height: 44px; padding: 8px 0; }
+  .turn__v { font-size: 1.22rem; }
+}
+/* short viewports: keep the whole stage on one screen */
+@media (max-height: 700px) {
+  .turn { --turn-h2: clamp(2.2rem, min(9vw, 7.2svh), 5rem); }
+  .turn__frame { gap: 14px; }
+  .turn__row { min-height: 40px; padding: 6px 0; }
+}
+
+/* very short viewports (landscape phones): let the stage flow instead of clipping inside a sticky box */
+@media (max-height: 560px) {
+  .turn__pin { height: auto; min-height: 0; }
+  .turn__stage { position: relative; height: auto; min-height: 100svh; overflow: visible; }
+  .turn__frame { height: auto; padding-top: calc(84px + var(--safe-top)); padding-bottom: 56px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turn__knob, .turn__v, .turn__opt, .turn__lamp { transition: none; }
+  .turn__switch.is-thunk { animation: none; }
+}

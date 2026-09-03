@@ -1,0 +1,137 @@
+/* 13 — The last page. Paper, and the site's proof that it ends: a headline,
+   a coupon (one field, one button), a long stretch of empty paper, the
+   tombstone, and the colophon. Scoped to .lastpage__… */
+
+.lastpage { padding-bottom: 0; }
+
+/* ---------- head ---------- */
+.lastpage__head { display: grid; gap: clamp(18px, 3vh, 28px); }
+.lastpage__title { max-width: 16ch; }
+.lastpage__l { display: block; padding-bottom: 0.06em; margin-bottom: -0.06em; }
+
+/* ---------- body: the deck on the left, the coupon on the right ---------- */
+.lastpage__body {
+  margin-top: clamp(36px, 5vw, 60px);
+  padding-top: clamp(24px, 3vw, 36px);
+  border-top: 1px solid var(--line);
+  display: grid; grid-template-columns: minmax(0, 1fr);
+  gap: clamp(28px, 5vw, 48px) clamp(40px, 6vw, 96px);
+  align-items: start;
+}
+.lastpage__sub { color: var(--ink); }
+@media (min-width: 880px) {
+  .lastpage__body { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
+}
+
+/* ---------- the coupon ---------- */
+.lastpage__signup { display: grid; gap: clamp(20px, 3vw, 30px); }
+.lastpage__waitlist { scroll-margin-top: calc(88px + var(--safe-top)); }
+.lastpage__form { margin: 0; }
+.lastpage__field { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: end; }
+.lastpage__line { position: relative; min-width: 0; }
+
+/* the field: a rule on paper, not a box */
+.lastpage__input {
+  display: block; width: 100%; min-width: 0; height: 56px; margin: 0; padding: 0 0 2px;
+  background: transparent; border: 0; border-bottom: 1px solid var(--ink); border-radius: 0;
+  font-family: var(--font-body); font-size: 1.0625rem; letter-spacing: -0.005em; color: var(--ink);
+  -webkit-appearance: none; appearance: none;
+  transition: border-color 220ms, box-shadow 220ms, color 220ms;
+}
+.lastpage__input::placeholder { color: var(--faint); opacity: 1; }
+.lastpage__input:focus, .lastpage__input:focus-visible {
+  outline: none; border-radius: 0;
+  border-bottom-color: var(--accent); box-shadow: 0 1px 0 0 var(--accent);
+}
+.lastpage__input:-webkit-autofill, .lastpage__input:-webkit-autofill:hover {
+  -webkit-text-fill-color: var(--ink);
+  -webkit-box-shadow: 0 0 0 1000px var(--bg) inset;
+  transition: background-color 9999s ease-out;
+}
+.lastpage__input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--ink);
+  -webkit-box-shadow: 0 0 0 1000px var(--bg) inset, 0 1px 0 0 var(--accent);
+}
+.lastpage__line.is-invalid .lastpage__input { border-bottom-color: var(--amber); box-shadow: 0 1px 0 0 var(--amber); }
+
+.lastpage__btn { width: 100%; min-height: 56px; padding-inline: 26px; font-size: 1.05rem; white-space: nowrap; }
+/* a tap is not a hover: keep the ink button ink on touch screens */
+@media (hover: none) { .lastpage__btn:hover { background: var(--ink); border-color: var(--ink); color: var(--bg); } }
+@media (min-width: 640px) {
+  .lastpage__field { grid-template-columns: minmax(0, 1fr) auto; gap: 18px; }
+  .lastpage__btn { width: auto; }
+}
+
+/* loading: the arrow keeps leaving, the field goes quiet */
+.lastpage__form.is-busy { cursor: progress; }
+.lastpage__form.is-busy .lastpage__input { color: var(--muted); pointer-events: none; }
+.lastpage__form.is-busy .lastpage__btn { pointer-events: none; }
+.lastpage__form.is-busy .lastpage__btn .arrow { animation: lastpage-travel 900ms cubic-bezier(0.4, 0, 0.2, 1) infinite; }
+@keyframes lastpage-travel {
+  0% { transform: translateX(-6px); opacity: 0; }
+  30% { opacity: 1; }
+  100% { transform: translateX(10px); opacity: 0; }
+}
+
+/* error: the server's own words, in amber, on a reserved line */
+.lastpage__alert {
+  min-height: 1.5em; margin-top: 12px;
+  font-family: var(--font-mono); font-size: 0.84rem; letter-spacing: 0.02em; line-height: 1.5;
+  color: var(--amber); text-wrap: pretty;
+}
+
+/* success: the form is gone; one printed line takes its place */
+.lastpage__status { display: none; }
+.lastpage__status.is-shown {
+  display: flex; align-items: center; gap: 14px; min-height: 56px; outline: none;
+  font-family: var(--font-display); font-size: clamp(1.4rem, 1.2vw + 1rem, 1.8rem); line-height: 1.2; letter-spacing: -0.01em;
+  color: var(--ink); text-wrap: balance;
+}
+.lastpage__status.is-shown::before { content: ''; flex: none; width: 18px; height: 1px; background: var(--accent); }
+
+.lastpage__notes { display: grid; gap: 8px; }
+.lastpage__note { font-size: 1rem; line-height: 1.5; color: var(--muted); max-width: 48ch; text-wrap: pretty; }
+.lastpage__req { font-family: var(--font-mono); font-size: 0.76rem; letter-spacing: 0.04em; line-height: 1.6; color: var(--faint); }
+.lastpage__req span { white-space: nowrap; }
+
+/* ---------- the empty paper ---------- */
+.lastpage__paper { position: relative; min-height: 36svh; margin-top: clamp(40px, 8svh, 96px); }
+@media (min-width: 880px) { .lastpage__paper { min-height: 44svh; } }
+.lastpage__thread {
+  position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; margin-left: -0.5px;
+  background: color-mix(in srgb, var(--ink) 30%, transparent);
+  transform-origin: 50% 0; will-change: transform;
+}
+
+/* the end */
+.lastpage__end { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 18px; padding-top: 18px; }
+.lastpage__tombstone { display: block; font-family: var(--font-display); font-size: 1.5rem; line-height: 1; color: var(--ink); }
+.lastpage__end-note { font-family: var(--font-mono); font-size: 0.8rem; letter-spacing: 0.06em; line-height: 1.5; color: var(--muted); }
+
+/* ---------- colophon ---------- */
+.lastpage__colophon { margin-top: clamp(72px, 14svh, 160px); padding-bottom: calc(28px + var(--safe-bottom)); }
+.lastpage__colophon-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 22px; padding-top: 22px; align-items: start; }
+.lastpage__colophon-brand { display: grid; gap: 10px; justify-items: start; }
+.lastpage__wordmark { font-size: 1.6rem; }
+.lastpage__tagline {
+  font-family: var(--font-display); font-style: italic; font-size: clamp(1.1rem, 1vw + 0.8rem, 1.3rem); line-height: 1.25; letter-spacing: -0.005em;
+  color: var(--muted);
+}
+.lastpage__links { display: flex; flex-wrap: wrap; gap: 0 clamp(18px, 2.4vw, 28px); margin-block: -6px; }
+.lastpage__links a { position: relative; display: inline-flex; align-items: center; min-height: 44px; font-size: 1rem; color: var(--ink); -webkit-tap-highlight-color: transparent; }
+.lastpage__links a::after { content: ''; position: absolute; left: 0; right: 0; bottom: 11px; height: 1px; background: var(--line); transition: background-color 220ms; }
+.lastpage__links a:hover::after, .lastpage__links a:focus-visible::after { background: var(--ink); }
+.lastpage__copyright {
+  margin-top: 26px; padding-top: 14px; border-top: 1px solid var(--line);
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; line-height: 1.6; color: var(--faint); text-wrap: pretty;
+}
+@media (min-width: 880px) {
+  .lastpage__colophon-grid { grid-template-columns: minmax(0, 1fr) auto; gap: 48px; padding-top: 26px; }
+  .lastpage__links { margin-top: 2px; }
+}
+
+/* reduced motion: the JS never hides anything, so the CSS above is the end state */
+@media (prefers-reduced-motion: reduce) {
+  .lastpage__thread, .lastpage__tombstone { will-change: auto; }
+  .lastpage__form.is-busy .lastpage__btn .arrow { animation: none; opacity: 0.5; }
+}

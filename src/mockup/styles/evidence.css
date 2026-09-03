@@ -1,0 +1,202 @@
+/* 09 — Evidence: the literature, pinned to a ruled lab wall.
+   Four paper sheets on a faint hairline grid. Each carries one study: a big
+   figure, a small hairline instrument, the finding, the source. The sheet is
+   a button; pressed, it turns over to the caveat. */
+.evidence {
+  --ev-sheet: #FCFAF6;
+  --ev-sheet-2: #F8F5EE;
+  --ev-sheet-ink: #1C1917;
+  --ev-sheet-muted: #6F675F;
+  --ev-sheet-line: rgba(28, 25, 23, 0.16);
+  --ev-fig: clamp(3.8rem, 17vw, 6rem);
+  --ev-pad: clamp(20px, 2.6vw, 30px);
+  --ev-foot: 44px;
+  --ev-tail: calc(var(--section-y) * 0.7);
+  padding-bottom: var(--ev-tail);
+  overflow: hidden;
+  isolation: isolate;
+}
+@media (min-width: 880px) { .evidence { --ev-fig: clamp(4.6rem, 5.8vw, 6.4rem); } }
+
+/* the lab wall: minor and major hairlines, fading at the section's edges */
+.evidence::before {
+  content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(28, 25, 23, 0.09) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 25, 23, 0.09) 1px, transparent 1px),
+    linear-gradient(rgba(28, 25, 23, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(28, 25, 23, 0.045) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: center top;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 160px, #000 calc(100% - var(--ev-tail) - 120px), transparent calc(100% - var(--ev-tail)));
+  mask-image: linear-gradient(to bottom, transparent, #000 160px, #000 calc(100% - var(--ev-tail) - 120px), transparent calc(100% - var(--ev-tail)));
+}
+.evidence > .container { position: relative; z-index: 1; }
+
+/* ---------- head ---------- */
+.evidence__head { display: grid; gap: clamp(16px, 2.4vw, 26px); }
+.evidence__h2 { max-width: 14ch; }
+.evidence__l { display: block; padding-bottom: 0.06em; margin-bottom: -0.06em; }
+.evidence__lead { color: var(--muted); }
+
+/* ---------- the sheets ---------- */
+.evidence__tiles {
+  list-style: none; margin: clamp(40px, 6vw, 72px) 0 0; padding: 0;
+  display: grid; grid-template-columns: 1fr; gap: 16px;
+}
+@media (min-width: 880px) { .evidence__tiles { grid-template-columns: 1fr 1fr; gap: 22px; } }
+
+.evidence__tile { position: relative; display: grid; perspective: 1600px; transition: transform 420ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+@media (hover: hover) { .evidence__tile:hover { transform: translateY(-3px); } }
+
+.evidence__flip {
+  display: grid; width: 100%; min-width: 0; text-align: left; color: var(--ev-sheet-ink);
+  border-radius: 3px; -webkit-tap-highlight-color: transparent; -webkit-appearance: none; appearance: none;
+  outline-offset: 5px;
+}
+.evidence__card {
+  position: relative; display: grid; min-width: 0;
+  transform-style: preserve-3d; -webkit-transform-style: preserve-3d;
+  transition: transform 760ms cubic-bezier(0.2, 0.8, 0.2, 1); will-change: transform;
+}
+.evidence__tile.is-flipped .evidence__card { transform: rotateY(180deg); }
+
+.evidence__face {
+  grid-area: 1 / 1; position: relative; display: flex; flex-direction: column; min-width: 0;
+  padding: var(--ev-pad) var(--ev-pad) calc(var(--ev-pad) + var(--ev-foot) + 8px);
+  background: linear-gradient(180deg, var(--ev-sheet), var(--ev-sheet-2));
+  border: 1px solid var(--ev-sheet-line); border-radius: 3px;
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.7) inset,
+    0 1px 2px rgba(28, 25, 23, 0.06),
+    0 18px 34px -22px rgba(28, 25, 23, 0.38);
+  -webkit-backface-visibility: hidden; backface-visibility: hidden;
+  transform: rotateY(0deg);
+}
+.evidence__face * { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+/* belt and braces: once the sheet has turned past edge-on, the front is gone entirely */
+.evidence__tile.is-flipped .evidence__face--front { visibility: hidden; transition: visibility 0s 380ms; }
+/* a rule above the source line, on both sides of the sheet */
+.evidence__face::after {
+  content: ''; position: absolute; left: var(--ev-pad); right: var(--ev-pad);
+  bottom: calc(var(--ev-pad) + var(--ev-foot) - 4px); height: 1px; background: var(--ev-sheet-line);
+}
+.evidence__face--back { transform: rotateY(180deg); background: linear-gradient(180deg, #F7F3EB, #F3EEE4); }
+
+/* top row: the figure number, like a plate label */
+.evidence__top {
+  display: block;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--ev-sheet-muted); font-variant-numeric: tabular-nums;
+}
+/* the turn-over hint, printed at the sheet's foot on the right, like a card's "over" */
+.evidence__hint {
+  position: absolute; right: var(--ev-pad); bottom: calc(var(--ev-pad) - 8px);
+  display: inline-flex; align-items: center; gap: 6px; min-height: var(--ev-foot);
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.06em; color: var(--accent); white-space: nowrap;
+}
+.evidence__hint > i { font-style: normal; font-size: 1.05em; transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+@media (hover: hover) { .evidence__flip:hover .evidence__hint > i { transform: rotate(-70deg); } }
+
+/* the figure */
+.evidence__fig {
+  display: flex; align-items: baseline; flex-wrap: wrap; column-gap: 0.16em;
+  margin-top: clamp(18px, 3vw, 30px);
+  font-family: var(--font-display); font-size: var(--ev-fig); line-height: 0.92; letter-spacing: -0.03em;
+  color: var(--ev-sheet-ink); font-variant-numeric: tabular-nums;
+}
+.evidence__num { display: inline-block; }
+.evidence__num--count { position: relative; }
+.evidence__num--count .evidence__sizer { visibility: hidden; }
+.evidence__num--count [data-count] { position: absolute; left: 0; top: 0; }
+.evidence__unit { font-size: 0.38em; font-style: italic; letter-spacing: -0.01em; color: var(--ev-sheet-muted); line-height: 1; }
+.evidence__unit--tight { margin-left: -0.08em; margin-right: 0.26em; }
+.evidence__unit--tight:last-child { margin-right: 0; }
+.evidence__sub { margin-top: 10px; font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); }
+
+/* the instruments */
+.evidence__glyph { display: block; height: auto; max-width: 100%; margin-top: clamp(16px, 2.4vw, 22px); color: var(--ev-sheet-ink); overflow: visible; }
+.evidence__glyph--weeks { width: 100px; }
+.evidence__glyph--tally { width: 236px; }
+.evidence__glyph--ten { width: 200px; }
+.evidence__glyph--dial { width: 62px; margin-top: clamp(12px, 2vw, 18px); }
+
+.evidence__cell { fill: currentColor; fill-opacity: 0; stroke: currentColor; stroke-opacity: 0.32; stroke-width: 1; transition: fill-opacity 380ms ease-out; transition-delay: calc(var(--i) * 36ms); }
+.evidence__tile.is-in .evidence__cell { fill-opacity: 0.82; }
+
+.evidence__mark { fill: none; stroke: currentColor; stroke-width: 1.4; stroke-linecap: round; stroke-dasharray: 36; stroke-dashoffset: 36; transition: stroke-dashoffset 300ms cubic-bezier(0.2, 0.8, 0.2, 1); transition-delay: calc(var(--i) * 34ms); }
+.evidence__tile.is-in .evidence__mark { stroke-dashoffset: 0; }
+
+.evidence__pip { fill: currentColor; fill-opacity: 0; stroke: currentColor; stroke-opacity: 0.42; stroke-width: 1; transition: fill-opacity 340ms ease-out; transition-delay: calc(var(--i) * 90ms); }
+.evidence__tile.is-in .evidence__pip.is-on { fill-opacity: 0.88; }
+
+.evidence__ring { fill: none; stroke: currentColor; stroke-opacity: 0.34; stroke-width: 1; }
+.evidence__tick { stroke: currentColor; stroke-opacity: 0.34; stroke-width: 1; stroke-linecap: round; }
+.evidence__tick.is-major { stroke-opacity: 0.7; }
+.evidence__pin { fill: currentColor; fill-opacity: 0.6; }
+.evidence__wedge { fill: var(--accent); fill-opacity: 0; transition: fill-opacity 700ms ease-out 260ms; }
+.evidence__tile.is-in .evidence__wedge { fill-opacity: 0.26; }
+.evidence__arc { fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-dasharray: var(--len); stroke-dashoffset: var(--len); transition: stroke-dashoffset 900ms cubic-bezier(0.2, 0.8, 0.2, 1) 200ms; }
+.evidence__tile.is-in .evidence__arc { stroke-dashoffset: 0; }
+
+/* the finding */
+.evidence__finding { display: block; margin-top: clamp(18px, 2.6vw, 24px); max-width: 46ch; font-size: var(--t-body); line-height: 1.55; color: var(--ev-sheet-ink); text-wrap: pretty; }
+
+/* the spec's frame, set as a line of the sheet's own hand */
+.evidence__frame { display: block; margin-top: 12px; max-width: 30ch; font-family: var(--font-display); font-style: italic; font-size: clamp(1.25rem, 0.6vw + 1.05rem, 1.5rem); line-height: 1.22; letter-spacing: -0.01em; color: var(--ev-sheet-ink); text-wrap: pretty; }
+
+/* the fine print (back) */
+.evidence__kicker { display: block; margin-top: clamp(18px, 3vw, 28px); font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ev-sheet-muted); }
+.evidence__kicker--2 { margin-top: clamp(22px, 3vw, 32px); }
+.evidence__caveat { display: block; margin-top: 8px; max-width: 26ch; font-family: var(--font-display); font-style: italic; font-size: clamp(1.5rem, 1.3vw + 1rem, 2rem); line-height: 1.18; letter-spacing: -0.01em; color: var(--ev-sheet-ink); text-wrap: pretty; }
+.evidence__plain { display: block; margin-top: 8px; max-width: 46ch; font-size: var(--t-body); line-height: 1.5; color: var(--ev-sheet-ink); text-wrap: pretty; }
+.evidence__measured { display: block; margin-top: 10px; max-width: 54ch; font-family: var(--font-mono); font-size: 0.78rem; line-height: 1.6; color: var(--ev-sheet-muted); }
+
+/* the front figure showing through the paper, mirrored, as ink does */
+.evidence__ghost {
+  position: absolute; right: var(--ev-pad); top: calc(var(--ev-pad) + 1.05rem + clamp(18px, 3vw, 30px)); margin: 0;
+  transform: scaleX(-1); transform-origin: center; opacity: 0.07; pointer-events: none; white-space: nowrap; flex-wrap: nowrap;
+}
+.evidence__ghost .evidence__unit { color: var(--ev-sheet-ink); }
+
+/* the source line, laid over the sheet's foot so it stays put while the sheet turns */
+.evidence__src {
+  position: absolute; left: var(--ev-pad); right: calc(var(--ev-pad) + 104px); bottom: calc(var(--ev-pad) - 8px); z-index: 2;
+  margin: 0; display: flex; align-items: center; min-height: var(--ev-foot);
+}
+.evidence__src a {
+  display: block; padding: 14px 0; max-width: 100%;
+  font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.02em; line-height: 1.4; color: var(--ev-sheet-muted);
+  border-bottom: 0; -webkit-tap-highlight-color: transparent;
+}
+.evidence__src a > span { border-bottom: 1px solid var(--ev-sheet-line); transition: color 220ms, border-color 220ms; }
+.evidence__src a > i { display: inline-block; margin-left: 6px; font-style: normal; color: var(--accent); transition: transform 220ms; }
+.evidence__src a:hover > span { color: var(--ev-sheet-ink); border-color: var(--ev-sheet-ink); }
+.evidence__src a:hover > i { transform: translate(2px, -2px); }
+
+/* ---------- closing ---------- */
+.evidence__close {
+  margin-top: clamp(56px, 8vw, 104px); padding-top: clamp(18px, 3vw, 26px); border-top: 1px solid var(--ink);
+  max-width: 30ch; font-family: var(--font-display); font-size: clamp(1.6rem, 2.7vw, 2.5rem); line-height: 1.14; letter-spacing: -0.012em;
+  color: var(--ink); text-wrap: balance;
+}
+
+/* ---------- sources ---------- */
+.evidence__cite { list-style: none; margin: clamp(40px, 5vw, 64px) 0 0; padding: 14px 0 0; border-top: 1px solid var(--line); display: grid; gap: 10px; max-width: 78ch; }
+.evidence__cite li { display: grid; grid-template-columns: 1.6em minmax(0, 1fr); gap: 4px; }
+.evidence__cite b { font-weight: 500; color: var(--accent); }
+.evidence__cite a {
+  display: inline-block; white-space: nowrap; padding: 14px 6px; margin: -14px -6px;
+  border-bottom: 0; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; text-decoration-thickness: 1px;
+}
+.evidence__cite a:hover { text-decoration-color: currentColor; }
+
+/* reduced motion: sheets turn without the rotation; the instruments sit finished */
+@media (prefers-reduced-motion: reduce) {
+  .evidence__card { transform-style: flat; transition: none; }
+  .evidence__tile.is-flipped .evidence__card { transform: none; }
+  .evidence__face { transform: none; -webkit-backface-visibility: visible; backface-visibility: visible; }
+  .evidence__face--back { visibility: hidden; }
+  .evidence__tile.is-flipped .evidence__face--front { visibility: hidden; }
+  .evidence__tile.is-flipped .evidence__face--back { visibility: visible; }
+}

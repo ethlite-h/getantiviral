@@ -1,0 +1,122 @@
+/* 07 — Editor: say it, and it writes the rule down. Paper world. */
+.editor { --editor-phone-w: min(78vw, 320px); }
+@media (min-width: 880px) { .editor { --editor-phone-w: 330px; } }
+
+/* head */
+.editor__head { margin-bottom: clamp(44px, 7vw, 84px); }
+.editor__head .eyebrow { margin-bottom: clamp(18px, 3vw, 28px); }
+.editor__h-line { display: block; }
+.editor__lead { margin-top: clamp(18px, 3vw, 28px); max-width: 40ch; }
+@media (min-width: 880px) {
+  .editor__head { display: grid; grid-template-columns: minmax(0, 8fr) minmax(0, 4fr); column-gap: clamp(40px, 5vw, 72px); align-items: end; }
+  .editor__head .eyebrow { grid-column: 1 / -1; }
+  .editor__lead { margin-top: 0; padding-bottom: 0.4em; max-width: 34ch; }
+}
+/* the payoff sits on one line once the column is wide enough for it */
+@media (min-width: 1180px) {
+  .editor__h-line.i { white-space: nowrap; }
+}
+
+/* demo grid: one column on phones (phone, chips, drawer, body), two on desktop */
+.editor__demo { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(22px, 4vw, 32px); align-items: start; }
+@media (max-width: 879px) {
+  .editor__say, .editor__stage { display: contents; }
+  .editor__phone-wrap { order: 1; }
+  .editor__chips { order: 2; }
+  .editor__drawer { order: 3; }
+  .editor__body { order: 4; margin-top: clamp(20px, 5vw, 36px); }
+}
+@media (min-width: 880px) {
+  .editor__demo { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(48px, 7vw, 104px); }
+  .editor__say { position: sticky; top: calc(96px + var(--safe-top)); }
+  .editor__stage { display: flex; flex-direction: column; align-items: center; }
+  .editor__body { margin-top: clamp(36px, 4vw, 52px); }
+}
+
+/* the phone */
+.editor__phone-wrap { position: relative; z-index: 2; width: 100%; }
+.editor .phone { --phone-w: var(--editor-phone-w); }
+/* in-phone type floor: nothing on the screen goes under 12px */
+.editor .app-topbar__right { font-size: max(12px, calc(var(--phone-w) * 0.032)); }
+.editor .app-row__meta { font-size: max(12px, calc(var(--phone-w) * 0.03)); }
+.editor .app-row__why { font-size: max(12px, calc(var(--phone-w) * 0.034)); }
+.editor .app-row__why::before { font-size: max(12px, 0.85em); }
+.editor__rows { position: relative; }
+.editor .app-row { position: relative; }
+.editor .app-row::before {
+  content: ''; position: absolute; inset: 5px 9px; border-radius: 10px; pointer-events: none;
+  border: 1px solid var(--green); box-shadow: 0 0 0 4px rgba(107, 158, 111, 0.12);
+  opacity: 0; transition: opacity 0.35s;
+}
+.editor .app-row.is-target::before { opacity: 1; }
+.editor .app-row.is-rising { z-index: 2; background: #0B0A09; }
+.editor .app-row__thumb > svg { position: absolute; inset: 0; z-index: 1; margin: auto; width: 38%; height: 38%; color: #fff; opacity: 0.6; }
+
+/* chips, in the reader's voice */
+.editor__chips-label { font-family: var(--font-mono); font-size: var(--t-eyebrow); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+.editor__chips-list { display: flex; flex-wrap: wrap; gap: 10px; }
+@media (min-width: 880px) { .editor__chips-list { flex-direction: column; align-items: flex-start; gap: 10px; } }
+.editor__chip {
+  position: relative; display: inline-flex; align-items: center; gap: 11px;
+  min-height: 48px; padding: 0 20px 0 14px; border-radius: 999px;
+  border: 1px solid var(--line); background: transparent; color: var(--ink);
+  font-family: var(--font-body); font-size: 1rem; line-height: 1.2; letter-spacing: -0.005em; text-align: left;
+  transition: border-color 0.25s, background-color 0.25s, color 0.25s, transform 0.2s;
+  -webkit-tap-highlight-color: transparent; user-select: none;
+}
+.editor__chip:hover { border-color: var(--ink); }
+.editor__chip:active { transform: scale(0.98); }
+.editor__chip-mark { width: 20px; height: 20px; border-radius: 50%; border: 1px solid var(--faint); display: grid; place-items: center; flex: none; color: #fff; transition: border-color 0.25s, background-color 0.25s; }
+.editor__chip-mark svg { width: 11px; height: 11px; opacity: 0; transform: scale(0.6); transition: opacity 0.25s, transform 0.25s; }
+.editor__chip[data-state='queued'] .editor__chip-mark { border-style: dashed; border-color: var(--muted); }
+.editor__chip[data-state='running'] { border-color: var(--accent); }
+.editor__chip[data-state='running'] .editor__chip-mark { border-color: var(--accent); animation: editor-pulse 1s ease-in-out infinite; }
+.editor__chip[data-state='done'] { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.editor__chip[data-state='done'] .editor__chip-mark { background: var(--accent); border-color: var(--accent); }
+.editor__chip[data-state='done'] .editor__chip-mark svg { opacity: 1; transform: none; }
+@keyframes editor-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(94, 140, 97, 0.35); } 50% { box-shadow: 0 0 0 5px rgba(94, 140, 97, 0); } }
+.editor__status { margin-top: 14px; min-height: 1.4em; font-family: var(--font-mono); font-size: max(12px, 0.75rem); letter-spacing: 0.04em; color: var(--muted); }
+
+/* body copy */
+.editor__body { max-width: 46ch; }
+.editor__body p + p { margin-top: 1.1em; }
+.editor__close { font-family: var(--font-display); font-size: clamp(1.35rem, 1.2vw + 1rem, 1.7rem); line-height: 1.22; letter-spacing: -0.01em; text-wrap: balance; }
+
+/* the Rules drawer, under the phone */
+.editor__drawer {
+  position: relative; z-index: 1;
+  width: min(100%, calc(var(--editor-phone-w) + 96px)); margin-inline: auto;
+  padding: 20px 22px 18px;
+  background: color-mix(in srgb, var(--bg) 55%, #fff);
+  border: 1px solid var(--line); border-radius: 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 26px 50px -34px rgba(28, 25, 23, 0.4);
+}
+.editor__drawer-handle { width: 40px; height: 4px; border-radius: 4px; background: var(--line); margin: 0 auto 16px; }
+.editor__drawer-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 12px; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: var(--t-eyebrow); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.editor__drawer-count b { font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+.editor__rules { list-style: none; margin: 0; padding: 0; }
+.editor__rule { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; row-gap: 6px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid var(--line); border-radius: 6px; }
+.editor__rule-n { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); white-space: nowrap; }
+.editor__rule-text { display: block; min-height: 1.25em; font-family: var(--font-display); font-size: 1.22rem; line-height: 1.25; letter-spacing: -0.005em; color: var(--ink); overflow-wrap: anywhere; text-wrap: pretty; }
+.editor__rule-meta { grid-column: 2; display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 9px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.04em; color: var(--faint); }
+.editor__rule-actions { display: inline-flex; align-items: baseline; gap: 9px; white-space: nowrap; }
+.editor__rule-dot { color: var(--line); }
+.editor__rule-act { font: inherit; letter-spacing: inherit; color: var(--muted); text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 3px; padding: 16px 10px; margin: -16px -10px; border-radius: 4px; transition: color 0.2s, text-decoration-color 0.2s; }
+.editor__rule-act:hover { color: var(--ink); text-decoration-color: var(--ink); }
+.editor__rule.is-typing .editor__rule-text::after { content: ''; display: inline-block; width: 1px; height: 0.95em; margin-left: 2px; vertical-align: -0.12em; background: var(--accent); animation: editor-caret 1s steps(2) infinite; }
+@keyframes editor-caret { 50% { opacity: 0; } }
+.editor__rule.is-new { animation: editor-new 1.8s ease-out both; }
+@keyframes editor-new { from { background: color-mix(in srgb, var(--accent) 14%, transparent); } to { background: transparent; } }
+.editor__rule.is-pending { opacity: 0.45; pointer-events: none; }
+.editor__rule.is-editing .editor__rule-text { outline: 1px dashed var(--accent); outline-offset: 5px; border-radius: 3px; caret-color: var(--accent); }
+.editor__drawer-note { margin-top: 14px; font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.04em; line-height: 1.5; color: var(--faint); }
+
+/* phones: the rule number sits above its sentence so the meta line has room */
+@media (max-width: 879px) {
+  .editor__rule { grid-template-columns: minmax(0, 1fr); row-gap: 5px; }
+  .editor__rule-meta { grid-column: 1; }
+}
+/* desktop: the drawer tucks under the phone */
+@media (min-width: 880px) {
+  .editor__drawer { margin-top: -36px; padding-top: 52px; }
+}
