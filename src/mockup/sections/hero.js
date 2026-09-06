@@ -2,7 +2,7 @@
 import { gsap, ScrollTrigger, isMobile, prefersReducedMotion } from '../lib/scroll.js'
 
 export const html = `
-<section class="hero section--flush" id="top" data-page data-world-lock="feed" aria-label="Introduction">
+<section class="hero section--flush" id="top" data-page data-folio="infinite" data-world-lock="feed" aria-label="Introduction">
   <div class="hero__sticky">
     <canvas class="hero__canvas" aria-hidden="true"></canvas>
     <div class="hero__fallback" aria-hidden="true"></div>

@@ -33,7 +33,7 @@ export function initFolio() {
   })
   function set(i) {
     // the hero is the feed: it has no page number and no end
-    if (i === 0) { cur.textContent = '—'; tot.textContent = '∞'; head.classList.add('is-infinite') }
+    if (i === 0 && pages[0].dataset.folio === 'infinite') { cur.textContent = '—'; tot.textContent = '∞'; head.classList.add('is-infinite') }
     else { cur.textContent = String(i + 1); tot.textContent = String(pages.length); head.classList.remove('is-infinite') }
     head.classList.toggle('is-ending', i === pages.length - 1)
   }
