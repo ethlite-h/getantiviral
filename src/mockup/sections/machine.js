@@ -213,7 +213,7 @@ export const html = `
 /* --------------------------------------------------------------- the pen */
 // Every stroke in the .machine__ink group is drawn with dasharray/dashoffset
 // by one pen moving at a constant speed; the late group fades in at the end.
-function preparePen(svg) {
+export function preparePen(svg) {
   const ink = Array.from(svg.querySelectorAll('.machine__ink :is(path, line, circle, rect, polyline, ellipse):not([data-nodraw])'))
   const late = Array.from(svg.querySelectorAll('.machine__late, [data-late]'))
   const items = ink.map((el) => {
@@ -349,7 +349,7 @@ function beltRig(svg) {
   }
 }
 
-const RIGS = { lever: leverRig, balance: balanceRig, belt: beltRig }
+export const RIGS = { lever: leverRig, balance: balanceRig, belt: beltRig }
 
 /* ------------------------------------------------------------------ init */
 export function init(root) {

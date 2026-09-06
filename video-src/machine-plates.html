@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!-- Capture page for the three machine plates (scripts/render-gifs.mjs).
+     Mounts one plate, drives GSAP's clock by hand so every frame is deterministic.
+     ?fig=lever|balance|belt  ·  window.__seek(t) renders time t, window.__ready holds the schedule. -->
+<html lang="en" data-world="feed">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>machine plates</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <style>
+    html, body { margin: 0; background: #0B0A09; }
+    #stage { width: 546px; padding: 0; }
+  </style>
+</head>
+<body>
+  <div id="stage"></div>
+  <script type="module">
+    import '/src/mockup/styles/base.css'
+    import { gsap } from '/src/mockup/lib/scroll.js'
+    import { html, preparePen, RIGS } from '/src/mockup/sections/machine.js'
+
+    // hand-cranked clock: nothing advances unless __seek moves it
+    gsap.ticker.remove(gsap.updateRoot)
+    gsap.ticker.lagSmoothing(0)
+
+    // scripted dice for the lever: values are consumed in order, then real randomness resumes
+    const dice = []
+    const realRandom = Math.random
+    Math.random = () => (dice.length ? dice.shift() : realRandom())
+
+    const fig = new URLSearchParams(location.search).get('fig') || 'lever'
+    const tmp = document.createElement('div')
+    tmp.innerHTML = html
+    const plate = tmp.querySelector(`.machine__plate[data-fig="${fig}"]`)
+    document.getElementById('stage').appendChild(plate)
+    await document.fonts.ready
+
+    const svg = plate.querySelector('svg')
+    const pen = preparePen(svg)
+    const rig = RIGS[fig](svg)
+
+    const DRAW = 3.0 // seconds for the pen to finish the sheet
+    const master = gsap.timeline()
+    const draw = gsap.timeline()
+    pen.build(draw)
+    draw.timeScale(draw.duration() / DRAW)
+    master.add(draw, 0)
+    const at = (t, fn) => master.add(fn, t)
+    let total
+
+    if (fig === 'lever') {
+      // pull 1: a near miss (two of three). pull 2: the win, lamps flash.
+      at(DRAW + 0.2, () => { dice.push(0.9, 0.45, 0.45, 0.85); rig.enter() })
+      at(DRAW + 0.2 + 3.4, () => { dice.push(0.1, 0.45); rig.replay() })
+      total = DRAW + 0.2 + 3.4 + 3.9 + 1.0
+    } else if (fig === 'balance') {
+      at(0, () => rig.setActive(true))
+      at(DRAW + 0.3, () => rig.enter())
+      at(DRAW + 0.3 + 3.6, () => rig.replay())
+      total = DRAW + 0.3 + 3.6 + 3.0 + 1.2
+    } else {
+      at(DRAW - 0.5, () => rig.setActive(true))
+      at(DRAW + 0.6, () => rig.replay())
+      total = DRAW + 8.0
+    }
+
+    gsap.updateRoot(0)
+    window.__seek = (t) => { gsap.updateRoot(t); return t }
+    window.__ready = { fig, total }
+  </script>
+</body>
+</html>

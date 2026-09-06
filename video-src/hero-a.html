@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!-- Capture page for the variant A hero, "Your feed, finally yours." (scripts/render-hero.mjs).
+     Mounts the hero alone, replaces the clocks (Date.now, performance.now, rAF, CSS animations)
+     with one hand-cranked clock so every frame is deterministic.
+     window.__seek(t) renders time t; window.__ready holds the schedule. -->
+<html lang="en" data-world="feed">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0B0A09" />
+  <title>hero a</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <script>
+    // the clock, installed before gsap or three load so they capture the fakes
+    (function () {
+      var now = 0, queue = []
+      window.__clock = {
+        now: function () { return now },
+        step: function (ms) {
+          now += ms
+          var cbs = queue; queue = []
+          for (var i = 0; i < cbs.length; i++) cbs[i](now)
+        },
+      }
+      Date.now = function () { return now }
+      performance.now = function () { return now }
+      window.requestAnimationFrame = function (cb) { queue.push(cb); return queue.length }
+      window.cancelAnimationFrame = function () {}
+    })()
+  </script>
+  <style>
+    html, body { margin: 0; background: #0B0A09; overflow: hidden; }
+    /* one viewport, no scroll: the sticky frame is the whole capture */
+    .hero { height: 100vh !important; min-height: 0 !important; }
+    /* at 16:9 the top of the stack lands on the lead's second line; wrap the lead a little earlier */
+    .hero__lead { max-width: 46vw !important; }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <script type="module">
+    import '/src/mockup/styles/base.css'
+    import '/src/mockup/styles/chrome.css'
+    import '/src/mockup/styles/hero.css'
+    import '/src/mockup/styles/sections.css'
+    import '/src/mockup/styles/phone.css'
+    import { gsap } from '/src/mockup/lib/scroll.js'
+    import { html } from '/src/mockup/sections/hero.js'
+    import { mountStream } from '/src/mockup/hero/stream.js'
+
+    const app = document.getElementById('app')
+    const main = document.createElement('main')
+    main.innerHTML = html
+    app.appendChild(main)
+    const section = main.querySelector('.hero')
+    const canvas = section.querySelector('.hero__canvas')
+    await document.fonts.ready
+
+    // the stream, ticking on the fake rAF
+    const stream = mountStream(canvas, { mobile: false, reducedMotion: false })
+    stream.resize()
+    stream.start()
+    canvas.classList.add('is-ready')
+
+    // the eyebrow reveal (reveal.js does this on scroll) and the entrance, copied from hero.js
+    const eyebrow = section.querySelector('.hero__eyebrow')
+    const inners = section.querySelectorAll('.hero__inner')
+    gsap.set(eyebrow, { opacity: 0, y: 28 })
+    gsap.set(inners, { yPercent: 108 })
+    gsap.set(['.hero__lead', '.hero__actions', '.hero__cue'], { opacity: 0, y: 18 })
+    const tl = gsap.timeline({ defaults: { ease: 'power4.out' } })
+    tl.to(eyebrow, { opacity: 1, y: 0, duration: 1.05, ease: 'power3.out' }, 0)
+      .to(inners, { yPercent: 0, duration: 1.3, stagger: 0.12, delay: 0.15 }, 0)
+      .to('.hero__lead', { opacity: 1, y: 0, duration: 0.9 }, '-=0.7')
+      .to('.hero__actions', { opacity: 1, y: 0, duration: 0.9 }, '-=0.7')
+      .to('.hero__cue', { opacity: 1, y: 0, duration: 0.9, clearProps: 'opacity,transform' }, '-=0.6')
+
+    // the scroll, scripted: the stream becomes the edition between ORDER_AT and ORDER_AT + ORDER_DUR
+    const ORDER_AT = 5.0, ORDER_DUR = 4.5, TOTAL = 12.5
+    const orderAt = (t) => {
+      const p = Math.min(1, Math.max(0, (t - ORDER_AT) / ORDER_DUR))
+      return gsap.parseEase('power2.inOut')(p)
+    }
+
+    let t = 0
+    window.__seek = (target) => {
+      // advance in 1/60 s ticks so the stream's dt-based lerps behave as they do live
+      while (t < target - 1e-6) {
+        const dt = Math.min(1 / 60, target - t)
+        t += dt
+        const a = t * 0.24
+        stream.setPointer(Math.sin(a) * 0.35, Math.cos(a * 0.7) * 0.2)
+        const o = orderAt(t)
+        stream.setOrder(o)
+        section.style.setProperty('--order', o.toFixed(3))
+        window.__clock.step(dt * 1000)
+      }
+      // CSS animations and transitions (the scroll cue, the canvas fade) follow the same clock
+      document.getAnimations().forEach((an) => { try { an.pause(); an.currentTime = t * 1000 } catch (_) {} })
+      return t
+    }
+    window.__ready = { total: TOTAL, titleAt: 3.6 }
+  </script>
+</body>
+</html>
