@@ -11,7 +11,7 @@ export const html = `
       <p class="eyebrow hero__eyebrow" data-reveal>Fall 2026 · iPhone &amp; Mac</p>
       <h1 class="hero__title">
         <span class="hero__line"><span class="hero__inner">Your feed,</span></span>
-        <span class="hero__line"><span class="hero__inner"><em class="i accent">finally yours.</em></span></span>
+        <span class="hero__line"><span class="hero__inner"><em class="i accent">finally for you.</em></span></span>
       </h1>
       <p class="lead hero__lead measure-narrow">One honest daily edition from the sources you already follow, with a real last page. Curated on your phone by an AI that works for you, not an advertiser.</p>
       <div class="hero__actions">

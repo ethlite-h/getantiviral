@@ -1,4 +1,4 @@
-// Render the variant A hero ("Your feed, finally yours." over the stream, then the
+// Render the variant A hero ("Your feed, finally for you." over the stream, then the
 // stream settling into the edition) for posts that cannot run the live WebGL
 // (Substack, email): an H.264 mp4 of the whole 12.5 s, a 728 px GIF of just the
 // title entrance (a full-length GIF of this scene is 30+ MB), and two PNG posters.

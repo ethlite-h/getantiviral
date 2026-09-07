@@ -872,7 +872,7 @@ export default function AntiviralLanding() {
           marginBottom: "36px",
         }}>
           <span className="hero-line" style={{ animationDelay: "0.1s" }}>Your feed,</span>
-          <span className="hero-line" style={{ animationDelay: "0.3s", color: "#6B9E6F" }}>finally yours.</span>
+          <span className="hero-line" style={{ animationDelay: "0.3s", color: "#6B9E6F" }}>finally for you.</span>
         </h1>
 
         <p style={{

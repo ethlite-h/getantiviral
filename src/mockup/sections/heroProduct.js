@@ -54,7 +54,7 @@ export const html = `
       <p class="eyebrow herop__eyebrow" data-reveal>Fall 2026 · iPhone &amp; Mac</p>
       <h1 class="herop__title">
         <span class="herop__line"><span class="herop__inner">Your feed,</span></span>
-        <span class="herop__line"><span class="herop__inner"><em class="i accent">finally yours.</em></span></span>
+        <span class="herop__line"><span class="herop__inner"><em class="i accent">finally for you.</em></span></span>
       </h1>
       <p class="lead herop__lead measure-narrow">A feed of what you already follow, ranked by what you asked for, with a reason on every pick and one daily Edition that ends.</p>
       <div class="herop__actions">
