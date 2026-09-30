@@ -53,7 +53,7 @@ export default function Privacy() {
           letterSpacing: "-0.02em",
           marginBottom: "16px",
         }}>
-          Privacy
+          Privacy Policy
         </h1>
 
         <p style={{
@@ -62,7 +62,7 @@ export default function Privacy() {
           color: "rgba(255,255,255,0.55)",
           marginBottom: "64px",
         }}>
-          Last updated: June 29, 2026
+          Last updated: September 30, 2026
         </p>
 
         {/* INTRO */}
@@ -73,6 +73,117 @@ export default function Privacy() {
           <P>
             This isn't a legal document designed to obscure what we do. It's a plain-English explanation of exactly how Antiviral handles your information — including the few moments it does leave: syncing to your own iCloud, fetching the content you ask for, and the one daily call to Apple's Private Cloud Compute.
           </P>
+        </Section>
+
+        <Section title="Google user data accessed by Antiviral">
+          <P>
+            Antiviral, published by Studio Ikigai, uses YouTube API Services when you
+            choose to connect your Google account. Connecting is optional. We request
+            the read-only Google OAuth permission <Mono>youtube.readonly</Mono> to
+            import your YouTube sources and preferences. While you remain signed in,
+            Antiviral can refresh these imports when you open the app or sync your subscriptions.
+          </P>
+
+          <SubSection title="What Google user data we access">
+            <Ul>
+              <Li><Mono>YouTube subscriptions</Mono> — your subscribed channels and their metadata, including channel IDs, channel names, and thumbnail URLs.</Li>
+              <Li><Mono>Liked videos</Mono> — your channel's liked-videos playlist identifier, the video IDs in that playlist, and the videos' topic categories.</Li>
+              <Li><Mono>Disliked videos</Mono> — the topic categories of videos you have disliked, when YouTube makes them available.</Li>
+              <Li><Mono>Your playlists</Mono> — playlist metadata, particularly playlist titles, which we use to identify topics you are interested in.</Li>
+              <Li><Mono>Channel topics</Mono> — the topic categories associated with your subscribed YouTube channels.</Li>
+              <Li><Mono>Google account display name</Mono> — Antiviral attempts to read your display name from Google to label the connected account. It stores the name only if Google returns it.</Li>
+              <Li><Mono>Authorization credentials</Mono> — the OAuth access token, refresh token, and token expiration time Google issues so Antiviral can make these authorized requests.</Li>
+            </Ul>
+            <P>
+              This connection does not access Gmail messages, Google Drive files,
+              calendars, contacts, or your Google password. Antiviral does not request
+              your email address or read your YouTube watch or search history through
+              OAuth. Separately, if you choose to import a Google Takeout file,
+              Antiviral can read the YouTube subscriptions and watch history in that file.
+            </P>
+          </SubSection>
+
+          <SubSection title="How we use Google user data">
+            <P>
+              We use subscriptions to add channels to your Sources and fetch their
+              public feeds. We use video topics, playlist titles, and channel topics
+              to establish initial interests and preferences for your personalized
+              feed, Shortlist, and Edition. A local record of processed liked-video
+              IDs prevents repeat imports. The display name identifies your connected
+              account, and the tokens authorize and renew access to Google APIs.
+              Antiviral does not post, subscribe, like, dislike, or change playlists
+              on your behalf, and does not send your activity in Antiviral back to
+              your YouTube account.
+            </P>
+          </SubSection>
+
+          <SubSection title="Storage, protection, and sharing">
+            <P>
+              Requests to Google use HTTPS. OAuth tokens, their expiration time,
+              and any returned display name are stored in the operating system's
+              encrypted Keychain with device-only protection. These credentials are
+              not included in Antiviral's iCloud sync or backups.
+            </P>
+            <P>
+              Imported channels, channel metadata, and interests derived from your
+              YouTube data are stored in the app's local database. They can also sync
+              to your private iCloud account and be included in your iCloud backups.
+              The record of processed liked-video IDs is kept in a local app-data file.
+              Studio Ikigai does not receive these imports or your Google credentials
+              on its servers.
+            </P>
+            <P>
+              Derived interests can inform the search queries described below. When
+              the cloud editor is enabled, a summary of your interests and preferences
+              can also be sent to Apple's Private Cloud Compute with content metadata
+              to compose your Edition. The cloud editor is on by default on eligible
+              devices and can be turned off in Edition settings. These transfers
+              support the app's features; we do not sell Google user data, use it for
+              advertising, or use it to train general-purpose AI or machine-learning models.
+            </P>
+          </SubSection>
+
+          <SubSection title="Retention, disconnecting, and deletion">
+            <P>
+              Signing out in Antiviral's YouTube account settings removes the stored
+              Google tokens and display name from the device and sends a request to
+              Google to revoke access. You can also revoke Antiviral's access directly
+              at any time from your{" "}
+              <a href="https://myaccount.google.com/permissions"
+                 target="_blank" rel="noopener noreferrer"
+                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
+                Google Account permissions
+              </a>.
+            </P>
+            <P>
+              Signing out or revoking access stops future authorized imports; it does
+              not automatically delete channels, derived interests, or the local
+              record of processed video IDs already imported. These records remain
+              in your app data until removed. You can remove imported channels in
+              Sources and manage derived interests in Interests. Copies in iCloud
+              and backups are separate from the device's local data. For help removing
+              remaining app data or iCloud copies, contact{" "}
+              <a href="mailto:info@studioikigai.ai">info@studioikigai.ai</a>.
+            </P>
+          </SubSection>
+
+          <SubSection title="Google API Limited Use">
+            <P>
+              Antiviral's use and transfer of information received from Google APIs
+              to any other app adheres to the{" "}
+              <a href="https://developers.google.com/terms/api-services-user-data-policy"
+                 target="_blank" rel="noopener noreferrer"
+                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
+                Google API Services User Data Policy
+              </a>, including the Limited Use requirements. Google and YouTube's own
+              handling of data is described in the{" "}
+              <a href="https://policies.google.com/privacy"
+                 target="_blank" rel="noopener noreferrer"
+                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
+                Google Privacy Policy
+              </a>.
+            </P>
+          </SubSection>
         </Section>
 
         {/* WHAT STAYS ON YOUR DEVICE */}
@@ -125,42 +236,6 @@ export default function Privacy() {
             </P>
           </SubSection>
 
-          <SubSection title="YouTube import (optional)">
-            <P>
-              If you choose to import your YouTube subscriptions, Antiviral uses YouTube API
-              Services (via Google OAuth) to read your subscription list and liked-video
-              categories. The access is read-only and one-way — nothing flows back to Google,
-              and the data is used only on your device to seed your content sources. Your OAuth
-              token is stored in your device's Keychain, encrypted and device-only. When you
-              sign out, the token is revoked at Google and deleted from your device, and you can
-              revoke Antiviral's access at any time from your{" "}
-              <a href="https://myaccount.google.com/permissions"
-                 target="_blank" rel="noopener noreferrer"
-                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
-                Google Account permissions
-              </a>. Antiviral's use of YouTube API Services is also governed by the{" "}
-              <a href="https://policies.google.com/privacy"
-                 target="_blank" rel="noopener noreferrer"
-                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
-                Google Privacy Policy
-              </a>.
-            </P>
-          </SubSection>
-
-          <SubSection title="Google API Limited Use">
-            <P>
-              Antiviral's use and transfer of information received from Google APIs to any
-              other app adheres to the{" "}
-              <a href="https://developers.google.com/terms/api-services-user-data-policy"
-                 target="_blank" rel="noopener noreferrer"
-                 style={{ textDecoration: "underline", textDecorationColor: "rgba(255,255,255,0.15)", textUnderlineOffset: "3px" }}>
-                Google API Services User Data Policy
-              </a>, including the Limited Use requirements. Your YouTube subscription data is
-              used only on your device to seed your sources — it is never sold, transferred,
-              or used for advertising, and never reaches a server we operate.
-            </P>
-          </SubSection>
-
           <SubSection title="Bluesky (optional)">
             <P>
               If you connect a Bluesky account, your session credentials are stored in your device's Keychain. Antiviral fetches your timeline and follows list. You can disconnect at any time.
@@ -200,14 +275,14 @@ export default function Privacy() {
             <Li>Watch history and conversations are kept only as long as they're useful, and you can clear them at any time</Li>
             <Li>Interests you stop engaging with gradually fade over time</Li>
             <Li>Cached media (thumbnails, articles) is managed by a local cache with a size limit — oldest items are evicted first</Li>
-            <Li>If you delete the app, everything local is gone. There's nothing on our end to delete, because we never had it.</Li>
+            <Li>Sign out of connected accounts to remove their stored credentials. Removing local app data does not automatically remove copies in iCloud or backups. Studio Ikigai cannot delete those copies for you because they are in your own account.</Li>
           </Ul>
         </Section>
 
         {/* THIRD-PARTY SERVICES */}
         <Section title="Third-party services">
           <P>
-            Antiviral sends search queries to Brave Search and fetches content from YouTube, Reddit, podcast directories, and RSS feeds, and uses Apple's Private Cloud Compute to compose your daily Edition. These services have their own privacy policies. Antiviral does not share any user profile, device identifier, or personal information with them — only the search queries needed to find content, and, for the Edition, the day's titles and a preference summary that Apple is built to discard.
+            Antiviral sends search queries to Brave Search, fetches content from YouTube, Reddit, podcast directories, and RSS feeds, and uses Apple's Private Cloud Compute to compose your daily Edition when the cloud editor is enabled. These services receive the requests needed to provide those features and have their own privacy policies. Google authorization, private iCloud storage, and the use of derived Google data are described in the Google user data section above.
           </P>
         </Section>
 

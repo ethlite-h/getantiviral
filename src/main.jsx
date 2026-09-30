@@ -6,7 +6,7 @@ import Privacy from "./Privacy.jsx"
 import Terms from "./Terms.jsx"
 import DevLog from "./DevLog.jsx"
 
-const path = window.location.pathname;
+const path = window.location.pathname.replace(/\/+$/, "") || "/";
 
 const canonical = document.querySelector('link[rel="canonical"]');
 if (canonical) {
