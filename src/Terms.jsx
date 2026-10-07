@@ -100,7 +100,7 @@ export default function Terms() {
             The Feed, the Shortlist, and the Sunday Edition are free, forever. The daily Edition is for subscribers.
           </P>
           <P>
-            Antiviral is offered as an auto-renewing subscription at $5 per month or $50 per year. Prices are in US dollars and may differ by country. The price you'll pay is always shown in the App Store before you confirm.
+            Antiviral is offered as an auto-renewing subscription at $4.99 per month or $49.99 per year. Prices are in US dollars and may differ by country. The price you'll pay is always shown in the App Store before you confirm.
           </P>
           <P>
             All purchases are made through Apple's App Store and charged to your Apple account. A subscription renews automatically at the end of each period unless you cancel at least 24 hours before it ends. You can manage or cancel it at any time in your device's Settings under Subscriptions. Cancelling stops future charges; you keep access until the end of the period you've already paid for.

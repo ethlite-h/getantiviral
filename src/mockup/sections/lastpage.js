@@ -54,7 +54,7 @@ export const html = `
         </div>
 
         <div class="lastpage__notes" data-reveal data-reveal-delay="0.35">
-          <p class="lastpage__note">Free forever: Feed, Shortlist, Sunday Edition. The daily Edition is $5 a month.</p>
+          <p class="lastpage__note">Free forever: Feed, Shortlist, Sunday Edition. The daily Edition is $4.99 a month.</p>
           <p class="lastpage__req"><span>Requires Apple Intelligence</span> · <span>iPhone 15 Pro or newer</span> · <span>Apple-silicon Mac</span></p>
         </div>
       </div>

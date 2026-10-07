@@ -657,7 +657,7 @@ const PRICING_TIERS = [
   },
   {
     label: "Antiviral",
-    body: "$5/month or $50/year. The daily Edition, every day.",
+    body: "$4.99/month or $49.99/year. The daily Edition, every day.",
   },
 ];
 

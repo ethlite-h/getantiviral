@@ -18,7 +18,7 @@ export const html = `
     <header class="ledger__head">
       <p class="eyebrow" data-reveal>11 · The price</p>
       <h2 id="ledger-h" class="ledger__title">
-        <span class="ledger__l" data-reveal="lines">Five dollars a month,</span>
+        <span class="ledger__l" data-reveal="lines">$4.99 a month,</span>
         <span class="ledger__l" data-reveal="lines" data-reveal-delay="0.1"><em class="i">printed where you can check it.</em></span>
       </h2>
       <p class="lead ledger__lead measure" data-reveal data-reveal-delay="0.15">Every feed has a payer, and the payer is who the software works for. The free ones are paid for by advertisers, which is why the model of you they build works for advertisers. The subscription is you taking that seat.</p>
@@ -33,8 +33,8 @@ export const html = `
       </div>
       <ol class="ledger__rows">
         ${row('01', 'Feed · Shortlist · Sunday Edition', 'Free, forever')}
-        ${row('02', 'Daily Edition', '$5 / month')}
-        ${row('03', 'Daily Edition', '$50 / year')}
+        ${row('02', 'Daily Edition', '$4.99 / month')}
+        ${row('03', 'Daily Edition', '$49.99 / year')}
       </ol>
     </div>
 
