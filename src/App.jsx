@@ -659,10 +659,6 @@ const PRICING_TIERS = [
     label: "Antiviral",
     body: "$5/month or $50/year. The daily Edition, every day.",
   },
-  {
-    label: "Founding Reader",
-    body: "$199, once. Yours for good.",
-  },
 ];
 
 export default function AntiviralLanding() {

@@ -1,12 +1,12 @@
 // 11 — The ledger: the price, printed where you can check it.
 import '../styles/ledger.css'
-import { gsap, ScrollTrigger, prefersReducedMotion } from '../lib/scroll.js'
+import { gsap, prefersReducedMotion } from '../lib/scroll.js'
 
-const row = (no, name, price, opts = {}) => `
-      <li class="ledger__row${opts.cls ? ' ' + opts.cls : ''}">
+const row = (no, name, price) => `
+      <li class="ledger__row">
         <span class="ledger__no">${no}</span>
         <span class="ledger__item">
-          <span class="ledger__name">${name}${opts.stamp ? `<span class="ledger__stamp"><span class="ledger__stamp-text">${opts.stamp}</span></span>` : ''}</span>
+          <span class="ledger__name">${name}</span>
           <span class="ledger__date">published 2026</span>
         </span>
         <span class="ledger__price">${price}</span>
@@ -35,7 +35,6 @@ export const html = `
         ${row('01', 'Feed · Shortlist · Sunday Edition', 'Free, forever')}
         ${row('02', 'Daily Edition', '$5 / month')}
         ${row('03', 'Daily Edition', '$50 / year')}
-        ${row('04', 'Founding Reader', '$199, once', { cls: 'ledger__row--founding', stamp: 'Yours for good' })}
       </ol>
     </div>
 
@@ -63,44 +62,14 @@ export function init(root) {
   if (!el) return
   const list = el.querySelector('.ledger__rows')
   const rows = Array.from(el.querySelectorAll('.ledger__row'))
-  const founding = el.querySelector('.ledger__row--founding')
-  const stamp = el.querySelector('.ledger__stamp')
 
-  // Reduced motion: the CSS end state (rows visible, stamp down at -8deg) is the whole show.
+  // Reduced motion: the CSS end state (rows visible) is the whole show.
   if (prefersReducedMotion) return
 
   // Rows file in one at a time, ruled hairlines and all.
-  let rowsDone = false, stampArmed = false, stamped = false
   gsap.set(rows, { y: 16, opacity: 0 })
-  gsap.set(stamp, { opacity: 0, scale: 1.6, rotation: -8, filter: 'blur(3px)', transformOrigin: '50% 50%' })
   gsap.to(rows, {
     y: 0, opacity: 1, duration: 0.85, ease: 'power3.out', stagger: 0.09,
     scrollTrigger: { trigger: list, start: 'top 86%', once: true },
-    onComplete: () => { rowsDone = true; tryStamp() },
   })
-
-  // The stamp fires once, when the Founding Reader row is in view and has finished arriving.
-  ScrollTrigger.create({
-    trigger: founding, start: 'top 84%', once: true,
-    onEnter: () => { stampArmed = true; tryStamp() },
-  })
-
-  function tryStamp() {
-    if (stamped || !rowsDone || !stampArmed) return
-    stamped = true
-    stampDown()
-  }
-
-  function stampDown() {
-    const tl = gsap.timeline({ delay: 0.14 })
-    // the drop: 1.6 → 1, blurred → sharp, accelerating into the paper
-    tl.to(stamp, { opacity: 1, scale: 1, rotation: -8, filter: 'blur(0px)', duration: 0.22, ease: 'power3.in' })
-      // the paper flinches on impact
-      .to(founding, { y: 1.5, duration: 0.05, ease: 'power1.out' }, 0.2)
-      .to(founding, { y: 0, duration: 0.2, ease: 'power2.out' })
-      // a tiny settle: the rubber gives, then rests
-      .to(stamp, { scale: 0.965, rotation: -7.3, duration: 0.07, ease: 'power1.out' }, 0.22)
-      .to(stamp, { scale: 1, rotation: -8, duration: 0.3, ease: 'elastic.out(1, 0.6)' })
-      .set(stamp, { clearProps: 'filter,willChange' })
-  }
 }
