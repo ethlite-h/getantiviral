@@ -114,7 +114,7 @@ export const html = `
         </ul>
         <p class="edition__stays">A daily edition with a last page.</p>
         <div class="edition__va-body">
-          <p class="edition__p">Timers, blockers, and filters all accept the same premise: the feed is bottomless, so the fix is to ration you. You're cast as the problem to be managed, and the feed stays exactly as it was, waiting. Antiviral doesn't ration anything. It replaces the feed with something that was never built to hold you. No streak. No counter. No badge for finishing. Nothing is measuring whether you did.</p>
+          <p class="edition__p">Timers, blockers, and filters all accept the same premise: the feed is bottomless, so the fix is to ration you. You're cast as the problem to be managed, and the feed stays exactly as it was, waiting. Antiviral doesn't ration anything. It replaces the feed with something that was never built to hold you. No streak. No counter. No like button. No badge for finishing. Nothing is measuring whether you did.</p>
           <blockquote class="edition__quote"><p>Nobody sets a timer on a magazine. It just ends.</p></blockquote>
           <p class="edition__ai">Yes, it is an AI. <em class="i">One that only works for you.</em></p>
         </div>

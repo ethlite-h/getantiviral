@@ -91,6 +91,7 @@ export const html = `
         </div>
         <div class="editor__body" data-reveal>
           <p>Tell Antiviral something doesn’t belong and it writes a durable, inspectable rule that re-ranks your feed. The rule lives on your device, in plain language. Open it, change it, delete it. Nothing you’ve decided is buried behind a “Not interested” button that quietly stops working in a week.</p>
+          <p>Notice what’s missing: a like button. Everything you tell Antiviral stays on your phone and shapes only your feed. Elsewhere, one tap does two jobs. It tunes your feed, and it’s published as a vote for what strangers should see. You only ever needed the first one.</p>
           <p class="editor__close">Every item arrives with its reason attached. Not to reassure you. So you can overrule it. Don’t trust it. Check it.</p>
         </div>
       </div>

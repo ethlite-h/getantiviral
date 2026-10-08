@@ -8,6 +8,7 @@ import { setWorld } from '../lib/world.js'
 const ROWS = [
   ['Optimizes for:', 'minutes', 'what you asked for'],
   ['Learns you:', 'on their servers', 'on your phone'],
+  ['Your reactions:', 'votes for strangers', 'stay with you'],
   ['Shows its reasons:', 'never', 'every pick'],
   ['Paid by:', 'advertisers', 'you, $4.99'],
   ['Ends:', 'never', 'last page'],
