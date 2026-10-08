@@ -5,6 +5,7 @@ import App from "./App.jsx"
 import Privacy from "./Privacy.jsx"
 import Terms from "./Terms.jsx"
 import DevLog from "./DevLog.jsx"
+import Support from "./Support.jsx"
 
 const path = window.location.pathname.replace(/\/+$/, "") || "/";
 
@@ -15,7 +16,7 @@ if (canonical) {
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    {path === "/terms" ? <Terms /> : path === "/privacy" ? <Privacy /> : path === "/devlog" ? <DevLog /> : <App />}
+    {path === "/terms" ? <Terms /> : path === "/privacy" ? <Privacy /> : path === "/devlog" ? <DevLog /> : path === "/support" ? <Support /> : <App />}
     <Analytics />
   </React.StrictMode>,
 )

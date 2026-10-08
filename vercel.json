@@ -13,6 +13,10 @@
       "destination": "/site.html"
     },
     {
+      "source": "/support",
+      "destination": "/site.html"
+    },
+    {
       "source": "/devlog",
       "destination": "/site.html"
     }
