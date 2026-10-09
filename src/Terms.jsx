@@ -37,7 +37,7 @@ export default function Terms() {
           textDecoration: "none",
           display: "inline-flex",
           alignItems: "baseline",
-          gap: "10px",
+          gap: "4px",
         }}>
           <img src="/av-logo.png" alt="" width="32" height="28" style={{ display: "block" }} />
           antiviral
