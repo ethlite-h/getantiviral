@@ -17,9 +17,10 @@
   opacity: 0; transition: opacity 400ms;
 }
 .masthead.is-scrolled::before { opacity: 1; }
-.wordmark { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-display); font-size: 1.45rem; letter-spacing: -0.01em; line-height: 1; }
-.wordmark .wave-mark { color: var(--accent); transition: color var(--world-ease); }
-.wordmark .av-mark { height: 0.95em; width: auto; display: block; }
+/* The lockup: Av mark + lowercase monospace wordmark, the text baseline on the
+   mark's bottom edge (align-items: baseline — an image's baseline is its bottom). */
+.wordmark { display: inline-flex; align-items: baseline; gap: 10px; font-family: var(--font-mono); font-size: 1.125rem; font-weight: 500; letter-spacing: 0.05em; line-height: 1; }
+.wordmark .av-mark { height: 1.556em; width: auto; display: block; }
 .masthead__right { display: flex; align-items: center; gap: 14px; }
 .folio {
   font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;

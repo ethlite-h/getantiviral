@@ -832,7 +832,7 @@ export default function AntiviralLanding() {
           fontWeight: 500,
           letterSpacing: "0.05em",
           display: "flex",
-          alignItems: "center",
+          alignItems: "baseline",
           gap: "10px",
         }}>
           <img src="/av-logo.png" alt="" width="32" height="28" style={{ display: "block" }} />

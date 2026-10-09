@@ -9,7 +9,9 @@ export const WAVE_MARK = (size = 28, cls = '') => `
 // survives inside the product mockups (Edition masthead, loop cover), where it
 // depicts the app's own chrome.
 export const AV_MARK = (cls = '') => `
-<img class="av-mark ${cls}" src="/av-logo.png" alt="" width="30" height="26" decoding="async">`
+<img class="av-mark ${cls}" src="/av-logo.png" alt="" width="32" height="28" decoding="async">`
 
+// The lockup (2026-10-09): the Av mark with the lowercase monospace wordmark
+// sitting on its bottom edge — the text pages' nav, now on every page.
 export const WORDMARK = (cls = '') => `
-<span class="wordmark ${cls}">${AV_MARK()}<span class="wordmark__text">Antiviral</span></span>`
+<span class="wordmark ${cls}">${AV_MARK()}<span class="wordmark__text">antiviral</span></span>`

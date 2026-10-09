@@ -199,7 +199,7 @@ export default function DevLog() {
           color: "#fff",
           textDecoration: "none",
           display: "inline-flex",
-          alignItems: "center",
+          alignItems: "baseline",
           gap: "10px",
         }}>
           <img src="/av-logo.png" alt="" width="32" height="28" style={{ display: "block" }} />
