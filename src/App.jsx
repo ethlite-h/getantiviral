@@ -833,8 +833,9 @@ export default function AntiviralLanding() {
           letterSpacing: "0.05em",
           display: "flex",
           alignItems: "center",
-          gap: "8px",
+          gap: "10px",
         }}>
+          <img src="/av-logo-64.png" alt="" width="28" height="28" style={{ borderRadius: "7px", display: "block" }} />
           antiviral
         </div>
         <div style={{ display: "flex", gap: "12px" }}>

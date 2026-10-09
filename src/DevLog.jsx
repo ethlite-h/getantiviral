@@ -198,7 +198,11 @@ export default function DevLog() {
           letterSpacing: "0.05em",
           color: "#fff",
           textDecoration: "none",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "10px",
         }}>
+          <img src="/av-logo-64.png" alt="" width="28" height="28" style={{ borderRadius: "7px", display: "block" }} />
           antiviral
         </a>
       </nav>
