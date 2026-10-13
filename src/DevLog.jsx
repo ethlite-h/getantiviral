@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import AvMark from "./AvMark.jsx"
 
 const ENTRIES = [
   {
@@ -174,7 +175,7 @@ export default function DevLog() {
         a { color: rgba(255,255,255,0.5); outline: none; }
         a:hover { color: rgba(255,255,255,0.8); }
         a:focus-visible {
-          outline: 2px solid #6B9E6F;
+          outline: 2px solid #86BF8A;
           outline-offset: 3px;
           border-radius: 2px;
         }
@@ -192,7 +193,7 @@ export default function DevLog() {
         margin: "0 auto",
       }}>
         <a href="/" style={{
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "18px",
           fontWeight: 500,
           letterSpacing: "0.05em",
@@ -202,7 +203,7 @@ export default function DevLog() {
           alignItems: "baseline",
           gap: "4px",
         }}>
-          <img src="/av-logo.png" alt="" width="32" height="28" style={{ display: "block" }} />
+          <AvMark />
           antiviral
         </a>
       </nav>
@@ -213,12 +214,12 @@ export default function DevLog() {
         padding: "80px 40px 160px",
       }}>
         <p style={{
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "12px",
           fontWeight: 500,
           letterSpacing: "0.1em",
           textTransform: "uppercase",
-          color: "#6B9E6F",
+          color: "#86BF8A",
           marginBottom: "20px",
         }}>
           Dev Log
@@ -249,7 +250,7 @@ export default function DevLog() {
         </p>
 
         <p style={{
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "13px",
           color: "rgba(255,255,255,0.55)",
         }}>
@@ -263,12 +264,12 @@ export default function DevLog() {
             borderTop: "1px solid rgba(255,255,255,0.06)",
           }}>
             <p style={{
-              fontFamily: "'DM Mono', monospace",
+              fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
               fontSize: "12px",
               fontWeight: 500,
               letterSpacing: "0.08em",
               textTransform: "uppercase",
-              color: "#6B9E6F",
+              color: "#86BF8A",
               marginBottom: "12px",
             }}>
               {entry.date}
@@ -300,7 +301,7 @@ export default function DevLog() {
           marginTop: "80px",
           paddingTop: "40px",
           borderTop: "1px solid rgba(255,255,255,0.06)",
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "12px",
           color: "rgba(255,255,255,0.55)",
           display: "flex",

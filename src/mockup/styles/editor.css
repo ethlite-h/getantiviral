@@ -45,7 +45,7 @@
 .editor .app-row { position: relative; }
 .editor .app-row::before {
   content: ''; position: absolute; inset: 5px 9px; border-radius: 10px; pointer-events: none;
-  border: 1px solid var(--green); box-shadow: 0 0 0 4px rgba(107, 158, 111, 0.12);
+  border: 1px solid var(--accent); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 12%, transparent);
   opacity: 0; transition: opacity 0.35s;
 }
 .editor .app-row.is-target::before { opacity: 1; }

@@ -1,3 +1,4 @@
+import AvMark from "./AvMark.jsx"
 export default function Support() {
   return (
     <div style={{
@@ -11,7 +12,7 @@ export default function Support() {
         a { color: rgba(255,255,255,0.5); outline: none; }
         a:hover { color: rgba(255,255,255,0.8); }
         a:focus-visible {
-          outline: 2px solid #6B9E6F;
+          outline: 2px solid #86BF8A;
           outline-offset: 3px;
           border-radius: 2px;
         }
@@ -29,7 +30,7 @@ export default function Support() {
         margin: "0 auto",
       }}>
         <a href="/" style={{
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "18px",
           fontWeight: 500,
           letterSpacing: "0.05em",
@@ -39,7 +40,7 @@ export default function Support() {
           alignItems: "baseline",
           gap: "4px",
         }}>
-          <img src="/av-logo.png" alt="" width="32" height="28" style={{ display: "block" }} />
+          <AvMark />
           antiviral
         </a>
       </nav>
@@ -61,7 +62,7 @@ export default function Support() {
         </h1>
 
         <p style={{
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "13px",
           color: "rgba(255,255,255,0.35)",
           marginBottom: "64px",
@@ -142,7 +143,7 @@ export default function Support() {
           marginTop: "80px",
           paddingTop: "40px",
           borderTop: "1px solid rgba(255,255,255,0.06)",
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "12px",
           color: "rgba(255,255,255,0.3)",
         }}>
@@ -218,7 +219,7 @@ function Li({ children }) {
       <span style={{
         position: "absolute",
         left: 0,
-        color: "rgba(107, 158, 111, 0.6)",
+        color: "rgba(134, 191, 138, 0.6)",
       }}>
         —
       </span>

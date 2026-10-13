@@ -20,9 +20,9 @@
 .app-convo { position: absolute; left: calc(var(--phone-w) * 0.045); right: calc(var(--phone-w) * 0.045); bottom: calc(var(--phone-w) * 0.07); display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: calc(var(--phone-w) * 0.035) calc(var(--phone-w) * 0.05); border-radius: 999px; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.14); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); font-size: calc(var(--phone-w) * 0.04); z-index: 4; }
 .phone[data-theme='paper'] .app-convo { background: rgba(28,25,23,0.06); border-color: rgba(28,25,23,0.16); }
 .app-convo__text { opacity: 0.75; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.app-convo__send { width: calc(var(--phone-w) * 0.075); height: calc(var(--phone-w) * 0.075); border-radius: 50%; background: var(--green); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; flex: none; }
+.app-convo__send { width: calc(var(--phone-w) * 0.075); height: calc(var(--phone-w) * 0.075); border-radius: 50%; background: var(--accent); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 600; flex: none; }
 .app-convo.is-active .app-convo__text { opacity: 1; }
-.app-convo.is-active .app-convo__text::after { content: ''; display: inline-block; width: 1px; height: 1em; background: var(--green); margin-left: 2px; vertical-align: -0.15em; animation: caret 1s steps(2) infinite; }
+.app-convo.is-active .app-convo__text::after { content: ''; display: inline-block; width: 1px; height: 1em; background: var(--accent); margin-left: 2px; vertical-align: -0.15em; animation: caret 1s steps(2) infinite; }
 @keyframes caret { 50% { opacity: 0; } }
 
 /* Feed row inside the app */
@@ -34,5 +34,5 @@
 .app-row__title { font-weight: 500; font-size: max(13px, calc(var(--phone-w) * 0.041)); line-height: 1.25; letter-spacing: -0.005em; }
 .app-row__meta { margin-top: 3px; font-family: var(--font-mono); font-size: max(11px, calc(var(--phone-w) * 0.03)); letter-spacing: 0.04em; opacity: 0.55; display: flex; gap: 6px; align-items: center; }
 .app-row__meta .brand-mark { width: calc(var(--phone-w) * 0.036); height: calc(var(--phone-w) * 0.036); opacity: 0.9; }
-.app-row__why { margin-top: 5px; font-size: max(12px, calc(var(--phone-w) * 0.034)); color: var(--green); line-height: 1.3; }
+.app-row__why { margin-top: 5px; font-size: max(12px, calc(var(--phone-w) * 0.034)); color: var(--accent); line-height: 1.3; }
 .app-row__why::before { content: 'why · '; font-family: var(--font-mono); font-size: 0.85em; letter-spacing: 0.06em; opacity: 0.8; }

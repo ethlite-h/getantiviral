@@ -76,14 +76,16 @@
 /* page 1: masthead + note */
 .edition__masthead { text-align: center; padding-bottom: 0.9em; border-bottom: 1px solid var(--edition-sheet-rule); position: relative; }
 .edition__masthead::after { content: ''; position: absolute; left: 0; right: 0; bottom: -0.32em; height: 1px; background: var(--edition-sheet-rule); opacity: 0.5; }
-.edition__brand { display: inline-flex; align-items: center; justify-content: center; gap: 0.28em; font-size: 2em; line-height: 1; letter-spacing: -0.015em; }
-.edition__brand .wave-mark { width: 0.72em; height: 0.72em; color: var(--paper-accent); }
+.edition__brand { display: flex; justify-content: center; }
+/* the real cover's masthead: the lockup (mark + mono wordmark), 2026-10-10 */
+.edition__brand .wordmark { font-size: 1em; }
+.edition__brand .av-mark { color: var(--paper-accent); }
 .edition__date { display: flex; justify-content: center; gap: 0.5em; font-size: max(11px, 0.66em); text-transform: uppercase; margin-top: 0.9em; }
 .edition__date--sub { margin-top: 0.4em; }
 .edition__kicker { font-style: italic; font-size: 1.05em; margin-top: 1.5em; color: var(--edition-sheet-ink); }
-.edition__note { margin-top: 0.5em; font-size: 1.04em; line-height: 1.42; text-wrap: pretty; }
+.edition__note { margin-top: 0.5em; font-family: var(--font-prose); font-size: 1.04em; line-height: 1.42; text-wrap: pretty; }
 .edition__note::first-letter { float: left; font-size: 3.35em; line-height: 0.8; padding: 0.06em 0.1em 0 0; font-style: normal; }
-.edition__sig { margin-top: auto; padding-top: 0.9em; border-top: 1px solid var(--edition-sheet-line); font-size: max(11px, 0.66em); letter-spacing: 0.06em; text-align: right; }
+.edition__sig { font-family: var(--font-prose); margin-top: auto; padding-top: 0.9em; border-top: 1px solid var(--edition-sheet-line); font-size: max(11px, 0.66em); letter-spacing: 0.06em; text-align: right; }
 
 /* pages 2–3: titled lists on hairlines */
 .edition__title { font-family: var(--font-display); font-style: italic; font-weight: 400; font-size: 1.7em; line-height: 1.05; letter-spacing: -0.01em; margin: 0.85em 0 0.55em; text-wrap: balance; }

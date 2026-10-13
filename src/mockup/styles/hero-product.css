@@ -17,7 +17,7 @@
 @media (min-width: 880px) { .herop__proofs { margin-top: clamp(28px, 4vw, 44px); } }
 .herop__proof { display: grid; grid-template-columns: 26px 1fr; gap: 12px; align-items: start; padding-top: 14px; border-top: 1px solid var(--line); font-size: var(--t-small); line-height: 1.45; }
 .herop__proof:first-child { border-top: 0; padding-top: 0; }
-.herop__num, .herop__pin { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--green); color: #fff; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; line-height: 1; flex: none; }
+.herop__num, .herop__pin { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; line-height: 1; flex: none; }
 .herop__num { margin-top: 1px; }
 .herop__proof-head { font-weight: 500; color: var(--ink); }
 .herop__proof-text { color: var(--muted); }

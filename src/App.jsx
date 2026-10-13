@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import AvMark from "./AvMark.jsx"
 
 const FEED_COLORS = [
   { r: 107, g: 158, b: 111 }, // muted green (primary)
@@ -278,9 +279,9 @@ function WaitlistForm({ id }) {
   if (state === "done") {
     return (
       <p id={id} role="status" style={{
-        fontFamily: "'DM Mono', monospace",
+        fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
         fontSize: "15px",
-        color: "#6B9E6F",
+        color: "#86BF8A",
         padding: "8px 0",
       }}>
         {message}
@@ -313,8 +314,8 @@ function WaitlistForm({ id }) {
             outline: "none",
             color: "rgba(255,255,255,0.9)",
             fontSize: "16px",
-            fontFamily: "'DM Mono', monospace",
-            caretColor: "#6B9E6F",
+            fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
+            caretColor: "#86BF8A",
             minWidth: 0,
           }}
         />
@@ -330,7 +331,7 @@ function WaitlistForm({ id }) {
       {state === "error" && (
         <p role="alert" style={{
           margin: "10px 4px 0",
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "13px",
           color: "rgba(220,140,140,0.9)",
         }}>
@@ -470,7 +471,7 @@ function ConversationBar() {
     left: "50%",
     transform: "translateX(-50%)",
     zIndex: 99,
-    fontFamily: "'DM Mono', monospace",
+    fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
   };
 
   if (phase === "collapsed") {
@@ -482,12 +483,12 @@ function ConversationBar() {
             background: "rgba(10,10,10,0.7)",
             backdropFilter: "blur(16px)",
             WebkitBackdropFilter: "blur(16px)",
-            border: "1px solid rgba(107,158,111,0.2)",
+            border: "1px solid rgba(134, 191, 138,0.2)",
             borderRadius: "100px",
             padding: "12px 24px",
             color: "rgba(255,255,255,0.55)",
             fontSize: "13px",
-            fontFamily: "'DM Mono', monospace",
+            fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
             cursor: "pointer",
             maxWidth: "360px",
             whiteSpace: "nowrap",
@@ -534,7 +535,7 @@ function ConversationBar() {
           background: "rgba(10,10,10,0.85)",
           backdropFilter: "blur(20px)",
           WebkitBackdropFilter: "blur(20px)",
-          border: "1px solid rgba(107,158,111,0.15)",
+          border: "1px solid rgba(134, 191, 138,0.15)",
           borderRadius: "16px",
           padding: "20px",
           maxHeight: "40vh",
@@ -556,7 +557,7 @@ function ConversationBar() {
               cursor: "pointer",
               padding: "4px 8px",
               lineHeight: 1,
-              fontFamily: "'DM Mono', monospace",
+              fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
             }}
           >
             <span aria-hidden="true">&times;</span>
@@ -581,7 +582,7 @@ function ConversationBar() {
         background: "rgba(10,10,10,0.7)",
         backdropFilter: "blur(16px)",
         WebkitBackdropFilter: "blur(16px)",
-        border: "1px solid rgba(107,158,111,0.2)",
+        border: "1px solid rgba(134, 191, 138,0.2)",
         borderRadius: "100px",
         padding: "4px 4px 4px 20px",
         ...(phase === "loading" ? { animation: "convBarPulse 1.5s ease infinite" } : {}),
@@ -602,8 +603,8 @@ function ConversationBar() {
             outline: "none",
             color: "rgba(255,255,255,0.85)",
             fontSize: "16px",
-            fontFamily: "'DM Mono', monospace",
-            caretColor: "#6B9E6F",
+            fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
+            caretColor: "#86BF8A",
           }}
         />
         <button
@@ -611,7 +612,7 @@ function ConversationBar() {
           disabled={phase === "loading"}
           aria-label="Send question"
           style={{
-            background: "#6B9E6F",
+            background: "#86BF8A",
             border: "none",
             borderRadius: "100px",
             width: "36px",
@@ -690,7 +691,7 @@ export default function AntiviralLanding() {
         }
 
         ::selection {
-          background: #6B9E6F;
+          background: #86BF8A;
           color: #0A0A0A;
         }
 
@@ -708,7 +709,7 @@ export default function AntiviralLanding() {
           border-radius: 100px;
           font-size: 16px;
           font-weight: 600;
-          font-family: 'DM Mono', monospace;
+          font-family: 'JetBrains Mono', 'DM Mono', ui-monospace, monospace;
           letter-spacing: 0.02em;
           text-decoration: none;
           cursor: pointer;
@@ -717,7 +718,7 @@ export default function AntiviralLanding() {
         }
 
         .cta-primary {
-          background: #6B9E6F;
+          background: #86BF8A;
           color: #0A0A0A;
         }
         .cta-primary:hover {
@@ -746,7 +747,7 @@ export default function AntiviralLanding() {
         .quote-mark {
           font-size: 120px;
           line-height: 0.6;
-          color: rgba(107, 158, 111, 0.2);
+          color: rgba(134, 191, 138, 0.2);
           font-family: Georgia, serif;
           position: absolute;
           top: -10px;
@@ -756,12 +757,12 @@ export default function AntiviralLanding() {
 
         a, button, input, textarea { outline: none; }
         a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible {
-          outline: 2px solid #6B9E6F;
+          outline: 2px solid #86BF8A;
           outline-offset: 3px;
           border-radius: 4px;
         }
         .cta-btn:focus-visible {
-          outline: 2px solid #6B9E6F;
+          outline: 2px solid #86BF8A;
           outline-offset: 4px;
         }
 
@@ -827,7 +828,7 @@ export default function AntiviralLanding() {
         transition: "all 0.3s ease",
       }}>
         <div style={{
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "18px",
           fontWeight: 500,
           letterSpacing: "0.05em",
@@ -835,7 +836,7 @@ export default function AntiviralLanding() {
           alignItems: "baseline",
           gap: "4px",
         }}>
-          <img src="/av-logo.png" alt="" width="32" height="28" style={{ display: "block" }} />
+          <AvMark />
           antiviral
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
@@ -869,7 +870,7 @@ export default function AntiviralLanding() {
           marginBottom: "36px",
         }}>
           <span className="hero-line" style={{ animationDelay: "0.1s" }}>Your feed,</span>
-          <span className="hero-line" style={{ animationDelay: "0.3s", color: "#6B9E6F" }}>finally for you.</span>
+          <span className="hero-line" style={{ animationDelay: "0.3s", color: "#86BF8A" }}>finally for you.</span>
         </h1>
 
         <p style={{
@@ -977,11 +978,11 @@ export default function AntiviralLanding() {
                 border: "1px solid rgba(255,255,255,0.06)",
               }}>
                 <p style={{
-                  fontFamily: "'DM Mono', monospace",
+                  fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
                   fontSize: "11px",
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "#6B9E6F",
+                  color: "#86BF8A",
                   marginBottom: "16px",
                 }}>
                   {`0${i + 1} · ${step.label}`}
@@ -1020,7 +1021,7 @@ export default function AntiviralLanding() {
             marginBottom: "20px",
           }}>
             Don’t like what you see?<br />
-            <span style={{ color: "#6B9E6F" }}>Tell it.</span>
+            <span style={{ color: "#86BF8A" }}>Tell it.</span>
           </h2>
         </FadeIn>
 
@@ -1055,7 +1056,7 @@ export default function AntiviralLanding() {
             marginBottom: "28px",
           }}>
             On your device. Working for you.<br />
-            <span style={{ color: "#6B9E6F" }}>Showing its reasoning.</span>
+            <span style={{ color: "#86BF8A" }}>Showing its reasoning.</span>
           </h2>
         </FadeIn>
 
@@ -1090,9 +1091,9 @@ export default function AntiviralLanding() {
                 alignItems: "center",
                 gap: "8px",
               }}>
-                <span style={{ color: "#6B9E6F", fontSize: "18px" }}>—</span>
+                <span style={{ color: "#86BF8A", fontSize: "18px" }}>—</span>
                 <span style={{
-                  fontFamily: "'DM Mono', monospace",
+                  fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
                   fontSize: "13px",
                   color: "rgba(255,255,255,0.5)",
                   letterSpacing: "0.05em",
@@ -1126,7 +1127,7 @@ export default function AntiviralLanding() {
             marginBottom: "56px",
           }}>
             Pay for the product.<br />
-            <span style={{ color: "#6B9E6F" }}>Never with your attention.</span>
+            <span style={{ color: "#86BF8A" }}>Never with your attention.</span>
           </h2>
         </FadeIn>
 
@@ -1144,11 +1145,11 @@ export default function AntiviralLanding() {
                 border: "1px solid rgba(255,255,255,0.06)",
               }}>
                 <p style={{
-                  fontFamily: "'DM Mono', monospace",
+                  fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
                   fontSize: "11px",
                   letterSpacing: "0.1em",
                   textTransform: "uppercase",
-                  color: "#6B9E6F",
+                  color: "#86BF8A",
                   marginBottom: "16px",
                 }}>
                   {tier.label}
@@ -1177,7 +1178,7 @@ export default function AntiviralLanding() {
       }}>
         <FadeIn>
           <p style={{
-            fontFamily: "'DM Mono', monospace",
+            fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
             fontSize: "13px",
             letterSpacing: "0.1em",
             textTransform: "uppercase",
@@ -1237,7 +1238,7 @@ export default function AntiviralLanding() {
           display: "flex",
           alignItems: "center",
           gap: "20px",
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "11px",
           color: "rgba(255,255,255,0.55)",
         }}>
@@ -1263,7 +1264,7 @@ export default function AntiviralLanding() {
         </div>
 
         <div style={{
-          fontFamily: "'DM Mono', monospace",
+          fontFamily: "'JetBrains Mono', 'DM Mono', ui-monospace, monospace",
           fontSize: "12px",
           color: "rgba(255,255,255,0.4)",
         }}>

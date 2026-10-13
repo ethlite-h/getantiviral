@@ -2,7 +2,7 @@
 import '../styles/edition.css'
 import { ScrollTrigger, prefersReducedMotion } from '../lib/scroll.js'
 import { logo } from '../data/logos.js'
-import { WAVE_MARK } from '../data/brand.js'
+import { WORDMARK } from '../data/brand.js'
 
 const LEGEND = ["Editor's note", 'Why this is here', "What's set aside, and why", 'The last page']
 
@@ -21,7 +21,7 @@ const page = (n, inner, cls = '') => `
 
 const pageNote = page(1, `
   <header class="edition__masthead">
-    <span class="edition__brand">${WAVE_MARK(16)}Antiviral</span>
+    <span class="edition__brand">${WORDMARK()}</span>
     <p class="edition__date"><span>${dateLong}</span></p>
     <p class="edition__date edition__date--sub">6 pieces · 11 minutes</p>
   </header>

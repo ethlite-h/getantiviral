@@ -8,6 +8,9 @@
   --font-display: 'Instrument Serif', 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
   --font-body: 'Instrument Sans', 'Karla', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --font-mono: 'JetBrains Mono', 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  /* reading serif for Edition prose — the app's prose roles are the system serif (New York),
+     Instrument Serif is display only (plan 221, 2026-10-09) */
+  --font-prose: ui-serif, 'New York', 'Iowan Old Style', Charter, Georgia, serif;
 
   /* the feed world */
   --feed-bg: #0B0A09;
@@ -27,7 +30,8 @@
   --paper-line: rgba(28, 25, 23, 0.16);
   --paper-accent: #5E8C61;
 
-  /* brand constants */
+  /* brand constants — --green is the Stream's own green (hero/stream.js, the app's StreamAccent);
+     UI takes the world's --accent (2026-10-10 audit) */
   --green: #6B9E6F;
   --green-deep: #4E7C52;
   --amber: #D97706;

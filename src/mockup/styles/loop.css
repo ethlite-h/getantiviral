@@ -90,7 +90,7 @@
 .loop__typed { display: inline; }
 .loop__w { white-space: nowrap; }
 .loop__caret-wrap { display: inline-block; vertical-align: -0.15em; }
-.loop__caret { display: block; width: 1px; height: 1em; background: var(--green); margin-left: 1px; animation: loop-caret 1s steps(2) infinite; }
+.loop__caret { display: block; width: 1px; height: 1em; background: var(--accent); margin-left: 1px; animation: loop-caret 1s steps(2) infinite; }
 @keyframes loop-caret { 50% { opacity: 0; } }
 .loop .app-convo__send { will-change: transform; }
 
@@ -122,8 +122,9 @@
 /* 3 · Edition cover, on paper */
 .loop__cover { position: absolute; inset: 0; padding: calc(var(--phone-w) * 0.015) calc(var(--phone-w) * 0.075) calc(var(--phone-w) * 0.12); display: flex; flex-direction: column; }
 .loop__cover > * { will-change: transform, opacity; }
-.loop__cover-mast { display: flex; align-items: center; gap: calc(var(--phone-w) * 0.025); font-family: var(--font-display); font-size: calc(var(--phone-w) * 0.12); letter-spacing: -0.015em; line-height: 1; }
-.loop__cover-mast .wave-mark { width: 0.72em; height: 0.72em; color: var(--paper-accent); }
+.loop__cover-mast { display: flex; justify-content: center; }
+.loop__cover-mast .wordmark { font-size: calc(var(--phone-w) * 0.055); }
+.loop__cover-mast .av-mark { color: var(--paper-accent); }
 .loop__cover-rule { margin-top: calc(var(--phone-w) * 0.03); height: 5px; border-top: 2px solid #1C1917; border-bottom: 1px solid #1C1917; }
 .loop__cover-date { margin-top: calc(var(--phone-w) * 0.03); font-family: var(--font-mono); font-size: max(12px, calc(var(--phone-w) * 0.03)); letter-spacing: 0.05em; text-transform: uppercase; white-space: nowrap; }
 .loop__cover-count { margin-top: calc(var(--phone-w) * 0.012); font-family: var(--font-mono); font-size: max(12px, calc(var(--phone-w) * 0.03)); letter-spacing: 0.03em; line-height: 1.4; color: var(--paper-muted); }

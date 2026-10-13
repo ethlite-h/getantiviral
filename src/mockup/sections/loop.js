@@ -4,7 +4,7 @@ import '../styles/loop.css'
 import { gsap, ScrollTrigger, prefersReducedMotion, scrollTo } from '../lib/scroll.js'
 import { phoneFrame, appTopBar } from '../lib/phone.js'
 import { logo, SOURCES, brandHex } from '../data/logos.js'
-import { WAVE_MARK } from '../data/brand.js'
+import { WORDMARK } from '../data/brand.js'
 
 const today = new Date()
 const DATE_LONG = today.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
@@ -83,7 +83,7 @@ const shortlistScreen = `
 const editionScreen = `
   <div class="loop__screen loop__screen--edition">
     <div class="loop__cover">
-      <div class="loop__cover-mast">${WAVE_MARK(28)}<span>Antiviral</span></div>
+      <div class="loop__cover-mast">${WORDMARK()}</div>
       <div class="loop__cover-rule"></div>
       <div class="loop__cover-date">${DATE_LONG}</div>
       <div class="loop__cover-count">Today's edition · <span>6 pieces · 11 minutes</span></div>
