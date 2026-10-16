@@ -1,3 +1,7 @@
+// The App Store listing (Apple ID 6760153315). The link is fixed before release;
+// it resolves once the app is released.
+export const APP_STORE_URL = 'https://apps.apple.com/app/id6760153315'
+
 // The site's own wordmark carries the Av monogram (2026-10-09), inline so it takes
 // the world's accent (currentColor). The wave mark it replaced is gone everywhere —
 // the product mockups show the lockup too, as the real cover does (2026-10-10).
