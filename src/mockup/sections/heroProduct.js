@@ -52,7 +52,7 @@ export const html = `
 <section class="herop section" id="top" data-page data-world-lock="paper" aria-label="Introduction">
   <div class="container herop__grid">
     <div class="herop__copy">
-      <p class="eyebrow herop__eyebrow" data-reveal>Out now · iPhone &amp; Mac</p>
+      <p class="eyebrow herop__eyebrow" data-reveal>Out now · iPhone &amp; iPad · Native Mac app coming soon</p>
       <h1 class="herop__title">
         <span class="herop__line"><span class="herop__inner">Your feed,</span></span>
         <span class="herop__line"><span class="herop__inner"><em class="i accent">finally for you.</em></span></span>

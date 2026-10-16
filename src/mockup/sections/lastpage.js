@@ -16,7 +16,7 @@ export const html = `
     </header>
 
     <div class="lastpage__body">
-      <p class="lead lastpage__sub measure-narrow" data-reveal data-reveal-delay="0.15">Your first Edition prints today. Antiviral is on the App Store for iPhone and Mac.</p>
+      <p class="lead lastpage__sub measure-narrow" data-reveal data-reveal-delay="0.15">Your first Edition prints today. Antiviral is on the App Store for iPhone and iPad.</p>
 
       <div class="lastpage__signup">
         <div id="download" class="lastpage__download" data-reveal data-reveal-delay="0.25">
@@ -25,7 +25,8 @@ export const html = `
 
         <div class="lastpage__notes" data-reveal data-reveal-delay="0.35">
           <p class="lastpage__note">Free forever: Feed, Shortlist, Sunday Edition. The daily Edition is $4.99 a month.</p>
-          <p class="lastpage__req"><span>Requires Apple Intelligence</span> · <span>iPhone 15 Pro or newer</span> · <span>Apple-silicon Mac</span></p>
+          <p class="lastpage__req"><span>Requires Apple Intelligence</span> · <span>iPhone 15 Pro or newer</span> · <span>M-series iPad</span> · <span>Apple-silicon Mac</span></p>
+          <p class="lastpage__note">On a Mac today you get the iPad app, listed as “Designed for iPad” in the Mac App Store. The native Mac app is coming soon.</p>
         </div>
       </div>
     </div>

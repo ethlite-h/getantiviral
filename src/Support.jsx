@@ -90,6 +90,7 @@ export default function Support() {
           <Ul>
             <Li>iOS 27, iPadOS 27, or macOS 27.</Li>
             <Li>A device that supports Apple Intelligence: iPhone 15 Pro or later, or an iPad or Mac with an M-series chip.</Li>
+            <Li>On the Mac, the App Store currently offers the iPad version of Antiviral, listed as “Designed for iPad.” It runs on Apple-silicon Macs. A native Mac app is coming soon.</Li>
             <Li>Apple Intelligence turned on, in Settings ▸ Apple Intelligence &amp; Siri. The on-device model does the curation; without it the app still shows your followed sources, but planning and the editor are off.</Li>
           </Ul>
           <P>

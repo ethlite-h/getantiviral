@@ -9,7 +9,7 @@ export const html = `
     <div class="hero__fallback" aria-hidden="true"></div>
     <div class="hero__scrim" aria-hidden="true"></div>
     <div class="container hero__content">
-      <p class="eyebrow hero__eyebrow" data-reveal>Out now · iPhone &amp; Mac</p>
+      <p class="eyebrow hero__eyebrow" data-reveal>Out now · iPhone &amp; iPad · Native Mac app coming soon</p>
       <h1 class="hero__title">
         <span class="hero__line"><span class="hero__inner">Your feed,</span></span>
         <span class="hero__line"><span class="hero__inner"><em class="i accent">finally for you.</em></span></span>
