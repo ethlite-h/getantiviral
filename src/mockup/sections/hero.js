@@ -1,5 +1,6 @@
 // 01 — Hero: the stream that becomes an edition.
 import { gsap, ScrollTrigger, isMobile, prefersReducedMotion } from '../lib/scroll.js'
+import { APP_STORE_URL } from '../data/brand.js'
 
 export const html = `
 <section class="hero section--flush" id="top" data-page data-folio="infinite" data-world-lock="feed" aria-label="Introduction">
@@ -8,14 +9,14 @@ export const html = `
     <div class="hero__fallback" aria-hidden="true"></div>
     <div class="hero__scrim" aria-hidden="true"></div>
     <div class="container hero__content">
-      <p class="eyebrow hero__eyebrow" data-reveal>Fall 2026 · iPhone &amp; Mac</p>
+      <p class="eyebrow hero__eyebrow" data-reveal>Out now · iPhone &amp; Mac</p>
       <h1 class="hero__title">
         <span class="hero__line"><span class="hero__inner">Your feed,</span></span>
         <span class="hero__line"><span class="hero__inner"><em class="i accent">finally for you.</em></span></span>
       </h1>
       <p class="lead hero__lead measure-narrow">One honest daily edition from the sources you already follow, with a real last page. Curated on your phone by an AI that works for you, not an advertiser.</p>
       <div class="hero__actions">
-        <a class="btn btn--accent" href="#waitlist">Join the waitlist <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--accent" href="${APP_STORE_URL}" target="_blank" rel="noopener">Download on the App Store <span class="arrow" aria-hidden="true">→</span></a>
         <a class="btn btn--ghost" href="#edition">See the Edition</a>
       </div>
       <div class="hero__cue" aria-hidden="true">

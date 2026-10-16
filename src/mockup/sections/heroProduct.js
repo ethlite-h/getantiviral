@@ -4,6 +4,7 @@ import '../styles/hero-product.css'
 import { gsap, prefersReducedMotion } from '../lib/scroll.js'
 import { phoneFrame, appTopBar } from '../lib/phone.js'
 import { logo } from '../data/logos.js'
+import { APP_STORE_URL } from '../data/brand.js'
 
 const DAY_SHORT = new Date().toLocaleDateString('en-US', { weekday: 'short' })
 
@@ -51,14 +52,14 @@ export const html = `
 <section class="herop section" id="top" data-page data-world-lock="paper" aria-label="Introduction">
   <div class="container herop__grid">
     <div class="herop__copy">
-      <p class="eyebrow herop__eyebrow" data-reveal>Fall 2026 · iPhone &amp; Mac</p>
+      <p class="eyebrow herop__eyebrow" data-reveal>Out now · iPhone &amp; Mac</p>
       <h1 class="herop__title">
         <span class="herop__line"><span class="herop__inner">Your feed,</span></span>
         <span class="herop__line"><span class="herop__inner"><em class="i accent">finally for you.</em></span></span>
       </h1>
       <p class="lead herop__lead measure-narrow">A feed of what you already follow, ranked by what you asked for, with a reason on every pick and one daily Edition that ends.</p>
       <div class="herop__actions">
-        <a class="btn btn--accent" href="#waitlist">Join the waitlist <span class="arrow" aria-hidden="true">→</span></a>
+        <a class="btn btn--accent" href="${APP_STORE_URL}" target="_blank" rel="noopener">Download on the App Store <span class="arrow" aria-hidden="true">→</span></a>
         <a class="btn btn--ghost" href="#loop">See how a day goes</a>
       </div>
     </div>

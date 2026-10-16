@@ -1,5 +1,5 @@
 // Masthead + folio: the page has numbered pages and a last one.
-import { WORDMARK } from '../data/brand.js'
+import { WORDMARK, APP_STORE_URL } from '../data/brand.js'
 import { gsap, ScrollTrigger } from './scroll.js'
 
 export function mountChrome(root) {
@@ -11,7 +11,7 @@ export function mountChrome(root) {
       <a href="#top" class="masthead__brand" aria-label="Antiviral, home">${WORDMARK()}</a>
       <div class="masthead__right">
         <span class="folio" aria-live="polite"><span>p.</span><b data-folio-current>1</b><span>/</span><span data-folio-total>1</span></span>
-        <a class="btn btn--primary" href="#waitlist">Join the waitlist</a>
+        <a class="btn btn--primary" href="${APP_STORE_URL}" target="_blank" rel="noopener">Get the app</a>
       </div>
     </header>`
   root.prepend(...Array.from(el.childNodes))

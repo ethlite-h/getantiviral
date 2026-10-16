@@ -11,7 +11,7 @@ npm run build && npm run preview     # http://localhost:4173 and on the LAN (see
 npm run dev                          # http://localhost:5173
 ```
 
-The waitlist form posts to `/api/waitlist`. Locally a stub in `vite.config.js` answers it; on Vercel the Resend-backed function in `api/` does.
+The home page links to the App Store (`APP_STORE_URL` in `src/mockup/data/brand.js`). The retired waitlist endpoint `/api/waitlist` is still deployed; locally a stub in `vite.config.js` answers it.
 
 ## Layout
 
